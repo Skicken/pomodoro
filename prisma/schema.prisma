@@ -1,0 +1,69 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+enum Type {
+  INT
+  BOOL
+  DOUBLE
+}
+enum UserType {
+  ADMIN
+  USER
+}
+
+enum PomdoroState {
+  SESSION
+  SHORT_BREAK
+  LONG_BREAK
+}
+model SetingName{
+  id Int @id @default(autoincrement())
+  setting_SettingValue SettingValue[]
+  name String
+  type Type
+}
+model SettingValue{
+  id Int @id @default(autoincrement())
+  settingID Int
+  setting   SetingName @relation(fields: [settingID], references: [id])
+  settingValue_Template Template[] @relation(name:"Template_Settings")
+  value String
+}
+model User{
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  userType UserType @default(USER)
+  nickname String @unique
+  email String @unique
+  password String
+  spotifyToken String @default("")
+  templates Template[]
+  alarms Alarm[]
+}
+model Template{
+    id Int @id @default(autoincrement())
+    templateName String
+    userID Int
+    userOwner User @relation(fields: [userID],references: [id])
+    template_SettingValue SettingValue[] @relation(name:"Template_Settings")
+    sessions Session[]
+}
+model Session{
+  id         Int        @id @default(autoincrement())
+  templateID Int
+  template Template @relation(fields: [templateID],references: [id])
+  startTime  DateTime
+  endTime DateTime
+  state PomdoroState
+}
+model Alarm{
+    id Int @id @default(autoincrement())
+    ownerID Int
+    userOwner User @relation(fields: [ownerID],references: [id])
+    name String
+    urlPath String
+}
