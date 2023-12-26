@@ -1,9 +1,9 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AlarmService } from '../Services/Alarm/alarm.service';
 import { Body, Controller, HttpException, HttpStatus, ParseFilePipeBuilder, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { AddAlarmDto } from '../Dto/add-alarm-dto';
 import { Validate } from 'class-validator';
 import { multerOptions } from '../Services/Alarm/multer-options';
+import { AddAlarmDto } from '../Dto/add-alarm-dto';
 
 @Controller('alarm')
 export class AlarmController {

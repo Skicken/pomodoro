@@ -9,10 +9,10 @@
             "server": "localhost",
             "port": 3306,
             "driver": "MySQL",
-            "name": "PomodoroDatabase",
-            "database": "pomodoro",
             "username": "root",
-            "password": ""
+            "password": "root",
+            "name": "Pomodoro",
+            "database": "pomodoro"
         }
     ]
 }

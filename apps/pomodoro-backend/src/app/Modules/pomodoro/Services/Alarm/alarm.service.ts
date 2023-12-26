@@ -1,7 +1,7 @@
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../../../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { AddAlarmDto } from '../../Dto/add-alarm-dto';
 import {Multer} from 'multer'
+import { AddAlarmDto } from '../../Dto/add-alarm-dto';
 @Injectable()
 export class AlarmService {
 
