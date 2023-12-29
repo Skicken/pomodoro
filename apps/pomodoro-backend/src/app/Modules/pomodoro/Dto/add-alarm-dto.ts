@@ -1,5 +1,5 @@
 
-export class AddAlarmDto {
+export class AddAlarmDTO {
     name:string;
     ownerID:string;
 }

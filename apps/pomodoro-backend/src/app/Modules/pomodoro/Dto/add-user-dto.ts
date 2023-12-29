@@ -9,6 +9,5 @@ export class  AddUserDTO
   password:string;
   @IsEmail()
   email:string;
-  @IsEnum(UserType)
-  userType:UserType
+
 }

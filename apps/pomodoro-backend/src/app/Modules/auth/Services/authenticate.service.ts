@@ -1,21 +1,29 @@
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../DTO/login-dto';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 import { ReturnUserDTO } from '../../pomodoro/Dto/user-dto';
 import { User, UserType } from '@prisma/client';
 import { env } from 'process';
+
+export class TokenPayload
+{
+  sub:number
+  role:UserType
+}
+
 @Injectable()
 export class AuthenticateService {
   refreshToken(refresh_token: string) {
 
-    if(!refresh_token) return new UnauthorizedException()
-    const payload = this.jwtService.verify(refresh_token,{secret:env.REFRESH_SECRET});
-    if(!payload) return new UnauthorizedException()
+    if(!refresh_token) throw new UnauthorizedException()
 
-    const accessPayload = {sub: payload.sub, role: payload.userType}
+    const payload:TokenPayload = this.jwtService.verify(refresh_token,{secret:env.REFRESH_SECRET});
+    Logger.debug(payload)
+    if(!payload) throw new UnauthorizedException()
+    const accessPayload:TokenPayload = {sub: payload.sub, role: payload.role}
     return {
       access_token:this.jwtService.sign(accessPayload),
     }
@@ -25,7 +33,7 @@ export class AuthenticateService {
   constructor(private prisma:PrismaService, private jwtService: JwtService){}
 
   login(user: User) {
-    const payload = { sub: user.id, role: user.userType};
+    const payload:TokenPayload = { sub: user.id, role: user.userType};
     return {
       access_token:this.jwtService.sign(payload),
       refresh_token:this.jwtService.sign(payload,{

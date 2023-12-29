@@ -14,10 +14,13 @@ async function bootstrap() {
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
-  app.useGlobalPipes(new ValidationPipe({
-    transform: true,
-  }));
-
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+      whitelist: true,
+    })
+  );
   app.use(cookieParser());
 
   // somewhere in your initialization file
@@ -27,5 +30,4 @@ async function bootstrap() {
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
 }
-
 bootstrap();

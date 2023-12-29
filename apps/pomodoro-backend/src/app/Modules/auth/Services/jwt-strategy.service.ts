@@ -3,7 +3,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { ExecutionContext, Injectable } from '@nestjs/common';
 import { env } from 'process';
-import { UserType } from '@prisma/client';
+import { TokenPayload } from './authenticate.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,8 +15,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       secretOrKey: env.ACCESS_SECRET,
     });
   }
-  async validate(payload:{sub:number,role:UserType}) {
-    return { sub: payload.sub, role: payload.role };
+  async validate(payload:TokenPayload) {
+    return payload;
   }
 }
 @Injectable()

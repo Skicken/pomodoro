@@ -47,6 +47,19 @@
       "options": {
         "jestConfig": "apps/pomodoro-backend/jest.config.ts"
       }
+    },
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/pomodoro-backend/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "pomodoro-backend:serve"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "pomodoro-backend:serve:production"
+        }
+      }
     }
   },
   "tags": []

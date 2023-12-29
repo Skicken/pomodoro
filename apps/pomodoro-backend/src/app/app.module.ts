@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 
-import { AppService } from './app.service';
 import { PomodoroModule } from './Modules/pomodoro/pomodoro.module';
 import { PrismaModule } from './Modules/prisma/prisma.module';
 import { AuthModule } from './Modules/auth/auth.module';
@@ -15,9 +14,7 @@ import { ConfigModule } from '@nestjs/config';
 
   ],
   controllers: [],
-  providers: [
-    AppService,
-  ],
+  providers: [],
 
 })
 export class AppModule {}

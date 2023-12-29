@@ -5,10 +5,10 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-enum Type {
+enum SettingType {
   INT
-  BOOL
   DOUBLE
+	@@map("Type")
 }
 enum UserType {
   ADMIN
@@ -20,19 +20,27 @@ enum PomdoroState {
   SHORT_BREAK
   LONG_BREAK
 }
-model SetingName{
+model SettingName{
   id Int @id @default(autoincrement())
   setting_SettingValue SettingValue[]
-  name String
-  type Type
+  name String @unique
+  type SettingType
+  defaultValue String
+	@@map("SetingName")
 }
 model SettingValue{
   id Int @id @default(autoincrement())
-  settingID Int
-  setting   SetingName @relation(fields: [settingID], references: [id])
+  settingNameID Int
+
+  settingName   SettingName @relation(fields: [settingNameID], references: [id],onDelete: Cascade)
+
+  ownerTemplateID Int
+  ownerTemplate Template @relation(fields: [ownerTemplateID],references: [id],onDelete: Cascade)
+
   settingValue_Template Template[] @relation(name:"Template_Settings")
   value String
 }
+
 model User{
   id         Int        @id @default(autoincrement())
   createdAt  DateTime   @default(now())
@@ -46,9 +54,11 @@ model User{
 }
 model Template{
     id Int @id @default(autoincrement())
+    isDefault Boolean
     templateName String
     userID Int
-    userOwner User @relation(fields: [userID],references: [id])
+    userOwner User @relation(fields: [userID],references: [id],onDelete: Cascade)
+    ownedSettings SettingValue[]
     template_SettingValue SettingValue[] @relation(name:"Template_Settings")
     sessions Session[]
 }
@@ -63,7 +73,7 @@ model Session{
 model Alarm{
     id Int @id @default(autoincrement())
     ownerID Int
-    userOwner User @relation(fields: [ownerID],references: [id])
+    userOwner User @relation(fields: [ownerID],references: [id], onDelete: Cascade)
     name String
     urlPath String
 }

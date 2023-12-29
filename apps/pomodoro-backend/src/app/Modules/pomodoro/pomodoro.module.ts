@@ -7,13 +7,14 @@ import { TemplateController } from './Controllers/template/template.controller';
 import { UserController } from './Controllers/user/user.controller';
 import { AlarmService } from './Services/Alarm/alarm.service';
 import { SessionService } from './Services/Session/session.service';
-import { SettingnameService } from './Services/SettingName/settingname.service';
-import { SettingvalueService } from './Services/SettingValue/settingvalue.service';
-import { TemplateServiceService } from './Services/Template/template-service.service';
+import { SettingNameService } from './Services/SettingName/settingname.service';
+import { SettingValueService } from './Services/SettingValue/settingvalue.service';
+import { TemplateService } from './Services/Template/template.service';
 import { UserService } from './Services/User/user.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
-import { RoleGuard } from '../auth/Guards/role.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from '../auth/Services/jwt-strategy.service';
 
 @Module({
   imports:[
@@ -29,14 +30,12 @@ import { RoleGuard } from '../auth/Guards/role.guard';
     AlarmController,
   ],
   providers:[
-    TemplateServiceService,
+    TemplateService,
     UserService,
-    SettingvalueService,
-    SettingnameService,
+    SettingValueService,
+    SettingNameService,
     SessionService,
     AlarmService,
-
-
   ],
 
 

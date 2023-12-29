@@ -1,12 +1,16 @@
+import { CheckPayloadOwner, ExtractPayload, checkOwnerThrow, isOwner } from './../../../auth/extract-payload.decorator';
 import { Validate } from 'class-validator';
 
 import { UserService } from './../../Services/User/user.service';
-import { Body, Controller, Get, Logger, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Post, Put, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { AddUserDTO } from '../../Dto/add-user-dto';
 import { Role, RoleGuard } from '../../../auth/Guards/role.guard';
 import { UserType } from '@prisma/client';
 import { JwtAuthGuard } from '../../../auth/Services/jwt-strategy.service';
 import { IsOwnerGuard } from '../../../auth/Guards/is-owner.guard';
+
+import { TokenPayload } from '../../../auth/Services/authenticate.service';
+import { UpdateUserDTO } from '../../Dto/update-user-dto';
 
 @Controller('user')
 export class UserController {
@@ -17,19 +21,36 @@ export class UserController {
     {
       return this.userService.addUser(dto);
     }
-    @Get()
+    @Get(":id")
     @Role(UserType.USER)
-    @UseGuards(JwtAuthGuard,RoleGuard,IsOwnerGuard)
-    getUser(@Query('userID') id:number )
+    @UseGuards(JwtAuthGuard,RoleGuard)
+    getUser(@Param("id",ParseIntPipe) id:number,@ExtractPayload() payload:TokenPayload )
     {
-      Logger.debug(id);
+      checkOwnerThrow(id,payload);
       return this.userService.getUser(id);
     }
-    // @Get()
-    // getUser(@Param() filter:UserFilter)
-    // {
-
-
-    // }
+    @Get()
+    @Role(UserType.ADMIN)
+    @UseGuards(JwtAuthGuard,RoleGuard)
+    getUsers()
+    {
+      return this.userService.getUsers();
+    }
+    @Put(":id")
+    @Role(UserType.USER)
+    @UseGuards(JwtAuthGuard,RoleGuard)
+    updateUser(@Param("id",ParseIntPipe) id:number,@Body() dto:UpdateUserDTO,@ExtractPayload() payload:TokenPayload )
+    {
+      checkOwnerThrow(id,payload)
+      return this.userService.updateUser(id,dto);
+    }
+    @Delete(":id")
+    @Role(UserType.USER)
+    @UseGuards(JwtAuthGuard,RoleGuard)
+    deleteUser(@Param("id",ParseIntPipe) id:number,@Body() dto:UpdateUserDTO,@ExtractPayload() payload:TokenPayload )
+    {
+      checkOwnerThrow(id,payload)
+      return this.userService.deleteUser(id);
+    }
 
 }

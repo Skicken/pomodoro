@@ -1,3 +1,5 @@
+import axios from "axios";
+
 /* eslint-disable */
 var __TEARDOWN_MESSAGE__: string;
 
