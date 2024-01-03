@@ -1,0 +1,37 @@
+
+<nav>
+  <div class="nav-container">
+    <a href="" class="logo">
+      <h1>
+        Pomodoro
+      </h1>
+    </a>
+    <div class="link-container">
+      <a routerLink='/login' class="nav-item" *ngIf="!this.userService.user">
+          <mat-icon fontIcon="login" class="icon"></mat-icon>
+          <span class="nav-text">Login</span>
+      </a>
+      <a  class="nav-item dropdown" href="" *ngIf="this.userService.user">
+          <mat-icon fontIcon="person" class="icon"></mat-icon>
+          <span class="nav-text">{{this.userService.user.nickname}}</span>
+          <div class="dropdown-content">
+
+            <a (click)="logout()">
+              <mat-icon fontIcon="logout" class="icon"></mat-icon>
+              <span class="nav-text">Logout</span>
+            </a>
+
+          </div>
+      </a>
+      <a href="" class="nav-item">
+        <mat-icon fontIcon="analytics" class="icon"></mat-icon>
+        <span class="nav-text">Report</span>
+      </a>
+      <a href="" class="nav-item">
+        <mat-icon fontIcon="bookmark" class="icon"></mat-icon>
+        <span class="nav-text">Templates</span>
+      </a>
+    </div>
+
+  </div>
+</nav>

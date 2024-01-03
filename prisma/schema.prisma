@@ -8,7 +8,6 @@ datasource db {
 enum SettingType {
   INT
   DOUBLE
-	@@map("Type")
 }
 enum UserType {
   ADMIN
@@ -26,7 +25,6 @@ model SettingName{
   name String @unique
   type SettingType
   defaultValue String
-	@@map("SetingName")
 }
 model SettingValue{
   id Int @id @default(autoincrement())

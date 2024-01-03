@@ -1,0 +1,54 @@
+.center
+{
+  text-align: center;
+  margin: 10px;
+}
+.size
+{
+  margin: 5px;
+  padding: 10px;
+  font-size: larger;
+  font-weight: bold;
+}
+h1
+{
+  font-weight:500;
+  font-size:40px;
+}
+.tomato
+{
+  width: 200px;
+  height: 200px;
+  margin: auto;
+}
+.timer-text
+{
+  font-size: 40px;
+}
+.pause-text
+{
+  display: inline-flex;
+}
+.icon
+{
+  display: inline-flex;
+  float: right;
+}
+.template-icon
+{
+  transform: scale(1.5);
+  cursor: pointer;
+}
+.template-icon:hover
+{
+  color: black;
+}
+.template-icon:hover svg {
+  fill: black;
+}
+
+.selected
+{
+  color: black;
+  background-color: var(--white-font-color);
+}

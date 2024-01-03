@@ -7,6 +7,7 @@ import { plainToInstance } from 'class-transformer';
 import { Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { UpdateUserDTO } from '../../Dto/update-user-dto';
+import { TemplateService } from '../Template/template.service';
 @Injectable()
 export class UserService {
 
@@ -41,7 +42,7 @@ export class UserService {
       if(!user) throw new NotFoundException("User could not be found");
       return plainToInstance(ReturnUserDTO,user);
   }
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,private templateService:TemplateService) {}
 
   async addUser(dto:AddUserDTO)
   {
@@ -57,6 +58,7 @@ export class UserService {
       {
         throw new HttpException("User with defined email already exists",HttpStatus.CONFLICT)
       });
+    this.templateService.CreateUserDefault((await user).id);
     return plainToInstance(ReturnUserDTO,user);
   }
 }

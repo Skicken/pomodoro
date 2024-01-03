@@ -8,7 +8,7 @@ import { Prisma, SettingName, SettingType } from '@prisma/client';
 import { SettingValueDTO } from '../../Dto/setting-value-dto';
 import { isInt, isNumber, isNumberString } from 'class-validator';
 type SettingValueInclude = Prisma.SettingValueGetPayload<{
-  include: { settingName: true };
+  include: { settingName: true, settingValue_Template:true  };
 }>;
 @Injectable()
 export class SettingValueService {
@@ -46,6 +46,8 @@ export class SettingValueService {
       key: setting.settingName.name,
       type: setting.settingName.type,
       value: this.ParseContext(setting.value, setting.settingName.type),
+      usedByTemplates:setting.settingValue_Template
+
     };
   }
 
@@ -54,6 +56,7 @@ export class SettingValueService {
       where: { id: id },
       include: {
         settingName: true,
+        settingValue_Template:true
       },
     });
 
@@ -80,6 +83,7 @@ export class SettingValueService {
         },
         include: {
           settingName: true,
+          settingValue_Template:true,
         },
       })
     ).map((setting) => {
@@ -103,8 +107,6 @@ export class SettingValueService {
     });
     return values;
   }
-
-
   async UpdateSetting(id: number, dto: UpdateSettingDTO) {
     const setting:SettingValueDTO = await this.GetSetting(id);
     if(!this.CanParse(dto.value,setting.type))

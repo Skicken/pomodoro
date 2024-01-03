@@ -1,0 +1,74 @@
+<div class="content-wrapper">
+  <h1 class="center">
+    <div>
+    Homework
+    <mat-icon fontIcon="bookmark" class="template-icon"></mat-icon>
+    </div>
+  </h1>
+  <div class="buttons center">
+    <button
+      class="my-button-white size"
+      [class]="
+        this.pomodoroService.state ===
+        this.pomodoroService.PomodoroStateType.SESSION
+          ? 'selected'
+          : ''
+      "
+      (click)="this.pomodoroService.PomodoroButton()"
+    >
+      Pomodoro
+    </button>
+    <button
+      class="my-button-white size"
+      (click)="this.pomodoroService.ShortBreakButton()"
+      [class]="
+        this.pomodoroService.state ===
+        this.pomodoroService.PomodoroStateType.SHORT_BREAK
+          ? 'selected'
+          : ''
+      "
+    >
+      Short Break
+    </button>
+    <button
+      class="my-button-white size"
+      (click)="this.pomodoroService.LongBreakButton()"
+      [class]="
+        this.pomodoroService.state ===
+        this.pomodoroService.PomodoroStateType.LONG_BREAK
+          ? 'selected'
+          : ''
+      "
+    >
+      Long Break
+    </button>
+  </div>
+  <div class="center">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/7313/7313003.png"
+      alt=""
+      srcset=""
+      class="tomato"
+    />
+  </div>
+  <div class="center timer-text">
+    {{ formatTimer(this.pomodoroService.pomodoroTimer) }}
+  </div>
+  <div class="buttons center">
+    <button
+      class="my-button-white size"
+      (click)="this.pomodoroService.StopResumeButton()"
+    >
+      <ng-container *ngIf="this.pomodoroService.isPlaying">
+        <div class="pause-text">Pause</div>
+        <mat-icon fontIcon="pause" class="icon"></mat-icon>
+      </ng-container>
+      <ng-container *ngIf="!this.pomodoroService.isPlaying">
+        <div class="pause-text">Play</div>
+        <mat-icon fontIcon="play_arrow" class="icon"></mat-icon>
+      </ng-container>
+    </button>
+  </div>
+
+</div>
+

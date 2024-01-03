@@ -1,0 +1,24 @@
+.center
+{
+  text-align: center;
+  margin: 10px;
+}
+.login-button
+{
+  text-align: center;
+}
+.input
+{
+  display: block;
+  max-width: 250px;
+  margin: auto;
+}
+.error-login
+{
+  text-align: center;
+  margin: 5px;
+}
+.register-container
+{
+  min-width: 300px;
+}

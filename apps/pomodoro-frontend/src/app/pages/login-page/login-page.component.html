@@ -1,0 +1,38 @@
+<div class="content-wrapper">
+  <div class="center">
+    <h1><a href="">Pomodoro</a></h1>
+    <h2>Login</h2>
+  </div>
+  <div class="content-container">
+    <div class="login-container">
+      <form action="" [formGroup]="loginControl" (ngSubmit)="onSubmit()">
+        <mat-form-field class="input">
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            matInput
+            formControlName="email"
+          />
+        </mat-form-field>
+
+        <mat-form-field class="input">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            matInput
+            formControlName="password"
+          />
+        </mat-form-field>
+        <mat-error *ngIf="!correctForm" class="error-login">{{errorMessage}}</mat-error
+          >
+          <div class="login-button">
+            <button class="my-button" type="submit">Login</button>
+          </div>
+      </form>
+    </div>
+  </div>
+  <div class="center" style="margin-top: 20px;">
+    <h4>Do not have account?</h4>
+    <button class="my-button-white" style="margin-top: 10px;" routerLink="/register">Create account</button>
+  </div>
+</div>

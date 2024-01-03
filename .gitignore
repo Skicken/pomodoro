@@ -43,3 +43,5 @@ apps/pomodoro-backend/.env
 .env
 apps/pomodoro-backend/.env
 apps/pomodoro-backend/.env
+
+.angular

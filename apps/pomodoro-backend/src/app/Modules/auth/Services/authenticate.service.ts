@@ -16,7 +16,10 @@ export class TokenPayload
 
 @Injectable()
 export class AuthenticateService {
-  refreshToken(refresh_token: string) {
+
+  constructor(private prisma:PrismaService, private jwtService: JwtService){}
+
+  async refreshToken(refresh_token: string) {
 
     if(!refresh_token) throw new UnauthorizedException()
 
@@ -24,17 +27,23 @@ export class AuthenticateService {
     Logger.debug(payload)
     if(!payload) throw new UnauthorizedException()
     const accessPayload:TokenPayload = {sub: payload.sub, role: payload.role}
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id:payload.sub
+      }
+    });
     return {
       access_token:this.jwtService.sign(accessPayload),
+      ...plainToInstance(ReturnUserDTO,user),
     }
   }
 
 
-  constructor(private prisma:PrismaService, private jwtService: JwtService){}
 
   login(user: User) {
     const payload:TokenPayload = { sub: user.id, role: user.userType};
     return {
+      user:plainToInstance(ReturnUserDTO,user),
       access_token:this.jwtService.sign(payload),
       refresh_token:this.jwtService.sign(payload,{
         secret:env.REFRESH_SECRET,

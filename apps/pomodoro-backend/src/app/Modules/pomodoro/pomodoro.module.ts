@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AlarmController } from './Controllers/alarm.controller';
-import { SessionController } from './Controllers/session/session.controller';
-import { SettingNameController } from './Controllers/settingName/setting-name.controller';
-import { SettingValueController } from './Controllers/settingValue/setting-value.controller';
-import { TemplateController } from './Controllers/template/template.controller';
-import { UserController } from './Controllers/user/user.controller';
+import { SessionController } from './Controllers/session.controller';
+import { SettingNameController } from './Controllers/setting-name.controller';
+import { SettingValueController } from './Controllers/setting-value.controller';
+import { TemplateController } from './Controllers/template.controller';
+import { UserController } from './Controllers/user.controller';
 import { AlarmService } from './Services/Alarm/alarm.service';
 import { SessionService } from './Services/Session/session.service';
 import { SettingNameService } from './Services/SettingName/settingname.service';

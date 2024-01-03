@@ -5,13 +5,13 @@ import { AddTemplateDTO } from '../../Dto/add-template-dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AddSettingDTO } from '../../Dto/add-setting-dto';
 import { TemplateFilter } from '../../Filters/TemplateFilter';
+import { TokenPayload } from '../../../auth/Services/authenticate.service';
 
 @Injectable()
 export class TemplateService {
   DeleteTemplate(id: number) {
-     this.prisma.template.deleteMany({ where: { id: id } });
+    this.prisma.template.deleteMany({ where: { id: id } });
   }
-
   async GetTemplate(id: number) {
     const template = await this.prisma.template.findFirst({
       where: { id: id },
@@ -94,8 +94,14 @@ export class TemplateService {
       },
     });
   }
-  MapSettingTemplate(id:number,from:number,to:number)
+  async MapSettingTemplate(id:number,from:number,to:number,payload:TokenPayload)
   {
+    const fromSetting = await this.settingValueService.GetSetting(from)
+    const toSetting = await this.settingValueService.GetSetting(from)
+    const ownerFromTemplate = await this.GetTemplate(fromSetting.ownerTemplateID);
+    const ownerToTemplate = await this.GetTemplate(toSetting.ownerTemplateID);
+
+
     return this.prisma.template.update({
       where: { id: id },
       data: {
@@ -105,6 +111,9 @@ export class TemplateService {
 
         }
       },
+      include: {
+        template_SettingValue: true,
+      }
     });
   }
 

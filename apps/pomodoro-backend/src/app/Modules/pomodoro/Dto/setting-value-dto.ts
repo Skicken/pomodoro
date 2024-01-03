@@ -1,4 +1,4 @@
-import { SettingType } from '@prisma/client';
+import { SettingType, Template } from '@prisma/client';
 
 export class SettingValueDTO
 {
@@ -6,8 +6,9 @@ export class SettingValueDTO
   settingNameID:number;
   ownerTemplateID;
   value: number | string | boolean;
-  key:string
-  type:SettingType
+  key:string;
+  type:SettingType;
+  usedByTemplates:Template[]
 
 }
 
