@@ -11,7 +11,6 @@ import { AddUserDTO } from '../../Dto/add-user-dto';
 import { plainToInstance } from 'class-transformer';
 import { Logger } from '@nestjs/common';
 import { UpdateUserDTO } from '../../Dto/update-user-dto';
-import { TemplateService } from '../Template/template.service';
 import { passwordHash } from '../../../common/common';
 @Injectable()
 export class UserService {
@@ -57,7 +56,7 @@ export class UserService {
     if (!user) throw this.UserNotFound;
     return plainToInstance(ReturnUserDTO, user);
   }
-  constructor(private prisma: PrismaService,private templateService:TemplateService) {}
+  constructor(private prisma: PrismaService) {}
 
   async addUser(dto: AddUserDTO) {
     Logger.debug('Adding new user');

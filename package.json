@@ -5,8 +5,8 @@
   "scripts": {
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "mysql:restore":"mysql -h 127.0.0.1 -P 4000 -u root pomodoro_tests< dumps/%dump%.sql",
-    "mysql:dump":"mysqldump -h 127.0.0.1 -P 4000 --no-create-info --compact -u root pomodoro_tests > dumps/%dump%.sql",
+    "mysql:restore":"mysql -h 127.0.0.1 -P 4000 -u root pomodoro_tests< dumps/dump.sql",
+    "mysql:dump":"mysqldump -h 127.0.0.1 -P 4000 --no-create-info --compact -u root pomodoro_tests > dumps/dump.sql",
 
     "docker:connect": "mysql -h 127.0.0.1 -P 4000 -u root pomodoro_tests",
     "prisma:dev-seed": "npx prisma db push --force-reset && npx prisma db seed",

@@ -4,7 +4,7 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { ReturnUserDTO } from '../../pomodoro/Dto/user-dto';
-import { User, UserType } from '@prisma/client';
+import { Prisma, User, UserType } from '@prisma/client';
 import { env } from 'process';
 import { validPassword } from '../../common/common';
 import { AuthUserDTO } from '../DTO/auth-user-dto';
@@ -17,7 +17,7 @@ export class TokenPayload
 @Injectable()
 export class AuthenticateService {
 
-
+  constructor(private jwtService:JwtService,private prisma:PrismaService){}
   async refreshToken(refresh_token: string) {
 
     if(!refresh_token) throw new UnauthorizedException()

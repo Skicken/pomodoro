@@ -133,9 +133,7 @@ export class TemplateService {
       include: {
         template_SettingValue: true,
       },
-      include: {
-        template_SettingValue: true,
-      }
+
     });
   }
 
