@@ -49,7 +49,6 @@ export class TemplateController {
      return template;
   }
 
-
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
   async DeleteTemplate(@Param("id",ParseIntPipe) id:number,@ExtractPayload() payload:TokenPayload)

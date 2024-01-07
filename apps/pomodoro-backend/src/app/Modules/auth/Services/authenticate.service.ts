@@ -17,7 +17,6 @@ export class TokenPayload
 @Injectable()
 export class AuthenticateService {
 
-  constructor(private prisma:PrismaService, private jwtService: JwtService){}
 
   async refreshToken(refresh_token: string) {
 

@@ -57,7 +57,7 @@ export class UserService {
     if (!user) throw this.UserNotFound;
     return plainToInstance(ReturnUserDTO, user);
   }
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService,private templateService:TemplateService) {}
 
   async addUser(dto: AddUserDTO) {
     Logger.debug('Adding new user');
