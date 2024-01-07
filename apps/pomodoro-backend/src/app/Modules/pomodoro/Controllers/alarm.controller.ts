@@ -8,7 +8,7 @@ import { TokenPayload } from '../../auth/Services/authenticate.service';
 import { FilterByUserID } from '../Filters/FilterByUserID';
 import { IsOwnerGuard, ResourceOwner } from '../../auth/Guards/is-owner.guard';
 import { Payload } from '@prisma/client/runtime/library';
-import { ExtractPayload, checkOwnerThrow, isOwner } from '../../auth/extract-payload.decorator';
+import { ExtractPayload, checkOwnerThrow, isOwner } from '../../auth/Guards/extract-payload.decorator';
 import { Role, RoleGuard } from '../../auth/Guards/role.guard';
 import { UserType } from '@prisma/client';
 

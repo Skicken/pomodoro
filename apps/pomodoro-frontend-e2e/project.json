@@ -1,0 +1,30 @@
+{
+  "name": "pomodoro-frontend-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/pomodoro-frontend-e2e/src",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/pomodoro-frontend-e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "pomodoro-frontend:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "pomodoro-frontend:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "pomodoro-frontend:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["pomodoro-frontend"]
+}

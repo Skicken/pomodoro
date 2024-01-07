@@ -1,0 +1,79 @@
+/* You can add global styles to this file, and also import other style files */
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+:root {
+  --main-bg-color: #6F2DBD;
+  --white-font-color: #FBF5F3;
+}
+body,head
+{
+  background-color: var(--main-bg-color);
+  font-family: 'Inter';
+  color: var(--white-font-color);
+  height: 100%;
+}
+*
+{
+  font-family: 'Inter';
+  margin: 0;
+  padding: 0;
+}
+a
+{
+  text-decoration: none;
+  color: var(--white-font-color);
+}
+.content-wrapper
+{
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%);
+  margin: auto;
+}
+
+.content-container
+{
+  background-color: #FBF5F3;
+  border-radius: 2em;
+  padding: 30px;
+  color: black;
+}
+.my-button
+{
+  min-width: 150px;
+  font-size:x-large;
+  font-family: 'Inter';
+  background-color: black;
+  color: var(--white-font-color);
+  border-radius: 30px;
+  font-weight: 500;
+}
+.my-button:hover
+{
+  background-color: var(--white-font-color);
+  color: black;
+  cursor:pointer;
+}
+.my-button-white
+{
+  background-color: transparent;
+  color: var(--white-font-color);
+  font-size:large;
+  padding: 10px;
+  min-width: 200px;
+  border-radius: 40px;
+  border: 1px solid var(--white-font-color);
+}
+.my-button-white:hover
+{
+  cursor:pointer;
+  background-color: white;
+  color: black;
+}
+.m5-top
+{
+  margin-top: 10px;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

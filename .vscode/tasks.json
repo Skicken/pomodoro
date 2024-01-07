@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "nx",
+			"project": "",
+			"command": "run",
+			"positional": "pomodoro-backend:test",
+			"flags": [],
+			"problemMatcher": [],
+			"label": "nx: nx run pomodoro-backend:test",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
+		}
+	]
+}

@@ -10,11 +10,9 @@ import { ConfigModule } from '@nestjs/config';
     PomodoroModule,
     PrismaModule,
     AuthModule,
-    ConfigModule.forRoot({isGlobal:true})
-
+    ConfigModule.forRoot({ isGlobal: true }),
   ],
   controllers: [],
   providers: [],
-
 })
 export class AppModule {}

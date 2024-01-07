@@ -14,5 +14,8 @@
             "name": "Pomodoro",
             "database": "pomodoro"
         }
+    ],
+    "cSpell.words": [
+        "Pomodoro"
     ]
 }

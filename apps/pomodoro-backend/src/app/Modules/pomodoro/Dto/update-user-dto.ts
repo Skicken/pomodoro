@@ -5,14 +5,14 @@ export class UpdateUserDTO {
 
     @IsOptional()
     @Length(5,20)
-    nickname:string;
+    nickname?:string;
 
     @IsOptional()
     @Length(5,20)
-    password:string;
+    password?:string;
 
     @IsOptional()
-    spotifyToken:string
+    spotifyToken?:string
 }
 
 

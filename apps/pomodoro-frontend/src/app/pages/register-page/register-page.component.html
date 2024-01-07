@@ -1,0 +1,70 @@
+<div class="content-wrapper">
+  <div class="center">
+    <h1><a href="">Pomodoro</a></h1>
+    <h2>Register</h2>
+  </div>
+  <div class="content-container">
+    <div class="register-container">
+      <form action="" [formGroup]="registerControl" (ngSubmit)="onSubmit()">
+        <mat-form-field class="input">
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            matInput
+            formControlName="email"
+            name="email"
+          />
+
+        </mat-form-field>
+        <mat-form-field class="input">
+          <mat-label>Username</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="username"
+            name="username"
+
+          />
+          <mat-error *ngIf="registerControl.value.confirmPassword">Username should be at least length of 5.</mat-error>
+
+        </mat-form-field>
+        <mat-form-field class="input">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            matInput
+            formControlName="password"
+            name="new-password"
+            autocomplete="on"
+          />
+          <mat-error *ngIf="registerControl.value.confirmPassword">Password should be at least length of 5.</mat-error>
+
+
+        </mat-form-field>
+        <mat-form-field class="input">
+          <mat-label>Confirm password</mat-label>
+          <input
+            type="password"
+            matInput
+            formControlName="confirmPassword"
+            name="password"
+            autocomplete="on"
+
+          />
+          <mat-error *ngIf="registerControl.value.confirmPassword">Passwords do not match.</mat-error>
+        </mat-form-field>
+
+
+        <mat-error *ngIf="!correctForm" class="error-login">{{errorMessage}}</mat-error
+          >
+          <div class="login-button" >
+            <button class="my-button" type="submit">Register</button>
+          </div>
+      </form>
+    </div>
+  </div>
+  <div class="center" style="margin-top: 20px;">
+    <h4>Have account?</h4>
+    <button class="my-button-white" style="margin-top: 10px;" routerLink="/login">Login</button>
+  </div>
+</div>
