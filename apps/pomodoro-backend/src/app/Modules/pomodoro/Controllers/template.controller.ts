@@ -1,6 +1,6 @@
-import { ExtractPayload, checkOwnerThrow } from '../../auth/Guards/extract-payload.decorator';
+import { ExtractPayload, checkOwnerThrow, checkOwnerThrowIgnoreAdmin } from '../../auth/Guards/extract-payload.decorator';
 import { AddTemplateDTO } from '../Dto/add-template-dto';
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
 import { TemplateService } from '../Services/Template/template.service';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
@@ -12,12 +12,19 @@ import { MapSettingDTO } from '../Dto/map-setting-dto';
 export class TemplateController {
 
   constructor(private templateService:TemplateService){}
+  @Get("default")
+  GetDefaultTemplate(@Query() filter:TemplateFilter,@ExtractPayload() payload:TokenPayload)
+  {
+    checkOwnerThrow(filter.userID,payload)
+    return this.templateService.GetUserDefault(filter.userID);
+  }
 
   @Put(":id")
   async MapSetting(@Param("id",ParseIntPipe) id:number,@Body() dto:MapSettingDTO,@ExtractPayload() payload:TokenPayload)
   {
     const template = await this.templateService.GetTemplate(id);
-    checkOwnerThrow(template.userID,payload)
+    checkOwnerThrowIgnoreAdmin(template.userID,payload)
+    if(template.isDefault) throw new BadRequestException("cannot map default template");
     return this.templateService.MapSettingTemplate(id,dto.from,dto.to,payload);
   }
 
@@ -27,13 +34,6 @@ export class TemplateController {
   {
     return this.templateService.AddTemplate(payload.sub,dto);
   }
-  @Get("default")
-  GetDefaultTemplate(@Query() filter:TemplateFilter,@ExtractPayload() payload:TokenPayload)
-  {
-    checkOwnerThrow(filter.userID,payload)
-    return this.templateService.GetUserDefault(filter.userID);
-  }
-
 
   @Get()
   GetFilterTemplate(@Query() filter:TemplateFilter,@ExtractPayload() payload:TokenPayload)
@@ -55,7 +55,7 @@ export class TemplateController {
   {
      const template = await this.templateService.GetTemplate(id);
      checkOwnerThrow(template.userID,payload)
-     if(!template.isDefault)
-      this.templateService.DeleteTemplate(id);
+     if(template.isDefault) throw new BadRequestException("cannot delete default setting");
+     return this.templateService.DeleteTemplate(id);
   }
 }

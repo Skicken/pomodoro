@@ -1,0 +1,41 @@
+@import "variables.less";
+.content-wrapper
+{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+}
+@media screen and (max-height: 900px) {
+  .content-wrapper
+  {
+    top:100px;
+    transform: translate(-50%, 0%);
+  }
+}
+.content-wrapper-top
+{
+  min-width: 60%;
+  position: absolute;
+  margin-top: 20px;
+  left: 50%;
+  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
+  -moz-transform: translate(-50%);
+  -o-transform: translate(-50%);
+  -ms-transform: translate(-50%);
+}
+.content-container
+{
+  background-color: #FBF5F3;
+  border-radius: 2em;
+  padding: 30px;
+  color: black;
+  min-width: 300px;
+}
+.dialog-wrapper
+{
+  min-width: 200px;
+  padding: 20px;
+}

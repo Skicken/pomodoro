@@ -1,0 +1,52 @@
+<div class="content-wrapper-top">
+  <div class="content-container padding">
+
+    <div class="text-center template">
+      <div class="text-center">
+        <h3>Select template</h3>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Template</mat-label>
+          <mat-select name="template" [(ngModel)]="selectedTemplate">
+            @for (template of templates; track template) {
+            <mat-option [value]="template">{{
+              template.name
+            }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-icon
+          fontIcon="add"
+          class="icon add-icon"
+          matTooltip="Add new template"
+          (click) = openAddTemplate()
+        ></mat-icon>
+      </div>
+      <div>
+      <mat-icon
+          fontIcon="remove"
+          class="icon remove-icon"
+          matTooltip="Remove current template"
+          (click) = "openDeleteTemplate()"
+        ></mat-icon>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+    <h3 class="text-center m1">General Settings</h3>
+    <div class="settings-container">
+      <setting-input
+        settingName="Test"
+        label="123"
+        [timeValue]="parseToHHMM(getKeyValue('pomodoroTime'))"
+        (valueChange)="setKey('pomodoroTime', $event)"
+      />
+      <setting-input settingName="Test" label="123" type="slider"   />
+      <setting-input settingName="Test" label="123" type="list-id" [listItems]=alarmItemList />
+      <setting-input settingName="Test" label="123" type="toggle" />
+    </div>
+  </div>
+</div>

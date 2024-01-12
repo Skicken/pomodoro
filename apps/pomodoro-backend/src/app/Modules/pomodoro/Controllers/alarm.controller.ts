@@ -1,14 +1,12 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AlarmService } from '../Services/Alarm/alarm.service';
-import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, Req, UnauthorizedException, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { multerOptions } from '../Services/Alarm/multer-options';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
 import { Request } from 'express';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
 import { FilterByUserID } from '../Filters/FilterByUserID';
-import { IsOwnerGuard, ResourceOwner } from '../../auth/Guards/is-owner.guard';
-import { Payload } from '@prisma/client/runtime/library';
-import { ExtractPayload, checkOwnerThrow, isOwner } from '../../auth/Guards/extract-payload.decorator';
+import { ExtractPayload, checkOwnerThrow } from '../../auth/Guards/extract-payload.decorator';
 import { Role, RoleGuard } from '../../auth/Guards/role.guard';
 import { UserType } from '@prisma/client';
 
@@ -26,7 +24,7 @@ export class AlarmController {
         fileType: 'mp3',
       })
       .addMaxSizeValidator({
-        maxSize: 1048576, // just to you know it's possible.
+        maxSize: 1048576,
       })
       .build({
         exceptionFactory(error) {
@@ -60,7 +58,6 @@ export class AlarmController {
     checkOwnerThrow(alarm.ownerID,payload);
     return alarm;
   }
-
 
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)

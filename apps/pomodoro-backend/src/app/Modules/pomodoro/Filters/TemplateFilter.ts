@@ -1,4 +1,4 @@
-import { IsNumber } from "class-validator";
+import { IsBoolean, IsNumber } from "class-validator";
 
 export class TemplateFilter
 {
@@ -6,6 +6,7 @@ export class TemplateFilter
 
   @IsNumber()
   userID?:number
-
+  @IsBoolean()
+  isDefault?:boolean
 
 }

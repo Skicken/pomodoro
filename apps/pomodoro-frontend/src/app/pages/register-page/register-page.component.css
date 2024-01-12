@@ -1,12 +1,3 @@
-.center
-{
-  text-align: center;
-  margin: 10px;
-}
-.login-button
-{
-  text-align: center;
-}
 .input
 {
   display: block;
@@ -15,10 +6,10 @@
 }
 .error-login
 {
+  font-size: small;
   text-align: center;
-  margin: 5px;
 }
-.register-container
+.error
 {
-  min-width: 300px;
+  font-size: x-small;
 }

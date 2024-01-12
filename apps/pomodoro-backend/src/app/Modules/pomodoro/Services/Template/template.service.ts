@@ -1,13 +1,17 @@
 import { UpdateTemplateDTO } from './../../Dto/update-template-dto';
 import { SettingValueService } from './../SettingValue/settingvalue.service';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { AddTemplateDTO } from '../../Dto/add-template-dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AddSettingDTO } from '../../Dto/add-setting-dto';
 import { TemplateFilter } from '../../Filters/TemplateFilter';
 import { TokenPayload } from '../../../auth/Services/authenticate.service';
 import { checkOwnerThrow } from '../../../auth/Guards/extract-payload.decorator';
+import { Prisma } from '@prisma/client';
 
+export type TemplateWithSettings = Prisma.TemplateGetPayload<{
+  include: {template_SettingValue: true};
+}>;
 @Injectable()
 export class TemplateService {
   async DeleteTemplate(id: number) {
@@ -21,6 +25,9 @@ export class TemplateService {
   async GetTemplate(id: number) {
     const template = await this.prisma.template.findFirst({
       where: { id: id },
+      include: {
+        template_SettingValue: true,
+      },
     });
     if (!template) throw new NotFoundException('Template not found');
     return template;
@@ -113,7 +120,7 @@ export class TemplateService {
     payload: TokenPayload
   ) {
     const fromSetting = await this.settingValueService.GetSetting(from);
-    const toSetting = await this.settingValueService.GetSetting(from);
+    const toSetting = await this.settingValueService.GetSetting(to);
     const ownerFromTemplate = await this.GetTemplate(
       fromSetting.ownerTemplateID
     );
@@ -121,6 +128,7 @@ export class TemplateService {
 
     checkOwnerThrow(ownerFromTemplate.userID, payload);
     checkOwnerThrow(ownerToTemplate.userID, payload);
+    if(fromSetting.settingNameID!=toSetting.settingNameID) throw new BadRequestException("Invalid setting mapping, template can only have one instance of specific setting name");
 
     return this.prisma.template.update({
       where: { id: id },
@@ -133,7 +141,6 @@ export class TemplateService {
       include: {
         template_SettingValue: true,
       },
-
     });
   }
 
@@ -141,6 +148,7 @@ export class TemplateService {
     return this.prisma.template.findMany({
       where: {
         userID: filter.userID,
+        isDefault:filter.isDefault
       },
       include: {
         template_SettingValue: true,

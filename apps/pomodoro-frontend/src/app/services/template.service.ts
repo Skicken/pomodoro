@@ -3,13 +3,17 @@ import { Injectable } from '@angular/core';
 import { UserService } from './user-service.service';
 import { Setting, Template } from '../Model/template-model';
 import { map, tap } from 'rxjs';
+import { exampleTemplate, mockList } from '../Model/mock-template';
+
+
 
 @Injectable({
   providedIn: 'root',
 })
 export class TemplateService {
-  templates: Template[] = [];
-  currentPomodoroTemplate: Template | null = null;
+
+  templates: Template[] = mockList;
+  defaultTemplate:Template = exampleTemplate;
 
   constructor(private userService: UserService, private http: HttpClient) {}
   GetTemplates() {
@@ -25,37 +29,40 @@ export class TemplateService {
       .pipe(
         map((data) => {
           data.forEach((element) => {
-            const temp: Template = new Template();
-            temp.id = element.id;
-            temp.isDefault = element.isDefault;
-            temp.templateName = element.templateName;
-            this.GetSettings(temp.id).pipe(
+            const template:Template = new Template();
+            template.id = element.id;
+            template.isDefault = element.isDefault;
+            template.name = element.templateName;
+            this.GetSettings(template.id).pipe(
               map((settings) => {
                 settings.forEach((setting) => {
-                  temp.settings.push(setting);
+                  template.settings.push(setting);
                 });
               })
             );
-            console.log(temp);
-            this.templates.push(temp);
+            console.log(template);
+            this.templates.push(template);
           });
         })
       );
+  }
+  AddTemplate(template: { templateName: any; }) {
+    throw new Error('Method not implemented.');
   }
   SetCurrentTemplate(template: Template) {}
   GetTemplate(templateID: number) {
     if (!this.userService.user) return;
     return this.http
-      .get<{ id: number; isDefault: boolean; templateName: string }>(
+      .get<Template>(
         `api/template/${templateID}`,
         {}
       )
       .pipe(
         map((data) => {
-          const template = new Template();
+          const template:Template = new Template();
           template.id = data.id;
           template.isDefault = data.isDefault;
-          template.templateName = data.templateName;
+          template.name = data.name;
           this.GetSettings(template.id).subscribe((settings) => {
             template.settings = settings;
           });

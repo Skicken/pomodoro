@@ -1,12 +1,13 @@
 import { ExtractPayload, checkOwnerThrow } from '../../auth/Guards/extract-payload.decorator';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
+import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
 import { AddSessionDTO } from '../Dto/add-session-dto';
 import { SessionFilter } from '../Filters/SessionFilter';
-import { SettingValueFilter } from '../Filters/SettingValueFilter';
 import { SessionService } from './../Services/Session/session.service';
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 
 @Controller('session')
+@UseGuards(JwtAuthGuard)
 export class SessionController {
 
   constructor(private sessionService:SessionService){}

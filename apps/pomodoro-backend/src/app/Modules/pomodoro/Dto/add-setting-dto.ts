@@ -1,10 +1,9 @@
-import { SettingName } from '@prisma/client';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 export class AddSettingDTO
 {
 
   @IsNotEmpty()
-  value:string
+  value:number
 
   @IsNumber()
   settingNameID:number;

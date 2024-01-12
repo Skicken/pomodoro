@@ -39,9 +39,6 @@ Thumbs.db
 
 .nx/cache
 apps/pomodoro-backend/.env
-.env
-.env
-apps/pomodoro-backend/.env
-apps/pomodoro-backend/.env
 
 .angular
+.env

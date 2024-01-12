@@ -1,9 +1,8 @@
+
 <div class="content-wrapper">
-  <h1 class="center">
-    <div>
-    Homework
-    <mat-icon fontIcon="bookmark" class="template-icon"></mat-icon>
-    </div>
+  <h1 class="text-center">
+      {{this.pomodoroService.selectedTemplate.name}}
+    <mat-icon fontIcon="bookmark" class="template-icon" (click)="openTemplateSelection()"></mat-icon>
   </h1>
   <div class="buttons center">
     <button
@@ -11,7 +10,7 @@
       [class]="
         this.pomodoroService.state ===
         this.pomodoroService.PomodoroStateType.SESSION
-          ? 'selected'
+          ? 'my-button-white-selected'
           : ''
       "
       (click)="this.pomodoroService.PomodoroButton()"
@@ -24,7 +23,7 @@
       [class]="
         this.pomodoroService.state ===
         this.pomodoroService.PomodoroStateType.SHORT_BREAK
-          ? 'selected'
+          ? 'my-button-white-selected'
           : ''
       "
     >
@@ -36,7 +35,7 @@
       [class]="
         this.pomodoroService.state ===
         this.pomodoroService.PomodoroStateType.LONG_BREAK
-          ? 'selected'
+          ? 'my-button-white-selected'
           : ''
       "
     >

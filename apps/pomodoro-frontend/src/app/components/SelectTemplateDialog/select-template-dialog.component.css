@@ -1,0 +1,23 @@
+.templateSelection
+{
+  color: black;
+  border: 1px solid black;
+  border-radius: 20px;
+  margin: 5px;
+  font-size: large;
+}
+.templateSelection:hover
+{
+  cursor: pointer;
+  color: white;
+  background-color: black;
+}
+.list
+{
+  scroll-behavior: auto;
+  max-height: 300px;
+}
+h3
+{
+  color: black;
+}

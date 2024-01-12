@@ -1,0 +1,38 @@
+<div class="setting">
+  <div class="setting-name">
+    <h4>
+      {{ settingName }}
+    </h4>
+  </div>
+  <div class="input">
+    <ng-container [ngSwitch]="type">
+      <mat-form-field *ngSwitchCase="'minutes'" class="minutes" >
+        <mat-label>HH:MM</mat-label>
+        <input type="time" matInput [(ngModel)]="timeValue" (change)="setValue()"/>
+      </mat-form-field>
+
+      <mat-slider class="slider" min="0" max="100" step="1" discrete *ngSwitchCase="'slider'" [displayWith]="formatLabel" >
+        <input matSliderThumb [(ngModel)]="value" (change)="setValue()">
+      </mat-slider>
+
+      <mat-slide-toggle *ngSwitchCase="'toggle'" [(ngModel)]="value" (change)="setValue()"></mat-slide-toggle>
+
+      <mat-form-field *ngSwitchCase="'list-id'">
+        <mat-label>{{label}}</mat-label>
+        <mat-select name="template" [(ngModel)]="value" (change)="setValue()">
+          @for (item of listItems; track item) {
+             <mat-option [value]="item.id">{{item.displayName}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+    </ng-container>
+  </div>
+  <div class="binding">
+    <mat-icon
+      fontIcon="bookmark"
+      class="template-icon"
+      matTooltip="Bind setting to other template"
+    ></mat-icon>
+  </div>
+</div>

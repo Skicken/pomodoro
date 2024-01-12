@@ -1,26 +1,11 @@
-.center
-{
-  text-align: center;
-  margin: 10px;
-}
-.login-button
-{
-  text-align: center;
-}
-.timer-text
-{
-
-}
 .input
 {
   display: block;
+  max-width: 250px;
+  margin: auto;
 }
 .error-login
 {
+  font-size: small;
   text-align: center;
-  margin: 5px;
-}
-.login-container
-{
-  max-width: 300px;
 }

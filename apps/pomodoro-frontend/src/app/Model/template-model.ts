@@ -4,24 +4,36 @@ export interface Setting
   id:number,
   settingNameID:number,
   key:string,
-  value: string | number,
+  value: number,
 
 }
-export class Template{
 
+export const GetKeyFromTemplate = (key:string,template:Template) : Setting | undefined =>
+{
+  return template.settings.find((element)=>{return element.key==key});
+}
+export const SetKeyTemplate = (key:string,value:number,template:Template) :void =>
+{
+  const setting = template.settings.find((element)=>{return element.key==key});
+  if(setting)
+    setting.value = value;
+  else
+    console.error("Could not find setting with: ",key)
+}
+
+
+export class Template{
   id:number = 0;
   settings:Setting[] = [];
   isDefault:boolean = false;
-  templateName:string = ""
-
-  constructor() {}
-  Get(key:string) : Setting | undefined
+  name:string = "";
+  public constructor(init?:Partial<Template>) {         Object.assign(this, init); }
+  GetKeySetting(key:string)
   {
     return this.settings.find((element)=>{return element.key==key});
   }
-  Replace(key:string,setting:Setting)
+  GetKey(key:string):number
   {
-    this.settings.map((value)=>{return value.key==key?setting:value});
+    return this.settings.find((element)=>{return element.key==key})!.value;
   }
-
 }

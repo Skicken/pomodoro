@@ -17,7 +17,6 @@ export class UserService {
       map((user) => {
         this.user = user;
         localStorage.setItem('user',JSON.stringify(user));
-
       })
     );
   }

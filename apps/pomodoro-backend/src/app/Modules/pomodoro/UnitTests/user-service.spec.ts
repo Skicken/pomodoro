@@ -8,20 +8,24 @@ import { config } from 'dotenv';
 import { UserService } from '../Services/User/user.service';
 import { AddUserDTO } from '../Dto/add-user-dto';
 import { UpdateUserDTO } from '../Dto/update-user-dto';
+import { TemplateService } from '../Services/Template/template.service';
 
 describe('UserService', () => {
   let service: UserService;
   let prisma: DeepMockProxy<{
     [K in keyof PrismaClient]: Omit<PrismaClient[K], 'groupBy'>;
   }>;
+  const templateServiceMock = { CreateUserDefault: jest.fn().mockImplementation((userID:number)=>{})};
   beforeEach(async () => {
     config({ path: 'apps/pomodoro-backend/.env' });
 
     const module = await Test.createTestingModule({
-      providers: [PrismaService, UserService],
+      providers: [PrismaService, UserService,TemplateService],
     })
       .overrideProvider(PrismaService)
       .useValue(mockDeep<PrismaClient>())
+      .overrideProvider(TemplateService)
+      .useValue(templateServiceMock)
       .compile();
 
     service = module.get(UserService);

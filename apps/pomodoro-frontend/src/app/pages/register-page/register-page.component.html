@@ -1,5 +1,5 @@
 <div class="content-wrapper">
-  <div class="center">
+  <div class="text-center">
     <h1><a href="">Pomodoro</a></h1>
     <h2>Register</h2>
   </div>
@@ -8,14 +8,12 @@
       <form action="" [formGroup]="registerControl" (ngSubmit)="onSubmit()">
         <mat-form-field class="input">
           <mat-label>Email</mat-label>
-          <input
-            type="email"
-            matInput
-            formControlName="email"
-            name="email"
-          />
-
+          <input type="email" matInput formControlName="email" name="email" />
+          @if (registerControl.value.email) {
+            <mat-error class="font-xsmall">Enter valid email</mat-error>
+            }
         </mat-form-field>
+
         <mat-form-field class="input">
           <mat-label>Username</mat-label>
           <input
@@ -23,11 +21,12 @@
             matInput
             formControlName="username"
             name="username"
-
           />
-          <mat-error *ngIf="registerControl.value.confirmPassword">Username should be at least length of 5.</mat-error>
-
+          @if (registerControl.value.username) {
+          <mat-error class="font-xsmall">Username should be at least length of 5</mat-error>
+          }
         </mat-form-field>
+
         <mat-form-field class="input">
           <mat-label>Password</mat-label>
           <input
@@ -37,10 +36,13 @@
             name="new-password"
             autocomplete="on"
           />
-          <mat-error *ngIf="registerControl.value.confirmPassword">Password should be at least length of 5.</mat-error>
-
-
+          @if (registerControl.value.password) {
+          <mat-error class="font-xsmall"
+            >Password should be at least length of 5.</mat-error
+          >
+          }
         </mat-form-field>
+
         <mat-form-field class="input">
           <mat-label>Confirm password</mat-label>
           <input
@@ -49,22 +51,31 @@
             formControlName="confirmPassword"
             name="password"
             autocomplete="on"
-
+            [errorStateMatcher]="this.matcher"
           />
-          <mat-error *ngIf="registerControl.value.confirmPassword">Passwords do not match.</mat-error>
+
+          @if (registerControl.hasError('notSamePassword')) {
+          <mat-error class="font-xsmall">Passwords do not match</mat-error>
+          }
         </mat-form-field>
 
-
-        <mat-error *ngIf="!correctForm" class="error-login">{{errorMessage}}</mat-error
-          >
-          <div class="login-button" >
-            <button class="my-button" type="submit">Register</button>
-          </div>
+        <mat-error *ngIf="!correctForm" class="font-xsmall m1">{{
+          errorMessage
+        }}</mat-error>
+        <div class="text-center">
+          <button class="my-button" type="submit">Register</button>
+        </div>
       </form>
     </div>
   </div>
-  <div class="center" style="margin-top: 20px;">
+  <div class="text-center" style="margin-top: 20px">
     <h4>Have account?</h4>
-    <button class="my-button-white" style="margin-top: 10px;" routerLink="/login">Login</button>
+    <button
+      class="my-button-white"
+      style="margin-top: 10px"
+      routerLink="/login"
+    >
+      Login
+    </button>
   </div>
 </div>

@@ -9,8 +9,10 @@ import {
 } from '@angular/forms';
 import { UserService } from '../../services/user-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import { catchError } from 'rxjs';
 import { Router } from '@angular/router';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+
 
 @Component({
   selector: 'pomodoro-register-page',
@@ -21,6 +23,8 @@ export class RegisterPageComponent {
   constructor(private userService: UserService,private router:Router) {}
   errorMessage = '';
   correctForm = true;
+  matcher = new PasswordConfirmMatcher();
+
   registerControl = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     username: new FormControl('', [
@@ -34,11 +38,8 @@ export class RegisterPageComponent {
     ]),
     confirmPassword: new FormControl('', [
       Validators.required,
-      confirmPasswordValidator,
-      Validators.minLength(5),
-      Validators.maxLength(20),
     ]),
-  });
+  },[confirmPasswordValidator]);
 
   onSubmit() {
     if (this.registerControl.invalid) {
@@ -70,12 +71,19 @@ export class RegisterPageComponent {
       });
   }
 }
-export const confirmPasswordValidator: ValidatorFn = (
+
+class PasswordConfirmMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null): boolean {
+    return control!.parent!.errors && control!.parent!.errors['notSamePassword'];
+  }
+}
+const confirmPasswordValidator: ValidatorFn = (
   control: AbstractControl
 ): ValidationErrors | null => {
-  const password = control.get('password');
+  const password = control.get("password");
   const confirmPassword = control.get('confirmPassword');
+
   return password && confirmPassword && password.value === confirmPassword.value
-    ? { confirmPassword: true }
-    : null;
-};
+    ? null
+    : { notSamePassword: true };
+}

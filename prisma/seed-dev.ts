@@ -1,7 +1,7 @@
 import { TemplateService } from './../apps/pomodoro-backend/src/app/Modules/pomodoro/Services/Template/template.service';
 import { passwordHash } from './../apps/pomodoro-backend/src/app/Modules/common/common';
 
-import { PrismaClient, SettingType, Template, User, UserType } from '@prisma/client';
+import { PrismaClient, Template, User, UserType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 export const seedDev = async () => {
@@ -53,58 +53,47 @@ const populateSettingNames = async () => {
     data: [
       {
         name: 'pomodoro',
-        type: SettingType.INT,
-        defaultValue: '25',
+        defaultValue: 25,
       },
       {
         name: 'shortBreak',
-        type: SettingType.INT,
-        defaultValue: '5',
+        defaultValue: 5,
       },
       {
         name: 'longBreak',
-        type: SettingType.INT,
-        defaultValue: '10',
+        defaultValue: 10,
       },
       {
         name: 'sessionBeforeLongBreak',
-        type: SettingType.INT,
-        defaultValue: '3',
+        defaultValue: 3,
       },
       {
         name: 'pomodoroAutostart',
-        type: SettingType.INT,
-        defaultValue: '0',
+        defaultValue: 0,
       },
       {
         name: 'breakAutostart',
-        type: SettingType.INT,
-        defaultValue: '0',
+        defaultValue: 0,
       },
       {
         name: 'pomodoroAlert',
-        type: SettingType.INT,
-        defaultValue: '0',
+        defaultValue: 0,
       },
       {
         name: 'pomodoroAlertVolume',
-        type: SettingType.INT,
-        defaultValue: '100',
+        defaultValue: 100,
       },
       {
         name: 'breakAlert',
-        type: SettingType.INT,
-        defaultValue: '0',
+        defaultValue: 0,
       },
       {
         name: 'breakAlertVolume',
-        type: SettingType.INT,
-        defaultValue: '100',
+        defaultValue: 100,
       },
       {
         name: 'backgroundColor',
-        type: SettingType.INT,
-        defaultValue: '0',
+        defaultValue: 0,
       },
     ],
   });

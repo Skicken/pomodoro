@@ -1,42 +1,17 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SettingValueFilter } from '../../Filters/SettingValueFilter';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AddSettingDTO } from '../../Dto/add-setting-dto';
 import { UpdateSettingDTO } from '../../Dto/update-setting-dto';
 import { SettingNameService } from '../SettingName/settingname.service';
-import { Prisma, SettingName, SettingType } from '@prisma/client';
+import { Prisma, SettingName } from '@prisma/client';
 import { SettingValueDTO } from '../../Dto/setting-value-dto';
-import { isInt, isNumber, isNumberString } from 'class-validator';
 type SettingValueInclude = Prisma.SettingValueGetPayload<{
   include: { settingName: true, settingValue_Template:true  };
 }>;
 @Injectable()
 export class SettingValueService {
-  ParseContext(value: string, type: SettingType) {
-    switch (type) {
-      case 'INT':
-      {
-        return parseInt(value);
-      }
-      case 'DOUBLE':
-      {
-        return parseFloat(value);
-      }
-    }
-  }
-  CanParse(value:string,type:SettingType)
-  {
-    switch (type) {
-      case 'INT':
-      {
-        return isNumberString(value)
-      }
-      case 'DOUBLE':
-      {
-        return isNumberString(value);
-      }
-    }
-  }
+
 
   MapSettingDTO(setting: SettingValueInclude): SettingValueDTO {
     return <SettingValueDTO>{
@@ -44,13 +19,11 @@ export class SettingValueService {
       id: setting.id,
       ownerTemplateID: setting.ownerTemplateID,
       key: setting.settingName.name,
-      type: setting.settingName.type,
-      value: this.ParseContext(setting.value, setting.settingName.type),
+      value: setting.value,
       usedByTemplates:setting.settingValue_Template
 
     };
   }
-
   async GetSetting(id: number) {
     const setting = await this.prisma.settingValue.findFirst({
       where: { id: id },
@@ -61,7 +34,6 @@ export class SettingValueService {
     });
 
     if (!setting) throw new NotFoundException('Setting could not be found');
-
     return this.MapSettingDTO(setting);
   }
   constructor(
@@ -108,11 +80,7 @@ export class SettingValueService {
     return values;
   }
   async UpdateSetting(id: number, dto: UpdateSettingDTO) {
-    const setting:SettingValueDTO = await this.GetSetting(id);
-    if(!this.CanParse(dto.value,setting.type))
-    {
-      throw new BadRequestException("bad type of a value");
-    }
+
     return await this.prisma.settingValue.update({
       where: {
         id: id,

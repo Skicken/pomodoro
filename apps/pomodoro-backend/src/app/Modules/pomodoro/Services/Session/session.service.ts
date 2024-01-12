@@ -12,7 +12,7 @@ export class SessionService {
       templateID:filter.id,
       ownerID:filter.userID,
       state:filter.state,
-    }})
+    },orderBy:{startTime:filter.SortDate}})
   }
   AddSession(dto: AddSessionDTO) {
     return this.prisma.session.create({data:{

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { PomodoroService } from '../../services/pomodoro.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectTemplateDialogComponent } from '../../components/SelectTemplateDialog/select-template-dialog.component';
 
 @Component({
   selector: 'pomodoro-pomodoro-page',
@@ -7,7 +9,7 @@ import { PomodoroService } from '../../services/pomodoro.service';
   styleUrl: './pomodoro-page.component.css',
 })
 export class PomodoroPageComponent {
-  constructor(readonly pomodoroService:PomodoroService){}
+  constructor(readonly pomodoroService:PomodoroService,public dialog: MatDialog){}
 
   formatTimer(value:number):string
   {
@@ -18,5 +20,18 @@ export class PomodoroPageComponent {
       ('00' + Math.floor(value - minutes * 60)).slice(-2)
     );
   }
+  openTemplateSelection()
+  {
+    const dialogRef = this.dialog.open(SelectTemplateDialogComponent)
+    dialogRef.afterClosed().subscribe(selectedTemplate=>{
+      if(selectedTemplate)
+      {
+        console.log("selecting template");
+        this.pomodoroService.SetTemplate(selectedTemplate);
+      }
+    })
+  }
+
+
 }
 

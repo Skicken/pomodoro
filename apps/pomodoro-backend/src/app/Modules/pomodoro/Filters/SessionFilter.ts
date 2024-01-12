@@ -8,15 +8,15 @@ export class SessionFilter
 
   @IsNumber()
   @IsOptional()
-  templateID:number
+  templateID?:number
 
   @IsOptional()
   id?:number;
 
   @IsOptional()
-  SortDate : "asc" | "desc";
+  SortDate? : "asc" | "desc";
 
   @IsOptional()
   @IsEnum(PomodoroState)
-  state:PomodoroState
+  state?:PomodoroState
 }

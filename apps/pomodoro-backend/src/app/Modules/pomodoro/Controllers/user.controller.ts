@@ -1,26 +1,26 @@
-import { TemplateService } from './../Services/Template/template.service';
-import { CheckPayloadOwner, ExtractPayload, checkOwnerThrow, isOwner } from '../../auth/Guards/extract-payload.decorator';
-import { Validate } from 'class-validator';
+import { ExtractPayload, checkOwnerThrow } from '../../auth/Guards/extract-payload.decorator';
 
 import { UserService } from '../Services/User/user.service';
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, ParseIntPipe, Post, Put, Query, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { AddUserDTO } from '../Dto/add-user-dto';
 import { Role, RoleGuard } from '../../auth/Guards/role.guard';
 import { UserType } from '@prisma/client';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
-import { IsOwnerGuard } from '../../auth/Guards/is-owner.guard';
 
 import { TokenPayload } from '../../auth/Services/authenticate.service';
 import { UpdateUserDTO } from '../Dto/update-user-dto';
+import { TemplateService } from '../Services/Template/template.service';
 
 @Controller('user')
 export class UserController {
 
-    constructor(private userService:UserService){}
+    constructor(private userService:UserService,private templateService:TemplateService){}
     @Post()
     async addUser(@Body() dto:AddUserDTO)
     {
-      return this.userService.addUser(dto);
+      const user = await this.userService.addUser(dto);
+      if(user) this.templateService.CreateUserDefault(user.id)
+      return user;
     }
     @Get(":id")
     @Role(UserType.USER)

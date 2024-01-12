@@ -24,6 +24,7 @@
           "apps/pomodoro-frontend/src/assets"
         ],
         "styles": [
+          "apps/pomodoro-frontend/src/material.scss",
           "@angular/material/prebuilt-themes/indigo-pink.css",
           "apps/pomodoro-frontend/src/styles.css"
         ],
@@ -65,7 +66,7 @@
       "configurations": {
         "production": {},
         "development": {
-          "buildTarget": "pomodoro-frontend:build:development"
+          "browserTarget": "pomodoro-frontend:build:development"
         }
 
       },
@@ -78,7 +79,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "buildTarget": "pomodoro-frontend:build"
+        "browserTarget": "pomodoro-frontend:build"
       }
     },
     "lint": {
@@ -99,7 +100,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "pomodoro-frontend:build",
+        "browserTarget": "pomodoro-frontend:build",
         "staticFilePath": "dist/apps/pomodoro-frontend/browser"
       }
     }

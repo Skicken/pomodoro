@@ -1,13 +1,12 @@
-import { SettingType, Template } from '@prisma/client';
+import {Template } from '@prisma/client';
 
 export class SettingValueDTO
 {
   id:number;
   settingNameID:number;
   ownerTemplateID;
-  value: number | string | boolean;
+  value: number;
   key:string;
-  type:SettingType;
   usedByTemplates:Template[]
 
 }

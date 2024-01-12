@@ -1,0 +1,16 @@
+<div class="dialog-wrapper">
+  <form action="" [formGroup]="form" (ngSubmit)="AddTemplate()">
+    <mat-form-field class="input" >
+      <mat-label>Template Name</mat-label>
+      <input type="input" matInput formControlName="templateName" />
+      @if (form.value.templateName) {
+        <mat-error class="font-xsmall"
+          >Template name should be at least length of 5.</mat-error
+        >
+        }
+    </mat-form-field>
+    <div class="text-center">
+      <button class="my-button" type = "submit"  >Add Template</button>
+    </div>
+  </form>
+</div>

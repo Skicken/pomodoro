@@ -20,7 +20,6 @@ export class SettingNameService {
   AddSettingName(dto: AddSettingName) {
     return this.prisma.settingName.create({data:{
       name:dto.name,
-      type:dto.type,
       defaultValue:dto.defaultValue
     }}).catch(()=>{
       throw new NotFoundException("Setting name already exists");

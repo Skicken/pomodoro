@@ -5,10 +5,6 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-enum SettingType {
-  INT
-  DOUBLE
-}
 enum UserType {
   ADMIN
   USER
@@ -23,8 +19,7 @@ model SettingName{
   id Int @id @default(autoincrement())
   setting_SettingValue SettingValue[]
   name String @unique
-  type SettingType
-  defaultValue String
+  defaultValue Int
 }
 model SettingValue{
   id Int @id @default(autoincrement())
@@ -36,7 +31,7 @@ model SettingValue{
   ownerTemplate Template @relation(fields: [ownerTemplateID],references: [id],onDelete: Cascade)
 
   settingValue_Template Template[] @relation(name:"Template_Settings")
-  value String
+  value Int
 }
 
 model User{

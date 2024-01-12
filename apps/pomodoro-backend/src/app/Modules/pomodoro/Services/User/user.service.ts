@@ -60,7 +60,7 @@ export class UserService {
 
   async addUser(dto: AddUserDTO) {
     Logger.debug('Adding new user');
-    const user = this.prisma.user
+    const user = await this.prisma.user
       .create({
         data: {
           email: dto.email,
@@ -75,6 +75,7 @@ export class UserService {
           HttpStatus.CONFLICT
         );
       });
+
     return plainToInstance(ReturnUserDTO, user);
   }
 }

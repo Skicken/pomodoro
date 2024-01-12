@@ -5,12 +5,13 @@
   "scripts": {
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
-    "mysql:restore":"mysql -h 127.0.0.1 -P 4000 -u root pomodoro_tests< dumps/dump.sql",
-    "mysql:dump":"mysqldump -h 127.0.0.1 -P 4000 --no-create-info --compact -u root pomodoro_tests > dumps/dump.sql",
-
-    "docker:connect": "mysql -h 127.0.0.1 -P 4000 -u root pomodoro_tests",
+    "mysql:restore": "mysql -h 127.0.0.1 -P 4000 -u root pomodoro_tests < dumps/dump.sql",
+    "mysql:dump": "mysqldump -h 127.0.0.1 -P 4000 --no-create-info --compact -u root pomodoro_tests > dumps/dump.sql",
+    "mysql:reset": " npx prisma db push --force-reset && npm run mysql:restore",
+    "mysql:connect": "mysql -h 127.0.0.1 -P 4000 -u root pomodoro_tests",
     "prisma:dev-seed": "npx prisma db push --force-reset && npx prisma db seed",
-    "int-test": "npx prisma db push --force-reset && npm run mysql:restore && npx nx test --silent=true pomodoro-backend "
+    "int-test": "npx prisma db push --force-reset && npm run mysql:restore && npx nx test --silent=true pomodoro-backend ",
+    "watch-css":"npx nx watch --projects=pomodoro-frontend -- npx lessc ./apps/pomodoro-frontend/src/styles.less ./apps/pomodoro-frontend/src/styles.css && echo 'compiled less to css'"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -55,7 +56,7 @@
     "zone.js": "~0.14.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~17.0.0",
+    "@angular-devkit/build-angular": "^16.2.11",
     "@angular-devkit/core": "~17.0.0",
     "@angular-devkit/schematics": "~17.0.0",
     "@angular-eslint/eslint-plugin": "~17.0.0",
@@ -116,6 +117,7 @@
     "jest-runner-groups": "^2.2.0",
     "jsdom": "~22.1.0",
     "jsonc-eslint-parser": "^2.1.0",
+    "less": "^4.2.0",
     "nx": "17.2.1",
     "prettier": "^2.6.2",
     "prisma": "^5.7.1",

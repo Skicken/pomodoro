@@ -1,7 +1,8 @@
+import { SettingValue } from '@prisma/client';
 import { INestApplication, Logger, ValidationPipe } from "@nestjs/common";
 import cookieParser from "cookie-parser";
 export const createApp=(moduleRef):INestApplication=>{
-  const app = moduleRef.createNestApplication();
+  const app:INestApplication = moduleRef.createNestApplication();
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
@@ -10,7 +11,13 @@ export const createApp=(moduleRef):INestApplication=>{
       whitelist: true,
     })
   );
-  app.useLogger(new Logger());
-
   return app;
 }
+
+
+export const hasDuplicateSetting=(settings:SettingValue[])=>
+{
+  const uniqueValues = new Set(settings.map(v => v.settingNameID));
+  return uniqueValues.size<settings.length;
+}
+

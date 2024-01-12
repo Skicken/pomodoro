@@ -1,8 +1,7 @@
-import { SettingType, Template } from '@prisma/client';
-import { IsEnum, IsNotEmpty } from 'class-validator';
+import { IsNumber } from 'class-validator';
 export class UpdateSettingDTO
 {
-  @IsNotEmpty()
-  value:string
+  @IsNumber()
+  value:number
 
 }

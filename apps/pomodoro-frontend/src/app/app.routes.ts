@@ -5,6 +5,7 @@ import { HomePageComponent } from './pages/home-page/home-page.component';
 import { ValidRegistrationComponent } from './pages/valid-registration/valid-registration.component';
 import { PomodoroPageComponent } from './pages/pomodoro-page/pomodoro-page.component';
 import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';
+import { TemplatePageComponent } from './pages/template-page/template-page.component';
 
 export const appRoutes: Route[] = [
   { path: 'login', component: LoginPageComponent },
@@ -16,7 +17,8 @@ export const appRoutes: Route[] = [
     component: HomePageComponent,
     children: [
       {path:'',component:PomodoroPageComponent},
-      {path:'user-settings',component:UserSettingsPageComponent}
+      {path:'user-settings',component:UserSettingsPageComponent},
+      {path:'templates',component:TemplatePageComponent}
 
 
     ],
