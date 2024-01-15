@@ -70,8 +70,8 @@ export const exampleTemplate= new Template({
       value: 1
     },
   ],
-  isDefault: false,
-  name: "Other example"
+  isDefault: true,
+  templateName: "Simple pomodoro"
 })
 export const exampleTemplate1:Template= new Template({
   id: 0,
@@ -145,6 +145,6 @@ export const exampleTemplate1:Template= new Template({
 
   ],
   isDefault: false,
-  name: "Example"
+  templateName: "Example"
 })
 export const mockList:Template[] = [exampleTemplate,exampleTemplate1]

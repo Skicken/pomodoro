@@ -1,3 +1,4 @@
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../Model/user-model';
 import { HttpClient } from '@angular/common/http';
@@ -9,16 +10,20 @@ import { map } from 'rxjs';
 export class UserService {
   user: User | null = null;
   constructor(private http: HttpClient) {
-    const localUser = localStorage.getItem('user');
-    if (localUser) this.user = JSON.parse(localUser);
+    const userStorage =localStorage.getItem("user")
+    if(userStorage)
+    {
+      this.user = JSON.parse(userStorage);
+    }
   }
   refreshToken() {
     return this.http.post<User>('api/auth/refresh', {}).pipe(
       map((user) => {
         this.user = user;
-        localStorage.setItem('user',JSON.stringify(user));
+        localStorage.setItem("user",JSON.stringify(user));
       })
     );
+
   }
   loginUser(email: string, password: string) {
 
@@ -34,8 +39,10 @@ export class UserService {
       );
   }
   logout() {
-    this.http.post<User>('api/auth/logout', {});
+    this.http.post<User>('api/auth/logout', {}).subscribe();
     localStorage.removeItem('user');
+    localStorage.removeItem("selectedTemplate")
+    this.user = null;
   }
   registerUser(data: { email: string; nickname: string; password: string }) {
     return this.http.post<User>('api/user', data).pipe((user) => {

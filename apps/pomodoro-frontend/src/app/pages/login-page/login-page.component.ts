@@ -1,11 +1,11 @@
+import { PomodoroService } from './../../services/pomodoro.service';
 import { Component } from '@angular/core';
-import {
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../services/user-service.service';
 import { Router } from '@angular/router';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
+import { TemplateService } from '../../services/template.service';
+import { Template } from '../../Model/template-model';
 
 @Component({
   selector: 'pomodoro-login-page',
@@ -19,7 +19,12 @@ export class LoginPageComponent {
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
   });
-  constructor(private userService: UserService,private router:Router) {}
+  constructor(
+    private userService: UserService,
+    private templateService: TemplateService,
+    private pomodoroService:PomodoroService,
+    private router: Router
+  ) {}
   onSubmit() {
     if (this.loginControl.invalid) {
       this.errorMessage = 'Enter valid credentials';
@@ -32,11 +37,15 @@ export class LoginPageComponent {
     this.userService.loginUser(emailValue, passwordValue).subscribe({
       next: () => {
         console.log(this.userService.user);
+        this.pomodoroService.SetDefaultSelected();
         this.router.navigate(['']);
+
       },
-      error: () => {
-        this.errorMessage = 'User with such credentials does not exists';
-        this.correctForm = false;
+      error: (error: HttpErrorResponse) => {
+        if (error.status == HttpStatusCode.Unauthorized) {
+          this.errorMessage = 'User with such credentials does not exists';
+          this.correctForm = false;
+        } else this.errorMessage = error.message;
       },
     });
   }

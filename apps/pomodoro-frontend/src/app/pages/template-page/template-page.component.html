@@ -9,9 +9,9 @@
         <mat-form-field>
           <mat-label>Template</mat-label>
           <mat-select name="template" [(ngModel)]="selectedTemplate">
-            @for (template of templates; track template) {
+            @for (template of this.templateService.templates; track template) {
             <mat-option [value]="template">{{
-              template.name
+              template.templateName
             }}</mat-option>
             }
           </mat-select>
@@ -41,8 +41,8 @@
       <setting-input
         settingName="Test"
         label="123"
-        [timeValue]="parseToHHMM(getKeyValue('pomodoroTime'))"
-        (valueChange)="setKey('pomodoroTime', $event)"
+        [timeValue]="parseToHHMM(getKeyValue('pomodoro'))"
+        (valueChange)="setKey('pomodoro', $event)"
       />
       <setting-input settingName="Test" label="123" type="slider"   />
       <setting-input settingName="Test" label="123" type="list-id" [listItems]=alarmItemList />

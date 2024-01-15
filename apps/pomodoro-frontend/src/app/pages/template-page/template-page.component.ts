@@ -1,23 +1,25 @@
 import { ListItem } from '../../components/SettingInput/SettingInput.component';
 import { Component } from '@angular/core';
-import { SetKeyTemplate, Setting, Template } from '../../Model/template-model';
-import { exampleTemplate, exampleTemplate1 } from '../../Model/mock-template';
+import { Setting, Template } from '../../Model/template-model';
 import { AddTemplateDialogComponent } from '../../components/AddTemplateDialog/add-template-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { TemplateService } from '../../services/template.service';
 
 import { ConfirmDialogComponent } from '../../components/ConfirmDialog/confirm-dialog.component';
+import { InfoService } from '../../services/info.service';
 @Component({
   selector: 'pomodoro-template-page',
   templateUrl: './template-page.component.html',
   styleUrl: './template-page.component.css',
 })
 export class TemplatePageComponent {
-  selectedTemplate: Template = exampleTemplate;
+  selectedTemplate: Template;
   alarmItemList:ListItem[] = [];
-  templates: Template[] = [exampleTemplate, exampleTemplate1];
-  constructor(public dialog: MatDialog,private templateService:TemplateService)
+  constructor(public dialog: MatDialog,public templateService:TemplateService,private infoService:InfoService)
   {
+
+
+    this.selectedTemplate = templateService.templates[0];
     const item:ListItem = {
       id: 1,
       displayName: 'Test'
@@ -28,9 +30,10 @@ export class TemplatePageComponent {
     console.log(value);
   }
   setKey(key: string, value: number) {
-    //TODO: Exchange to service
+    const setting:Setting = this.selectedTemplate.GetKeySetting(key)!;
+    this.selectedTemplate = this.templateService.UpdateSetting(this.selectedTemplate,setting,value)
     console.log('setting template key: ', key, 'to: ', value);
-    SetKeyTemplate(key, value, this.selectedTemplate);
+
   }
   getKeyValue(key: string):number {
     const setting:Setting | undefined =  this.selectedTemplate.settings.find((element) => {
@@ -64,7 +67,12 @@ export class TemplatePageComponent {
   }
   openDeleteTemplate()
   {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent,{data:{message:"Are you sure you want to delete "+this.selectedTemplate.name+"?"}})
+    if(this.selectedTemplate.isDefault)
+    {
+      this.infoService.openInfoBar("Cannot delete default template");
+      return;
+    }
+    const dialogRef = this.dialog.open(ConfirmDialogComponent,{data:{message:"Are you sure you want to delete "+this.selectedTemplate.templateName+"?"}})
     dialogRef.afterClosed().subscribe(accept=>{
       if(accept)
       {

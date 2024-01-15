@@ -1,7 +1,7 @@
 .logo
 {
     position: absolute;
-    color: var(--white-font-color);
+    color: var(--white-color);
     font-weight:600;
     text-decoration: none;
     margin-left: 10px;
@@ -10,6 +10,10 @@
   .nav-text
   {
     display: none;
+  }
+  .dropdown-content
+  {
+    min-width: 50px;
   }
   .logo
   {
@@ -31,33 +35,33 @@ nav
 
 .dropdown .dropdown-content
 {
+  z-index: 1;
   top: 35px;
   padding: 10px;
   position: absolute;
-  min-width: 200px;
-  display: none;
+  min-width: 150px;
+  display: block;
   border-radius: 20px;
-  background-color: var(--white-font-color);
+  background-color: var(--white-color) ;
   left: 50% !important;
   right: auto !important;
   text-align: center !important;
   transform: translate(-50%, 0) !important;
 
 }
+
 .dropdown-content a
 {
   color: black;
   display: flex;
+  border-radius: 10px;
+
 }
 .dropdown-content a:hover
 {
   background-color: gray;
 }
-.dropdown:hover .dropdown-content
-{
 
-  display: block;
-}
 
 a
 {
@@ -66,12 +70,13 @@ a
   font-size: large;
   font-weight: 500;
   margin: auto;
-  color: var(--white-font-color);
+  color: var(--white-color);
 }
 .nav-item
 {
   display: flex;
   position: relative;
+  cursor: pointer;
 }
 .nav-item:after {
   background: none repeat scroll 0 0 transparent;

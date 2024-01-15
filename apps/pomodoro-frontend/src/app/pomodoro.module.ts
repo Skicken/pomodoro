@@ -7,6 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
@@ -25,10 +26,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { InputMinutesComponent } from './components/SettingInput/SettingInput.component';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
-
+import { MatButtonModule } from '@angular/material/button';
 import { AddTemplateDialogComponent } from './components/AddTemplateDialog/add-template-dialog.component';
 import { ConfirmDialogComponent } from './components/ConfirmDialog/confirm-dialog.component';
 import { SelectTemplateDialogComponent } from './components/SelectTemplateDialog/select-template-dialog.component';
+import { InfoPopupComponent } from './components/InfoPopup/info-popup.component';
+import { InfoService } from './services/info.service';
+import { TemplateService } from './services/template.service';
 
 @NgModule({
   declarations: [
@@ -45,10 +49,13 @@ import { SelectTemplateDialogComponent } from './components/SelectTemplateDialog
     AddTemplateDialogComponent,
     ConfirmDialogComponent,
     SelectTemplateDialogComponent,
+    InfoPopupComponent,
   ],
   providers: [
-    UserService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    UserService,
+    InfoService,
+    TemplateService,
   ],
   imports: [
     BrowserModule,
@@ -65,6 +72,8 @@ import { SelectTemplateDialogComponent } from './components/SelectTemplateDialog
     MatSliderModule,
     MatSlideToggleModule,
     MatDialogModule,
+    MatSnackBarModule,
+    MatButtonModule
   ],
   bootstrap: [AppComponent],
 })

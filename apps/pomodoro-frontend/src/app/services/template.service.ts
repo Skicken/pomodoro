@@ -2,47 +2,59 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { UserService } from './user-service.service';
 import { Setting, Template } from '../Model/template-model';
-import { map, tap } from 'rxjs';
+import { Observable, Subject, forkJoin, map, of, switchMap, tap } from 'rxjs';
 import { exampleTemplate, mockList } from '../Model/mock-template';
-
-
-
 @Injectable({
   providedIn: 'root',
 })
 export class TemplateService {
 
-  templates: Template[] = mockList;
-  defaultTemplate:Template = exampleTemplate;
+  templates: Template[] = [exampleTemplate];
 
-  constructor(private userService: UserService, private http: HttpClient) {}
-  GetTemplates() {
-    if (!this.userService.user) return;
-    this.templates = [];
+  constructor(private http: HttpClient,private readonly userService: UserService ) {
+
+  }
+  UpdateSetting(selectedTemplate: Template, setting: Setting, value: number): Template {
+      this.GetTemplates()?.subscribe();
+      return selectedTemplate;
+  }
+  ResetTemplates()
+  {
+    this.templates = [exampleTemplate];
+  }
+  GetTemplates() : Observable<Template[]> {
+    console.log(this.userService.user)
+    if (!this.userService.user) return new Observable<Template[]>;
+    this.templates = []
     return this.http
-      .get<{ id: number; isDefault: boolean; templateName: string }[]>(
+      .get<Template[]>(
         'api/template',
         {
           params: { userID: this.userService.user.id },
         }
       )
       .pipe(
-        map((data) => {
+        map((data:Template[]) => {
           data.forEach((element) => {
             const template:Template = new Template();
             template.id = element.id;
             template.isDefault = element.isDefault;
-            template.name = element.templateName;
-            this.GetSettings(template.id).pipe(
-              map((settings) => {
-                settings.forEach((setting) => {
-                  template.settings.push(setting);
-                });
+            template.templateName = element.templateName;
+            this.templates.push(template)
+
+          });
+          return this.templates;
+        }),switchMap((templates:Template[])=>{
+          const observables = templates.map(template => {
+            return this.GetSettings(template.id).pipe(
+              switchMap((settings: Setting[]) => {
+                template.settings = settings;
+                return of(template);
               })
             );
-            console.log(template);
-            this.templates.push(template);
           });
+
+          return forkJoin(observables);
         })
       );
   }
@@ -58,15 +70,17 @@ export class TemplateService {
         {}
       )
       .pipe(
-        map((data) => {
+        switchMap((data) => {
           const template:Template = new Template();
           template.id = data.id;
           template.isDefault = data.isDefault;
-          template.name = data.name;
-          this.GetSettings(template.id).subscribe((settings) => {
+          template.templateName = data.templateName;
+          const observable = this.GetSettings(template.id).pipe(switchMap((settings:Setting[])=>
+          {
             template.settings = settings;
-          });
-          return template;
+            return of(template);
+          }))
+          return observable;
         })
       );
   }
@@ -75,7 +89,12 @@ export class TemplateService {
       params: { templateID: templateID },
     });
   }
-
+  GetDefaultTemplate()
+  {
+    if(this.userService.user)
+      return this.http.get(`/template/default/${this.userService.user.id}`);
+    return undefined;
+  }
   Bind(template: Template, setting: Setting, to: Setting) {
     if (template.isDefault) return;
     return this.http

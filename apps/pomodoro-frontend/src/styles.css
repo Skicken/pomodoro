@@ -85,6 +85,9 @@ head {
   margin: 0;
   padding: 0;
 }
+:root {
+  --white-color: #FBF5F3;
+}
 a {
   text-decoration: none;
   color: #FBF5F3;

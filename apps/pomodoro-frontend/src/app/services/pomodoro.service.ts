@@ -1,7 +1,9 @@
+
 import { Injectable } from '@angular/core';
-import { Subscription, timer } from 'rxjs';
+import { Subject, Subscription, timer } from 'rxjs';
 import { exampleTemplate } from '../Model/mock-template';
 import { Template } from '../Model/template-model';
+import { TemplateService } from './template.service';
 
 
 export enum PomodoroState
@@ -22,16 +24,37 @@ export class PomodoroService {
   state:PomodoroState = PomodoroState.SESSION;
   PomodoroStateType = PomodoroState;
   sessionsMade = 0;
-  constructor() {
+  constructor(private templateService:TemplateService) {
     this.countDown = null;
-    this.SetTemplate(exampleTemplate);
+    this.SetDefaultSelected();
+
+  }
+  SetDefaultSelected()
+  {
+    this.templateService.GetTemplates().subscribe((templates:Template[])=>{
+      const defaultTemplate = this.templateService.templates.find((element)=>{return element.isDefault});
+      const selectedTemplate = localStorage.getItem("selectedTemplate");
+      if(selectedTemplate)
+      {
+        const template:Template = JSON.parse(selectedTemplate);
+        const foundTemplate:Template | undefined = this.templateService.templates.find((element)=>{return element.id== template.id});
+        if(foundTemplate)
+        {
+          this.SetTemplate(foundTemplate);
+        }
+      }
+      if(defaultTemplate)
+      {
+        this.SetTemplate(defaultTemplate);
+      }
+    })
   }
   SetTemplate(template:Template)
   {
     this.selectedTemplate = template;
     this.SetPlaying(false);
     this.SetSessionState();
-
+    localStorage.setItem("selectedTemplate",JSON.stringify(this.selectedTemplate))
   }
   SetMinutes(minutes:number)
   {
@@ -70,6 +93,7 @@ export class PomodoroService {
   }
   SetSessionState()
   {
+    console.log(this.selectedTemplate)
     this.SetMinutes(this.selectedTemplate.GetKey("pomodoro"));
     this.state = PomodoroState.SESSION;
   }

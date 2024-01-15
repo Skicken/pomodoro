@@ -14,8 +14,6 @@ import { UpdateUserDTO } from '../Modules/pomodoro/Dto/update-user-dto';
 import { ReturnUserDTO } from '../Modules/pomodoro/Dto/user-dto';
 
 /**
- * Bar tests
- *
  * @group int
  */
 

@@ -5,7 +5,6 @@ import { config } from "dotenv";
 import { DeepMockProxy, mockDeep } from "jest-mock-extended";
 import { PrismaService } from "../../prisma/prisma.service";
 import { AuthenticateService } from "../Services/authenticate.service";
-import { RoleGuard } from "../Guards/role.guard";
 
 describe('AuthenticationService', () => {
 

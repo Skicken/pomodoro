@@ -8,7 +8,10 @@ import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 import { passwordHash } from '../../common/common';
 import { config } from 'dotenv';
 import { UnauthorizedException } from '@nestjs/common';
-import { env } from 'process';
+
+/**
+ * @group unit/backend
+ */
 describe('AuthenticationService', () => {
   let service: AuthenticateService;
   let prisma: DeepMockProxy<{
@@ -100,7 +103,6 @@ describe('AuthenticationService', () => {
     it('refresh access token with invalid refresh token', async () => {
 
       const refresh_token = "some invalid token";
-
       await prisma.user.findUnique.mockResolvedValueOnce(loginUser);
       await expect(service.refreshToken(refresh_token)).rejects.toThrow(
         UnauthorizedException

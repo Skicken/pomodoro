@@ -5,27 +5,42 @@ import { retry, tap } from "rxjs";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
+  urlsToNotUse:string[]
 
-  constructor(private userService:UserService) {}
+  constructor(private userService:UserService) {
+
+
+    this.urlsToNotUse= [
+      'auth/refresh',
+    ];
+  }
 
   intercept(req: HttpRequest<unknown>, next: HttpHandler) {
-    const authToken = this.userService.getAccessToken();
-
-
-    const authReq = req.clone({
-      headers: req.headers.set('Authorization', authToken)
-    });
-
-    return next.handle(authReq).pipe(tap({
+    if(!this.isValidRequestForInterceptor(req.url))
+    {
+      return next.handle(req);
+    }
+    return next.handle(req).pipe(tap({
       error:(error:HttpErrorResponse)=>{
         if(error.status==HttpStatusCode.Unauthorized)
         {
-          this.userService.refreshToken();
-          const authToken = this.userService.getAccessToken();
-          authReq.headers.set('Authorization', authToken)
+          this.userService.refreshToken().subscribe();
           retry();
         }
       }
     }));
+  }
+  private isValidRequestForInterceptor(requestUrl: string): boolean {
+    const positionIndicator: string = 'api/';
+    const position = requestUrl.indexOf(positionIndicator);
+    if (position > 0) {
+      const destination: string = requestUrl.substr(position + positionIndicator.length);
+      for (const address of this.urlsToNotUse) {
+        if (new RegExp(address).test(destination)) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 }

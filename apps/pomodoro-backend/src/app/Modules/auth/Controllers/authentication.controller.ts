@@ -1,10 +1,9 @@
 import { ReturnAuthUserDTO } from './../DTO/return-auth-user-dto';
 import { plainToInstance } from 'class-transformer';
-import { AuthenticateService, TokenPayload } from '../Services/authenticate.service';
+import { AuthenticateService } from '../Services/authenticate.service';
 import { Controller, Post, Res,Req, UseGuards, Logger } from '@nestjs/common';
 import { Response,Request} from 'express';
 import { LocalAuthGuard } from '../Services/local-strategy.service';
-import { ExtractPayload } from '../Guards/extract-payload.decorator';
 @Controller('auth')
 export class AuthenticationController {
 
@@ -19,6 +18,14 @@ export class AuthenticationController {
         resp.cookie('refresh_token', data_login.refresh_token,{
           httpOnly:true,
           expires:new Date(Date.now()+60*60*1000*24*7),
+          path:"api/auth",
+          domain:"localhost",
+          sameSite:'strict'
+        })
+        resp.cookie('access_token', data_login.access_token,{
+          httpOnly:true,
+          expires:new Date(Date.now()+60*60*1000),
+          sameSite:'strict'
         })
         resp.cookie('isLogged', true,
         {
@@ -29,7 +36,6 @@ export class AuthenticationController {
     @Post("refresh")
     async refreshToken(@Req() request: Request)
     {
-        Logger.debug(request.cookies)
         return plainToInstance(ReturnAuthUserDTO,this.authService.refreshToken(request.cookies["refresh_token"]));
     }
 
@@ -37,7 +43,12 @@ export class AuthenticationController {
     async logout(@Res({ passthrough: true }) resp: Response)
     {
         resp.clearCookie("isLogged");
-        resp.clearCookie("refresh_token");
+        resp.clearCookie("refresh_token",{
+          domain:"localhost",
+          path:"api/auth"
+        });
+        resp.clearCookie("access_token");
+
     }
 
 

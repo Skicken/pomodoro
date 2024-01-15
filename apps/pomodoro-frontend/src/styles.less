@@ -3,6 +3,7 @@
 @import "styles/containers.less";
 @import "styles/helpers.less";
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
+
 body,head
 {
   background-color: @main-bg-color;
@@ -17,7 +18,10 @@ body,head
   margin: 0;
   padding: 0;
 }
-
+:root
+{
+  --white-color:@white-color
+}
 a
 {
   text-decoration: none;

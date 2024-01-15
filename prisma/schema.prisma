@@ -9,7 +9,11 @@ enum UserType {
   ADMIN
   USER
 }
-
+enum TableIDConstraint {
+  NO_CONSTRAINT
+  TEMPLATE_ID
+  ALARM_ID
+}
 enum PomodoroState {
   SESSION
   SHORT_BREAK
@@ -20,7 +24,11 @@ model SettingName{
   setting_SettingValue SettingValue[]
   name String @unique
   defaultValue Int
+  minValue Int @default(0)
+  maxValue Int @default(1440)
+  constraint TableIDConstraint @default(NO_CONSTRAINT)
 }
+
 model SettingValue{
   id Int @id @default(autoincrement())
   settingNameID Int

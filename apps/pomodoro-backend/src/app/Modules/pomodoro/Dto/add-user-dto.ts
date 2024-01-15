@@ -1,5 +1,4 @@
-import { UserType } from "@prisma/client";
-import { IsEmail, IsEnum, IsNotEmpty, Length } from "class-validator";
+import { IsEmail, IsNotEmpty, Length } from "class-validator";
 
 export class  AddUserDTO
 {
