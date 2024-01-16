@@ -1,18 +1,15 @@
 
 import { Injectable } from '@angular/core';
-import { Subject, Subscription, timer } from 'rxjs';
+import { Subscription, timer } from 'rxjs';
 import { exampleTemplate } from '../Model/mock-template';
 import { Template } from '../Model/template-model';
-import { TemplateService } from './template.service';
-import { GetStorageUser } from './helper';
+import { PomodoroState, Session } from '../Model/session-model';
+import { SessionService } from './session.service';
+import { AlarmService } from './alarm.service';
+import { defaultAlarm } from '../Model/alarm-model';
 
 
-export enum PomodoroState
-{
-  SESSION,
-  LONG_BREAK,
-  SHORT_BREAK,
-}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -24,8 +21,14 @@ export class PomodoroService {
   pomodoroTimer = 600;
   state:PomodoroState = PomodoroState.SESSION;
   PomodoroStateType = PomodoroState;
+  currentSession:Session = {
+    state: PomodoroState.SESSION,
+    startTime: new Date(Date.now()),
+    endTime: new Date(Date.now()),
+    templateID: 0
+  };
   sessionsMade = 0;
-  constructor() {
+  constructor(private sessionService:SessionService,private alarmService:AlarmService) {
     this.countDown = null;
   }
   SetTemplate(template:Template)
@@ -44,6 +47,9 @@ export class PomodoroService {
     this.isPlaying = isPlaying;
     if (this.isPlaying)
     {
+
+      this.currentSession.startTime= new Date(Date.now());
+      this.currentSession.templateID = this.selectedTemplate.id;
       this.countDown = timer(0, 1000).subscribe(() => {
         --this.pomodoroTimer;
         if(this.pomodoroTimer<=0) this.TimerEnd();
@@ -99,10 +105,13 @@ export class PomodoroService {
     const pomodoroAutostart = this.selectedTemplate.GetKey("pomodoroAutostart")
     const breakAutostart = this.selectedTemplate.GetKey("breakAutostart");
     const sessionBeforeLongBreak = this.selectedTemplate.GetKey("sessionBeforeLongBreak");
-    //TODO: Save session
+    this.currentSession.state = this.state;
+    this.currentSession.endTime = new Date(Date.now());
+    this.alarmService.PlayAlarm(defaultAlarm);
 
+    this.sessionService.AddSession(this.currentSession).subscribe();
 
-    if(this.InSession() && this.sessionsMade%sessionBeforeLongBreak)
+    if(this.InSession() && this.sessionsMade%sessionBeforeLongBreak==0)
     {
       this.SetShortBreakState();
       if(!breakAutostart) this.SetPlaying(false)

@@ -34,7 +34,6 @@ export class LoginPageComponent {
 
     this.authService.loginUser(emailValue, passwordValue).subscribe({
       next: () => {
-        DeleteStorageTemplate()
         this.router.navigate(['']);
       },
       error: (error: HttpErrorResponse) => {

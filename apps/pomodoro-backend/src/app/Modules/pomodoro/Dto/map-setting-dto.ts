@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, MinLength } from "class-validator";
+import { IsNumber, IsOptional } from "class-validator";
 
 export class MapSettingDTO {
 
@@ -6,6 +6,7 @@ export class MapSettingDTO {
     @IsNumber()
     from:number;
 
+    @IsOptional()
     @IsNumber()
     to:number;
 

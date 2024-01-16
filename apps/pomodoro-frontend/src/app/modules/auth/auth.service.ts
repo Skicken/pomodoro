@@ -1,8 +1,8 @@
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { User } from '../../Model/user-model';
-import { map, tap } from 'rxjs';
-import { HttpBackend, HttpClient } from '@angular/common/http';
+import { catchError, map, tap } from 'rxjs';
+import { HttpBackend, HttpClient, HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +18,20 @@ export class AuthService {
   }
   refreshToken() {
     return this.http.post<User>('api/auth/refresh', {}).pipe(
-      map((user) => {
-        this.user = user;
-        localStorage.setItem('user', JSON.stringify(user));
+      tap((user:User|null) => {
+        if(user)
+        {
+          this.user = user;
+          localStorage.setItem('user', JSON.stringify(user));
+          window.location.reload();
+        }
+      }),
+      catchError((error:HttpErrorResponse,caught)=>{
+        if(error.status == HttpStatusCode.Unauthorized)
+        {
+          this.logout().subscribe();
+        }
+        return caught;
       })
     );
   }
@@ -39,7 +50,6 @@ export class AuthService {
       localStorage.removeItem('user');
       localStorage.removeItem('selectedTemplate');
       window.location.reload();
-
     }));
   }
 }

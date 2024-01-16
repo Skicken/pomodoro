@@ -1,15 +1,17 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AlarmService } from '../Services/Alarm/alarm.service';
-import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { multerOptions } from '../Services/Alarm/multer-options';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
-import { Request } from 'express';
+import { Request,Response } from 'express';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
 import { FilterByUserID } from '../Filters/FilterByUserID';
 import { ExtractPayload, checkOwnerThrow } from '../../auth/Guards/extract-payload.decorator';
 import { Role, RoleGuard } from '../../auth/Guards/role.guard';
 import { UserType } from '@prisma/client';
-
+import { createReadStream } from 'fs';
+import { join } from 'path';
+import { Res } from '@nestjs/common';
 @Controller('alarm')
 @UseGuards(JwtAuthGuard)
 export class AlarmController {
@@ -21,7 +23,7 @@ export class AlarmController {
   UploadFile(
     @UploadedFile(new ParseFilePipeBuilder()
       .addFileTypeValidator({
-        fileType: 'mp3',
+        fileType: 'wav',
       })
       .addMaxSizeValidator({
         maxSize: 1048576,
@@ -58,6 +60,7 @@ export class AlarmController {
     checkOwnerThrow(alarm.ownerID,payload);
     return alarm;
   }
+
 
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)

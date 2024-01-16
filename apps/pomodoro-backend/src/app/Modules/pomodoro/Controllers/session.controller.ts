@@ -25,8 +25,7 @@ export class SessionController {
     @Body() dto:AddSessionDTO,
     @ExtractPayload() payload: TokenPayload
   ) {
-    checkOwnerThrow(dto.userID,payload)
-    return this.sessionService.AddSession(dto)
+    return this.sessionService.AddSession(payload.sub,dto)
   }
 
 

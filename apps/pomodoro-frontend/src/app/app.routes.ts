@@ -6,6 +6,8 @@ import { ValidRegistrationComponent } from './pages/valid-registration/valid-reg
 import { PomodoroPageComponent } from './pages/pomodoro-page/pomodoro-page.component';
 import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';
 import { TemplatePageComponent } from './pages/template-page/template-page.component';
+import { ReportPageComponent } from './pages/report-page/report-page.component';
+import { loginGuard } from './guards/login.guard';
 
 export const appRoutes: Route[] = [
   { path: 'login', component: LoginPageComponent },
@@ -18,8 +20,8 @@ export const appRoutes: Route[] = [
     children: [
       {path:'',component:PomodoroPageComponent},
       {path:'user-settings',component:UserSettingsPageComponent},
-      {path:'templates',component:TemplatePageComponent}
-
+      {path:'templates',component:TemplatePageComponent},
+      {path:'report',component:ReportPageComponent,canActivate:[loginGuard]}
 
     ],
   },

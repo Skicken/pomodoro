@@ -3,7 +3,6 @@ import { User } from '../Model/user-model';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs';
 import { TemplateService } from './template.service';
-import { PomodoroService } from './pomodoro.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,14 +17,6 @@ export class UserService {
     if (userStorage) {
       this.user = JSON.parse(userStorage);
     }
-  }
-  refreshToken() {
-    return this.http.post<User>('api/auth/refresh', {}).pipe(
-      map((user) => {
-        this.user = user;
-        localStorage.setItem('user', JSON.stringify(user));
-      })
-    );
   }
   loginUser(email: string, password: string) {
     const body = { username: email, password: password };

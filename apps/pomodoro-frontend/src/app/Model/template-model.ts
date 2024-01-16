@@ -26,8 +26,9 @@ export class Template {
   templateName: string = '';
 
   GetKeySetting(key: string) {
-    const setting =  this.settings.find((element) => {
-      return element.key.trim() == key.trim();
+
+    const setting:Setting | undefined =  this.settings.find((element) => {
+      return element.key=== key;
     });
     if (setting)
     {

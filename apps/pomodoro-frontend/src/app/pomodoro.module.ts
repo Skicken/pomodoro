@@ -34,6 +34,7 @@ import { InfoPopupComponent } from './components/InfoPopup/info-popup.component'
 import { InfoService } from './services/info.service';
 import { TemplateService } from './services/template.service';
 import { AuthModule } from './modules/auth/auth.module';
+import { ReportPageComponent } from './pages/report-page/report-page.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { AuthModule } from './modules/auth/auth.module';
     ConfirmDialogComponent,
     SelectTemplateDialogComponent,
     InfoPopupComponent,
+    ReportPageComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
@@ -76,7 +78,6 @@ import { AuthModule } from './modules/auth/auth.module';
     MatSnackBarModule,
     MatButtonModule,
     AuthModule,
-
   ],
   bootstrap: [AppComponent],
 })

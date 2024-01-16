@@ -7,22 +7,31 @@ import { MatDialog } from '@angular/material/dialog';
 import { TemplateService } from '../../services/template.service';
 
 import { ConfirmDialogComponent } from '../../components/ConfirmDialog/confirm-dialog.component';
-import { InfoService } from '../../services/info.service';
-import { GetStorageTemplate, GetStorageUser, SetStorageTemplate } from '../../services/helper';
+import {
+  GetStorageTemplate,
+  SetStorageTemplate,
+} from '../../services/helper';
+import { SelectTemplateDialogComponent } from '../../components/SelectTemplateDialog/select-template-dialog.component';
+import { BehaviorSubject, Observable, map, of } from 'rxjs';
 import { exampleTemplate } from '../../Model/mock-template';
+import { Router } from '@angular/router';
 @Component({
   selector: 'pomodoro-template-page',
   templateUrl: './template-page.component.html',
   styleUrl: './template-page.component.css',
 })
 export class TemplatePageComponent implements OnInit {
-  selectedTemplate: Template = exampleTemplate;
+  selectedTemplate: Template = exampleTemplate ;
+  selectedTemplate$: BehaviorSubject<Template | null> = new BehaviorSubject<Template | null>(null);
+
   alarmItemList: Item[] = [];
   constructor(
     public dialog: MatDialog,
     public templateService: TemplateService,
-    public authService:AuthService
+    public authService: AuthService,
+    public router:Router
   ) {
+    this.SetDefaultSelected();
     const item: Item = {
       id: 1,
       displayName: 'Test',
@@ -30,79 +39,91 @@ export class TemplatePageComponent implements OnInit {
     this.alarmItemList = [item];
   }
   ngOnInit(): void {
-    if (!GetStorageUser())
-    {
-      this.selectedTemplate = this.templateService.templates[0];
-    }
-    else {
-      this.SetDefaultSelected()
-    }
+    this.SetDefaultSelected();
   }
 
-  SetDefaultSelected()
-  {
-    this.templateService.GetUserTemplates().subscribe((templates: Template[]) => {
-      const defaultTemplate = this.templateService.templates.find((element)=>{return element.isDefault});
-      const storageTemplate:Template | undefined = GetStorageTemplate()
-      let hasSet = false;
-      if(storageTemplate)
-      {
-        const foundTemplate:Template | undefined = templates.find((element)=>{return element.id== storageTemplate.id});
-        if (foundTemplate) {
-          this.selectedTemplate = foundTemplate;
-          hasSet = true
+  SetDefaultSelected() {
+    this.templateService
+      .GetUserTemplates()
+      .subscribe((templates: Template[]) => {
+        const defaultTemplate = templates.find((element) => {
+          return element.isDefault;
+        });
+        const storageTemplate: Template | undefined = GetStorageTemplate();
+        let hasSet = false;
+
+        if (storageTemplate) {
+          const foundTemplate: Template | undefined = templates.find(
+            (element) => {
+              return element.id == storageTemplate.id;
+            }
+          );
+          if (foundTemplate) {
+            this.selectedTemplate = foundTemplate;
+            hasSet = true;
+          }
+
         }
+        if (defaultTemplate && !hasSet) {
+          this.selectedTemplate = defaultTemplate;
+        }
+        this.selectedTemplate$.next(this.selectedTemplate);
+
+      });
+  }
+  GetBound(setting:Setting):Observable<Item|null> {
+    return this.templateService.templates$.pipe(map((templates: Template[]) => {
+      const foundTemplate = templates.find((element) => {
+        return element.id == setting.ownerTemplateID;
+      });
+      if (foundTemplate && foundTemplate.id!=this.selectedTemplate.id) {
+        return  <Item>{
+          displayName: foundTemplate.templateName,
+          id: foundTemplate.id,
+        };
       }
-      if (defaultTemplate && !hasSet) {
-        this.selectedTemplate = defaultTemplate;
+      return null;
+    }));
+  }
+  SetBinding(setting: Setting) {
+    const dialogRef = this.dialog.open(SelectTemplateDialogComponent);
+    dialogRef.afterClosed().subscribe((dialogTemplate: Template) => {
+      if (dialogTemplate) {
+        let dialogSetting: Setting | undefined = dialogTemplate.settings.find(
+          (element) => {
+            return element.settingNameID == setting.settingNameID;
+          }
+        );
+        if (dialogTemplate.id == this.selectedTemplate.id) {
+          dialogSetting = undefined;
+        }
+        this.templateService
+          .Bind(this.selectedTemplate, setting, dialogSetting)
+          ?.subscribe(() => {
+            this.SetDefaultSelected();
+
+          });
       }
     });
   }
-  SettingBoundItem(key:string)
-  {
-    let item:Item | undefined = undefined
-    const foundSetting = this.selectedTemplate.GetKeySetting(key)
-    if(foundSetting && foundSetting?.ownerTemplateID!=this.selectedTemplate.id)
-    {
-      return this.templateService.templates$.subscribe((templates:Template[])=>{
-        const foundTemplate = templates.find((element)=>{return element.id == foundSetting.ownerTemplateID})
-
-        if(foundTemplate)
-        {
-          item = <Item>{displayName:foundTemplate.templateName,id:foundTemplate.id}
-          return item
-        }
-      })
-    }
-
-    return  item;
-  }
-
-  SetSelected(template:Template)
-  {
+  SetSelected(template: Template) {
     this.templateService.GetUserTemplates().subscribe((templates: Template[]) => {
       const selectTemplate = templates.find((element) => {
-        return template.id==element.id;
+        return template.id == element.id;
       });
       if (selectTemplate) {
         this.selectedTemplate = selectTemplate;
       }
     });
   }
-  UpdateSetting(key: string, value: number) {
-    const setting: Setting = this.selectedTemplate.GetKeySetting(key)!;
-    this.selectedTemplate.SetKey(key,value);
+  UpdateSetting(setting: Setting) {
+    console.log(this.selectedTemplate);
+
     SetStorageTemplate(this.selectedTemplate);
-    localStorage.setItem("selectedTemplate",JSON.stringify(this.selectedTemplate));
-    this.templateService.UpdateSetting(
-      setting,
-      value
-    ).subscribe();
-    console.log('setting template key: ', key, 'to: ', value);
+    this.templateService.UpdateSetting(setting, setting.value).subscribe(() => {
+      this.SetDefaultSelected();
+    });
   }
-
-
-
   parseToHHMM(value: number): string {
     const h = Math.floor(value / 60);
     const m = value % 60;
@@ -117,11 +138,12 @@ export class TemplatePageComponent implements OnInit {
   openAddTemplate() {
     const dialogRef = this.dialog.open(AddTemplateDialogComponent);
     dialogRef.afterClosed().subscribe((name) => {
-      if(!name) return;
-      this.templateService.AddTemplate({ templateName: name }).subscribe((template:Template)=>
-      {
+      if (!name) return;
+      this.templateService
+        .AddTemplate({ templateName: name })
+        .subscribe((template: Template) => {
           this.SetSelected(template);
-      });
+        });
     });
   }
   openDeleteTemplate() {
@@ -136,14 +158,15 @@ export class TemplatePageComponent implements OnInit {
     dialogRef.afterClosed().subscribe((accept) => {
       if (accept) {
         console.log('confirmed choice');
-        this.templateService.DeleteTemplate(this.selectedTemplate)?.subscribe(()=>{
-        this.SetDefaultSelected();
-        })
+        this.templateService
+          .DeleteTemplate(this.selectedTemplate)
+          ?.subscribe(() => {
+            this.SetDefaultSelected();
+          });
       }
     });
   }
-  UpdateSelected()
-  {
+  UpdateSelected() {
     SetStorageTemplate(this.selectedTemplate);
   }
 }

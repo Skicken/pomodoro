@@ -15,6 +15,4 @@ export class AddSessionDTO
   @IsNumber()
   templateID:number;
 
-  @IsNumber()
-  userID:number;
 }

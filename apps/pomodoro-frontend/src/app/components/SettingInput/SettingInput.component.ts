@@ -1,60 +1,60 @@
-import { TemplateService } from './../../../../../pomodoro-backend/src/app/Modules/pomodoro/Services/Template/template.service';
-import { MatDialog } from '@angular/material/dialog';
+import { Observable, of } from 'rxjs';
+
 import { AuthService } from './../../modules/auth/auth.service';
-import { TemplateService } from '../../services/template.service';
 import { Setting, Template } from './../../Model/template-model';
 
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { SelectTemplateDialogComponent } from '../SelectTemplateDialog/select-template-dialog.component';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { TemplateService } from '../../services/template.service';
+import { MatDialog } from '@angular/material/dialog';
 
-export interface Item
-{
-  id:number;
-  displayName:string;
+export interface Item {
+  id: number;
+  displayName: string;
 }
-export interface Binding
-{
-  templateID:number,
-
+export interface Binding {
+  templateID: number;
 }
-
 @Component({
   selector: 'setting-input',
   templateUrl: './SettingInput.component.html',
   styleUrl: './SettingInput.component.css',
 })
-export class InputMinutesComponent {
+export class InputMinutesComponent{
+  @Input({ required: true }) settingName: string = '';
+  @Input() label: string = 'Minutes';
+  @Input() type: 'number' | 'list-id' | 'toggle' | 'slider' =
+    'number';
+  @Input() listItems: Item[] = [];
+  @Input() minValue:number = 1;
+  @Input() maxValue:number = 1440;
+  @Output() valueChange = new EventEmitter<Setting>();
+  @Output() boundChange = new EventEmitter<Setting>();
+  @Input({ required: true }) setting!: Setting;
+  @Input() isDefault: boolean = false;
+  @Input() binding: Observable<Item | null> = new Observable<Item | null>;
+  boundTo: Item | null = null;
+  constructor(
+    public authService: AuthService,
+    private templateService: TemplateService,
+    public dialog: MatDialog,
 
-  @Input({required:true}) settingName:string = '';
-  @Input() listLabel:string = ''
-  @Input({required:true}) type:'minutes'| 'list-id' | 'toggle' | 'slider' = 'minutes'
-  @Input() listItems:Item[] = []
-  @Output() valueChange = new EventEmitter<number>();
-  @Output() boundChange = new EventEmitter<Template>();
-  @Input() setting!:Setting
-  @Input() value:number = 0;
-  @Input() isDefault:boolean = false;
-  @Input() BoundTo:Item | undefined = undefined;
-  constructor(public authService:AuthService,private templateService:TemplateService,private dialog: MatDialog){}
+  ) {}
 
   formatLabel(value: number): string {
-      return value.toString()+ '%';
+    return value.toString() + '%';
   }
 
-  setValue()
-  {
-    if(this.type=='minutes' && this.value<=0 || this.value>1440 ) return;
-    this.valueChange.emit(this.value);
+  setValue() {
+    if (
+      (this.type == 'number' && this.setting.value < this.minValue) ||
+      this.setting.value > this.maxValue
+    ) {
+      this.setting.value = 1;
+      return;
+    }
+    this.valueChange.emit(this.setting);
   }
-  setBinding()
-  {
-    const dialogRef = this.dialog.open(SelectTemplateDialogComponent)
-    dialogRef.afterClosed().subscribe(selectedTemplate=>{
-      if(selectedTemplate)
-      {
-        this.boundChange.emit(selectedTemplate)
-      }
-    })
+  EmitBinding() {
+    this.boundChange.emit(this.setting);
   }
-
 }

@@ -1,6 +1,5 @@
 <div class="content-wrapper-top">
   <div class="content-container padding">
-
     <div class="text-center template">
       <div class="text-center">
         <h3>Select template</h3>
@@ -8,8 +7,12 @@
       <div>
         <mat-form-field>
           <mat-label>Template</mat-label>
-          <mat-select name="template" [(ngModel)]="selectedTemplate" (ngModelChange)="UpdateSelected()">
-            @for (template of this.templateService.templates  ; track template) {
+          <mat-select
+            name="template"
+            [(ngModel)]="selectedTemplate"
+            (ngModelChange)="UpdateSelected()"
+          >
+            @for (template of this.templateService.templates$ | async ; track template) {
             <mat-option [value]="template">{{
               template.templateName
             }}</mat-option>
@@ -18,43 +21,97 @@
         </mat-form-field>
       </div>
       <ng-container *ngIf="this.authService.user">
-
-      <div>
-        <mat-icon
-          fontIcon="add"
-          class="icon add-icon"
-          matTooltip="Add new template"
-          (click) = openAddTemplate()
-        ></mat-icon>
-      </div>
-      <div>
-      <mat-icon
-          fontIcon="remove"
-          class="icon remove-icon"
-          matTooltip="Remove current template"
-          (click) = "openDeleteTemplate()"
-          *ngIf="!this.selectedTemplate.isDefault"
-
-        ></mat-icon>
-      </div>
-    </ng-container>
-
+        <div>
+          <mat-icon
+            fontIcon="add"
+            class="icon add-icon"
+            matTooltip="Add new template"
+            (click)="openAddTemplate()"
+          ></mat-icon>
+        </div>
+        <div>
+          <mat-icon
+            fontIcon="remove"
+            class="icon remove-icon"
+            matTooltip="Remove current template"
+            (click)="openDeleteTemplate()"
+            *ngIf="!this.selectedTemplate.isDefault"
+          ></mat-icon>
+        </div>
+      </ng-container>
     </div>
 
     <mat-divider></mat-divider>
     <h3 class="text-center m1">General Settings</h3>
-    <div class="settings-container">
+    <div class="settings-container" >
       <setting-input
         settingName="Pomodoro time"
-        type="minutes"
-        [value]="this.selectedTemplate.GetKey('pomodoro')"
-        (valueChange)="this.UpdateSetting('pomodoro', $event)"
-        (boundChange)="this.SetBinding('')"
+        [setting]="this.selectedTemplate.GetKeySetting('pomodoro')! "
+        (valueChange)="this.UpdateSetting($event)"
+        (boundChange)="this.SetBinding($event)"
         [isDefault]="this.selectedTemplate.isDefault"
+        [binding]="this.GetBound(this.selectedTemplate.GetKeySetting('pomodoro')!)"
+
       />
-      <!-- <setting-input settingName="Test" label="123" type="slider"   />
-      <setting-input settingName="Test" label="123" type="list-id" [listItems]=alarmItemList />
-      <setting-input settingName="Test" label="123" type="toggle" /> -->
+      <div class="settings-container">
+        <setting-input
+          settingName="Short Break time"
+          [setting]="this.selectedTemplate.GetKeySetting('shortBreak')!"
+          (valueChange)="this.UpdateSetting($event)"
+          (boundChange)="this.SetBinding($event)"
+          [isDefault]="this.selectedTemplate.isDefault"
+          [binding]="this.GetBound(this.selectedTemplate.GetKeySetting('shortBreak')!)"
+
+        />
+        <div class="settings-container">
+          <setting-input
+            settingName="Long Break time"
+            [setting]="this.selectedTemplate.GetKeySetting('longBreak')!"
+            (valueChange)="this.UpdateSetting($event)"
+            (boundChange)="this.SetBinding($event)"
+            [isDefault]="this.selectedTemplate.isDefault"
+            [binding]="this.GetBound(this.selectedTemplate.GetKeySetting('longBreak')!)"
+
+          />
+          <div class="settings-container">
+            <setting-input
+              settingName="Sessions before long break"
+              type="number"
+              label="sessions"
+              [minValue]=1
+              [maxValue]=10
+              [setting]="this.selectedTemplate.GetKeySetting('sessionBeforeLongBreak')!"
+              (valueChange)="this.UpdateSetting($event)"
+              (boundChange)="this.SetBinding($event)"
+              [isDefault]="this.selectedTemplate.isDefault"
+              [binding]="this.GetBound(this.selectedTemplate.GetKeySetting('sessionBeforeLongBreak')!)"
+            />
+
+          <div class="settings-container">
+            <setting-input
+              settingName="Break autostart"
+              type="toggle"
+              [setting]="this.selectedTemplate.GetKeySetting('breakAutostart')!"
+              (valueChange)="this.UpdateSetting($event)"
+              (boundChange)="this.SetBinding($event)"
+              [isDefault]="this.selectedTemplate.isDefault"
+              [binding]="this.GetBound(this.selectedTemplate.GetKeySetting('breakAutostart')!)"
+
+            />
+          <div class="settings-container">
+            <setting-input
+              settingName="Pomodoro autostart"
+              type="toggle"
+              [setting]="this.selectedTemplate.GetKeySetting('pomodoroAutostart')!"
+              (valueChange)="this.UpdateSetting($event)"
+              (boundChange)="this.SetBinding($event)"
+              [isDefault]="this.selectedTemplate.isDefault"
+              [binding]="this.GetBound(this.selectedTemplate.GetKeySetting('pomodoroAutostart')!)"
+
+            />
+
+        </div>
+      </div>
     </div>
   </div>
 </div>

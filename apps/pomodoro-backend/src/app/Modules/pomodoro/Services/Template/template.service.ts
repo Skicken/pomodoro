@@ -192,7 +192,15 @@ export class TemplateService {
 
     return this.MapSetting(id,from,to);
   }
-
+ async MapSettingSelf(templateID:number,from:number)
+ {
+  const fromSetting = await this.settingValueService.GetSetting(from);
+  const toSetting = await this.prisma.settingValue.findFirst({where:{
+    ownerTemplateID:templateID,
+    settingNameID:fromSetting.settingNameID,
+  }})
+  return this.MapSetting(templateID,fromSetting.id,toSetting.id);
+ }
   async GetTemplateFilter(filter: TemplateFilter) {
     return this.prisma.template.findMany({
       where: {

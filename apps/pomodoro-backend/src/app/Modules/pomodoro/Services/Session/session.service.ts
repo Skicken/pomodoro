@@ -12,11 +12,13 @@ export class SessionService {
       templateID:filter.id,
       ownerID:filter.userID,
       state:filter.state,
-    },orderBy:{startTime:filter.SortDate}})
+    },orderBy:{startTime:filter.SortDate},include:{
+      template:true
+    }})
   }
-  AddSession(dto: AddSessionDTO) {
+  AddSession(userID:number,dto: AddSessionDTO) {
     return this.prisma.session.create({data:{
-      userOwner:{connect:{id:dto.userID}},
+      userOwner:{connect:{id:userID}},
       template:{connect:{id:dto.templateID}},
       startTime: dto.startDate,
       endTime: dto.endDate,

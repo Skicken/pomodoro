@@ -1,0 +1,10 @@
+.session
+{
+  padding: 5px;
+  margin: 5px;
+  border: solid 1px black;
+}
+.date
+{
+  display: flex;
+}

@@ -1,0 +1,21 @@
+<div class="content-wrapper-top">
+  <div class="content-container padding">
+    <ng-container *ngIf="this.sessionService.sessions$ | async; let sessions">
+
+      <div *ngFor="let session of sessions" class="session">
+        <h3>{{session.template?.templateName}}</h3>
+        {{session.state}}
+        <div class="date">
+        {{this.formatTime(session.startTime)}}
+
+        </div>
+        <div class="date"> {{this.formatTime(session.endTime)}}</div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="(this.sessionService.sessions$ |async)!">
+      <div class="text-center">
+        <h1>No saved sessions</h1>
+      </div>
+    </ng-container>
+  </div>
+</div>

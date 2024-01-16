@@ -34,9 +34,17 @@ export class AuthenticationController {
         return plainToInstance(ReturnAuthUserDTO,data_login);
     }
     @Post("refresh")
-    async refreshToken(@Req() request: Request)
+    async refreshToken(@Req() request: Request,@Res({ passthrough: true }) resp: Response)
     {
-        return plainToInstance(ReturnAuthUserDTO,this.authService.refreshToken(request.cookies["refresh_token"]));
+        const userData:ReturnAuthUserDTO = await this.authService.refreshToken(request.cookies["refresh_token"]);
+
+        resp.cookie('access_token',userData.access_token,{
+          httpOnly:true,
+          expires:new Date(Date.now()+60*60*1000),
+          sameSite:'strict'
+        })
+        return plainToInstance(ReturnAuthUserDTO,userData);
+
     }
 
     @Post("logout")

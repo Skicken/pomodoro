@@ -4,38 +4,69 @@
       {{ settingName }}
     </h4>
   </div>
-  <div class="input">
+  <div class="input" >
     <ng-container [ngSwitch]="type">
-      <mat-form-field *ngSwitchCase="'minutes'" class="minutes" >
-        <mat-label>Minutes</mat-label>
-        <input min="1" max="1440" type="number" matInput [(ngModel)]="value" (change)="setValue()"/>
+      <mat-form-field *ngSwitchCase="'number'" class="minutes">
+        <mat-label>{{label}}</mat-label>
+        <input
+          [min]=this.minValue
+          [max]=this.maxValue
+          type="number"
+          matInput
+          [(ngModel)]="setting.value"
+          (change)="setValue()"
+          [disabled]="(this.binding|async)!==null"
+        />
       </mat-form-field>
 
-      <mat-slider class="slider" min="0" max="100" step="1" discrete *ngSwitchCase="'slider'" [displayWith]="formatLabel" >
-        <input matSliderThumb [(ngModel)]="value" (change)="setValue()">
+      <mat-slider
+        class="slider"
+        min="0"
+        max="100"
+        step="1"
+        discrete
+        *ngSwitchCase="'slider'"
+        [displayWith]="formatLabel"
+      >
+        <input
+          matSliderThumb
+          [(ngModel)]="setting.value"
+          (change)="setValue()"
+        />
       </mat-slider>
 
-      <mat-slide-toggle *ngSwitchCase="'toggle'" [(ngModel)]="value" (change)="setValue()"></mat-slide-toggle>
+      <mat-slide-toggle
+        *ngSwitchCase="'toggle'"
+        [(ngModel)]="setting.value"
+        (change)="setValue()"
+      ></mat-slide-toggle>
 
       <mat-form-field *ngSwitchCase="'list-id'">
-        <mat-label>{{listLabel}}</mat-label>
-        <mat-select name="template" [(ngModel)]="value" (change)="setValue()">
+        <mat-label>{{ label }}</mat-label>
+        <mat-select
+          name="template"
+          [(ngModel)]="setting.value"
+          (change)="setValue()"
+        >
           @for (item of listItems; track item) {
-             <mat-option [value]="item.id">{{item.displayName}}</mat-option>
+          <mat-option [value]="item.id">{{ item.displayName }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
-
     </ng-container>
   </div>
   <ng-container *ngIf="this.authService.user">
+    <div class="binding">
 
-  <div class="binding">
-    <mat-icon
-      fontIcon="bookmark"
-      class="template-icon"
-      matTooltip="Bind setting to other template"
-    ></mat-icon>
-  </div>
+      <!-- {{this.boundTo?.displayName}} -->
+      <mat-icon
+        *ngIf="!this.isDefault"
+        fontIcon="bookmark"
+        class="template-icon"
+        [matTooltip]="(this.binding|async)?'Currently bound to '+(this.binding | async)!.displayName:'Bind template'"
+        [class]="(this.binding|async)?'bound':''"
+        (click)="this.EmitBinding()"
+      ></mat-icon>
+    </div>
   </ng-container>
 </div>

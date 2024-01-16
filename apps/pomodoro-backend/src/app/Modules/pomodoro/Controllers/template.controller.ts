@@ -25,7 +25,9 @@ export class TemplateController {
     const template = await this.templateService.GetTemplate(id);
     checkOwnerThrowIgnoreAdmin(template.userID,payload)
     if(template.isDefault) throw new BadRequestException("cannot map default template");
-    return this.templateService.MapSettingTemplate(id,dto.from,dto.to,payload);
+    if(dto.to)
+      return this.templateService.MapSettingTemplate(id,dto.from,dto.to,payload);
+    return this.templateService.MapSettingSelf(id,dto.from);
   }
 
   @Post()

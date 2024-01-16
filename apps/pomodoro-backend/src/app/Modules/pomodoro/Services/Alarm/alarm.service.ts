@@ -11,7 +11,6 @@ export class AlarmService {
     return this.prisma.alarm.findMany();
   }
 
-
   constructor(private prisma:PrismaService){
 
   }
@@ -39,7 +38,7 @@ export class AlarmService {
     }
     return this.prisma.alarm.create({
       data:{
-          urlPath:alarmFile.path,
+          urlPath:alarmFile.filename,
           ownerID: userPayload.sub,
           name:alarmName,
       }
