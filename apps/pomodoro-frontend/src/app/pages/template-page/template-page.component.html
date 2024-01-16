@@ -8,8 +8,8 @@
       <div>
         <mat-form-field>
           <mat-label>Template</mat-label>
-          <mat-select name="template" [(ngModel)]="selectedTemplate">
-            @for (template of this.templateService.templates; track template) {
+          <mat-select name="template" [(ngModel)]="selectedTemplate" (ngModelChange)="UpdateSelected()">
+            @for (template of this.templateService.templates  ; track template) {
             <mat-option [value]="template">{{
               template.templateName
             }}</mat-option>
@@ -17,6 +17,8 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <ng-container *ngIf="this.authService.user">
+
       <div>
         <mat-icon
           fontIcon="add"
@@ -31,22 +33,28 @@
           class="icon remove-icon"
           matTooltip="Remove current template"
           (click) = "openDeleteTemplate()"
+          *ngIf="!this.selectedTemplate.isDefault"
+
         ></mat-icon>
       </div>
+    </ng-container>
+
     </div>
 
     <mat-divider></mat-divider>
     <h3 class="text-center m1">General Settings</h3>
     <div class="settings-container">
       <setting-input
-        settingName="Test"
-        label="123"
-        [timeValue]="parseToHHMM(getKeyValue('pomodoro'))"
-        (valueChange)="setKey('pomodoro', $event)"
+        settingName="Pomodoro time"
+        type="minutes"
+        [value]="this.selectedTemplate.GetKey('pomodoro')"
+        (valueChange)="this.UpdateSetting('pomodoro', $event)"
+        (boundChange)="this.SetBinding('')"
+        [isDefault]="this.selectedTemplate.isDefault"
       />
-      <setting-input settingName="Test" label="123" type="slider"   />
+      <!-- <setting-input settingName="Test" label="123" type="slider"   />
       <setting-input settingName="Test" label="123" type="list-id" [listItems]=alarmItemList />
-      <setting-input settingName="Test" label="123" type="toggle" />
+      <setting-input settingName="Test" label="123" type="toggle" /> -->
     </div>
   </div>
 </div>

@@ -33,6 +33,7 @@ import { SelectTemplateDialogComponent } from './components/SelectTemplateDialog
 import { InfoPopupComponent } from './components/InfoPopup/info-popup.component';
 import { InfoService } from './services/info.service';
 import { TemplateService } from './services/template.service';
+import { AuthModule } from './modules/auth/auth.module';
 
 @NgModule({
   declarations: [
@@ -73,7 +74,9 @@ import { TemplateService } from './services/template.service';
     MatSlideToggleModule,
     MatDialogModule,
     MatSnackBarModule,
-    MatButtonModule
+    MatButtonModule,
+    AuthModule,
+
   ],
   bootstrap: [AppComponent],
 })

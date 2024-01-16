@@ -46,7 +46,7 @@ export class SettingValueController {
     @ExtractPayload() payload: TokenPayload
   ) {
     const template = await this.templateService.GetTemplate(filter.templateID);
-    checkOwnerThrow(template.id, payload);
+    checkOwnerThrow(template.userID, payload);
     return this.settingService.GetSettingsFiltered(filter);
   }
 
@@ -60,7 +60,7 @@ export class SettingValueController {
     const template = await this.templateService.GetTemplate(
       setting.ownerTemplateID
     );
-    checkOwnerThrow(template.id, payload);
+    checkOwnerThrow(template.userID, payload);
 
     return this.settingService.UpdateSetting(id, dto);
   }

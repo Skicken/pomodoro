@@ -79,6 +79,8 @@ export class SettingValueService {
     });
     return values;
   }
+
+
   async UpdateSetting(id: number, dto: UpdateSettingDTO) {
 
     return await this.prisma.settingValue.update({

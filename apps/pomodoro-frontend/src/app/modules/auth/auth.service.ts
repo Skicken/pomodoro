@@ -1,19 +1,16 @@
+import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { User } from '../Model/user-model';
-import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
-import { TemplateService } from './template.service';
-import { PomodoroService } from './pomodoro.service';
+import { User } from '../../Model/user-model';
+import { map, tap } from 'rxjs';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
-export class UserService {
+export class AuthService {
   user: User | null = null;
-  constructor(
-    private http: HttpClient,
-    private templateService: TemplateService,
-  ) {
+  constructor(private http: HttpClient, backend: HttpBackend, private router:Router) {
+    this.http = new HttpClient(backend);
     const userStorage = localStorage.getItem('user');
     if (userStorage) {
       this.user = JSON.parse(userStorage);
@@ -36,10 +33,13 @@ export class UserService {
       })
     );
   }
+  logout() {
+    return this.http.post<User>('api/auth/logout', {}).pipe(tap(()=>{
+      this.user = null
+      localStorage.removeItem('user');
+      localStorage.removeItem('selectedTemplate');
+      window.location.reload();
 
-  registerUser(data: { email: string; nickname: string; password: string }) {
-    return this.http.post<User>('api/user', data).pipe((user) => {
-      return user;
-    });
+    }));
   }
 }

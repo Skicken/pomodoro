@@ -1,17 +1,11 @@
 import { InfoService } from './../../services/info.service';
-import { PomodoroService } from './../../services/pomodoro.service';
 
 import {
   Component,
-  ElementRef,
-  HostListener,
   Renderer2,
-  ViewChild,
 } from '@angular/core';
-import { UserService } from '../../services/user-service.service';
 import { Router } from '@angular/router';
-import { TemplateService } from '../../services/template.service';
-import { exampleTemplate } from '../../Model/mock-template';
+import { AuthService } from '../../modules/auth/auth.service';
 
 @Component({
   selector: 'pomodoro-navbar',
@@ -23,9 +17,7 @@ export class NavbarComponent {
   onDropdownClick: boolean = false;
 
   constructor(
-    public userService: UserService,
-    private pomodoroService: PomodoroService,
-    private templateService: TemplateService,
+    public authService: AuthService,
     private router: Router,
     private renderer: Renderer2,
     private info:InfoService
@@ -38,10 +30,8 @@ export class NavbarComponent {
     });
   }
   logout() {
-    this.pomodoroService.SetTemplate(exampleTemplate);
-    this.templateService.ResetTemplates();
-    this.userService.logout();
-    this.info.openInfoBar("Succesfully logged out");
+    this.authService.logout().subscribe(()=>{
+    });
   }
   openUserOptions() {
     this.onDropdownClick = true;

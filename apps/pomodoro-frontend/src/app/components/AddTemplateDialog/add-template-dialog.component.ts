@@ -18,6 +18,9 @@ export class AddTemplateDialogComponent {
   }
   AddTemplate()
   {
+    if(this.form.get("templateName")?.value && this.form.get("templateName")?.valid)
+      this.dialogRef.close(this.form.get("templateName")?.value);
+    else
     this.dialogRef.close();
   }
 

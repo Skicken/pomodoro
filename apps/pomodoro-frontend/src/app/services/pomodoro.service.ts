@@ -4,6 +4,7 @@ import { Subject, Subscription, timer } from 'rxjs';
 import { exampleTemplate } from '../Model/mock-template';
 import { Template } from '../Model/template-model';
 import { TemplateService } from './template.service';
+import { GetStorageUser } from './helper';
 
 
 export enum PomodoroState
@@ -24,30 +25,8 @@ export class PomodoroService {
   state:PomodoroState = PomodoroState.SESSION;
   PomodoroStateType = PomodoroState;
   sessionsMade = 0;
-  constructor(private templateService:TemplateService) {
+  constructor() {
     this.countDown = null;
-    this.SetDefaultSelected();
-
-  }
-  SetDefaultSelected()
-  {
-    this.templateService.GetTemplates().subscribe((templates:Template[])=>{
-      const defaultTemplate = this.templateService.templates.find((element)=>{return element.isDefault});
-      const selectedTemplate = localStorage.getItem("selectedTemplate");
-      if(selectedTemplate)
-      {
-        const template:Template = JSON.parse(selectedTemplate);
-        const foundTemplate:Template | undefined = this.templateService.templates.find((element)=>{return element.id== template.id});
-        if(foundTemplate)
-        {
-          this.SetTemplate(foundTemplate);
-        }
-      }
-      if(defaultTemplate)
-      {
-        this.SetTemplate(defaultTemplate);
-      }
-    })
   }
   SetTemplate(template:Template)
   {

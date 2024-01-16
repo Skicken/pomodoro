@@ -5,5 +5,4 @@ export interface User
   userType:UserType
   email:string,
   nickname:string,
-  access_token:string,
 }

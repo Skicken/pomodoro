@@ -7,8 +7,8 @@
   <div class="input">
     <ng-container [ngSwitch]="type">
       <mat-form-field *ngSwitchCase="'minutes'" class="minutes" >
-        <mat-label>HH:MM</mat-label>
-        <input type="time" matInput [(ngModel)]="timeValue" (change)="setValue()"/>
+        <mat-label>Minutes</mat-label>
+        <input min="1" max="1440" type="number" matInput [(ngModel)]="value" (change)="setValue()"/>
       </mat-form-field>
 
       <mat-slider class="slider" min="0" max="100" step="1" discrete *ngSwitchCase="'slider'" [displayWith]="formatLabel" >
@@ -18,7 +18,7 @@
       <mat-slide-toggle *ngSwitchCase="'toggle'" [(ngModel)]="value" (change)="setValue()"></mat-slide-toggle>
 
       <mat-form-field *ngSwitchCase="'list-id'">
-        <mat-label>{{label}}</mat-label>
+        <mat-label>{{listLabel}}</mat-label>
         <mat-select name="template" [(ngModel)]="value" (change)="setValue()">
           @for (item of listItems; track item) {
              <mat-option [value]="item.id">{{item.displayName}}</mat-option>
@@ -28,6 +28,8 @@
 
     </ng-container>
   </div>
+  <ng-container *ngIf="this.authService.user">
+
   <div class="binding">
     <mat-icon
       fontIcon="bookmark"
@@ -35,4 +37,5 @@
       matTooltip="Bind setting to other template"
     ></mat-icon>
   </div>
+  </ng-container>
 </div>

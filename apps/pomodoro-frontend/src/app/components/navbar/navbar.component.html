@@ -4,14 +4,14 @@
       <h1>Pomodoro</h1>
     </a>
     <div class="link-container">
-      <a routerLink="/login" class="nav-item" *ngIf="!this.userService.user">
+      <a routerLink="/login" class="nav-item" *ngIf="!this.authService.user">
         <mat-icon fontIcon="login" class="icon"></mat-icon>
         <span class="nav-text">Login</span>
       </a>
-      <a class="nav-item dropdown" *ngIf="this.userService.user" (click)="openUserOptions()">
+      <a class="nav-item dropdown" *ngIf="this.authService.user" (click)="openUserOptions()">
 
         <mat-icon fontIcon="person" class="icon"></mat-icon>
-        <span class="nav-text">{{ this.userService.user.nickname }}</span>
+        <span class="nav-text">{{ this.authService.user.nickname }}</span>
 
         <mat-icon fontIcon="arrow_drop_down"  *ngIf="!this.showUserOptions" class="icon"></mat-icon>
         <mat-icon fontIcon="arrow_drop_up"  *ngIf="this.showUserOptions" class="icon"></mat-icon>

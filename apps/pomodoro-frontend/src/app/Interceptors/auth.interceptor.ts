@@ -1,46 +1,30 @@
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpStatusCode } from "@angular/common/http";
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpErrorResponse, HttpStatusCode, HttpEvent } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { UserService } from "../services/user-service.service";
-import { retry, tap } from "rxjs";
+import { Observable, retry, tap } from "rxjs";
+import { AuthService } from "../modules/auth/auth.service";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  urlsToNotUse:string[]
 
-  constructor(private userService:UserService) {
+  constructor(private authService:AuthService) {
 
-
-    this.urlsToNotUse= [
-      'auth/refresh',
-    ];
   }
-
   intercept(req: HttpRequest<unknown>, next: HttpHandler) {
-    if(!this.isValidRequestForInterceptor(req.url))
+    if(!this.authService.user)
     {
-      return next.handle(req);
+      return new Observable<HttpEvent<unknown>>
     }
     return next.handle(req).pipe(tap({
       error:(error:HttpErrorResponse)=>{
         if(error.status==HttpStatusCode.Unauthorized)
         {
-          this.userService.refreshToken().subscribe();
+          this.authService.refreshToken().subscribe({error:()=>{
+            this.authService.logout();
+          }});
           retry();
         }
       }
     }));
   }
-  private isValidRequestForInterceptor(requestUrl: string): boolean {
-    const positionIndicator: string = 'api/';
-    const position = requestUrl.indexOf(positionIndicator);
-    if (position > 0) {
-      const destination: string = requestUrl.substr(position + positionIndicator.length);
-      for (const address of this.urlsToNotUse) {
-        if (new RegExp(address).test(destination)) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
+
 }

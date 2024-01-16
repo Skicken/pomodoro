@@ -1,11 +1,11 @@
 import { PomodoroService } from './../../services/pomodoro.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../services/user-service.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { TemplateService } from '../../services/template.service';
-import { Template } from '../../Model/template-model';
+import { AuthService } from '../../modules/auth/auth.service';
+import { DeleteStorageTemplate } from '../../services/helper';
 
 @Component({
   selector: 'pomodoro-login-page',
@@ -20,9 +20,7 @@ export class LoginPageComponent {
     password: new FormControl('', [Validators.required]),
   });
   constructor(
-    private userService: UserService,
-    private templateService: TemplateService,
-    private pomodoroService:PomodoroService,
+    private authService: AuthService,
     private router: Router
   ) {}
   onSubmit() {
@@ -34,12 +32,10 @@ export class LoginPageComponent {
     const emailValue = this.loginControl.get('email')!.value!;
     const passwordValue = this.loginControl.get('password')!.value!;
 
-    this.userService.loginUser(emailValue, passwordValue).subscribe({
+    this.authService.loginUser(emailValue, passwordValue).subscribe({
       next: () => {
-        console.log(this.userService.user);
-        this.pomodoroService.SetDefaultSelected();
+        DeleteStorageTemplate()
         this.router.navigate(['']);
-
       },
       error: (error: HttpErrorResponse) => {
         if (error.status == HttpStatusCode.Unauthorized) {

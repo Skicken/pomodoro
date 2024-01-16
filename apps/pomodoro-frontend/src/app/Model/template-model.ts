@@ -3,6 +3,8 @@ export interface Setting {
   settingNameID: number;
   key: string;
   value: number;
+  ownerTemplateID:number;
+
 }
 
 
@@ -15,7 +17,6 @@ export class Template {
     if (setting)
     {
       setting.value = value;
-      this.settings = Object.assign([], this.settings);
     }
     else console.error('Could not find setting with: ', key);
   }
