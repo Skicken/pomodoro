@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
-import { InfoService } from '../services/info.service';
+import { SnackBarService } from '../services/Snackbar/snack-bar.service';
 
 export const loginGuard: CanActivateFn = (route, state) => {
-  const info:InfoService = inject(InfoService)
+  const info:SnackBarService = inject(SnackBarService)
   if(localStorage.getItem('user'))
   {
     return true;

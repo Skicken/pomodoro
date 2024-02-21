@@ -1,4 +1,4 @@
-import { SessionService } from './../../services/session.service';
+import { SessionService } from '../../services/Session/session.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -21,6 +21,6 @@ export class ReportPageComponent implements OnInit {
   {
       const value = new Date(date);
 
-      return value.toLocaleDateString()+" "+value.getHours()+":"+value.getMinutes()
+      return value.toLocaleDateString()+" "+value.toLocaleTimeString();
   }
 }

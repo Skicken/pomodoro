@@ -1,6 +1,6 @@
 <div class="content-wrapper-top">
   <div class="content-container padding">
-    <ng-container *ngIf="this.sessionService.sessions$ | async; let sessions">
+    <ng-container *ngIf="this.sessionService.sessions$ | async; let sessions ">
 
       <div *ngFor="let session of sessions" class="session">
         <h3>{{session.template?.templateName}}</h3>
@@ -12,9 +12,9 @@
         <div class="date"> {{this.formatTime(session.endTime)}}</div>
       </div>
     </ng-container>
-    <ng-container *ngIf="(this.sessionService.sessions$ |async)!">
+    <ng-container *ngIf="(this.sessionService.sessions$ | async)?.length===0" >
       <div class="text-center">
-        <h1>No saved sessions</h1>
+        <h2>No saved sessions</h2>
       </div>
     </ng-container>
   </div>

@@ -3,7 +3,7 @@
   display: grid;
   max-width: 600px;
   grid-column:  auto;
-  grid-template-columns: 200px auto 30px;
+  grid-template-columns: 300px auto 30px;
   align-items: baseline;
   margin-left: auto;
   margin-right: auto;

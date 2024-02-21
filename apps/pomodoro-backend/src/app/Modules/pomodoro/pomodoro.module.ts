@@ -13,15 +13,11 @@ import { TemplateService } from './Services/Template/template.service';
 import { UserService } from './Services/User/user.service';
 import { PrismaModule } from '../prisma/prisma.module';
 import { AuthModule } from '../auth/auth.module';
-import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from '../auth/Services/jwt-strategy.service';
 import { FileController } from './Controllers/FileController';
+import { RegisterController } from './Controllers/registration.controller';
 
 @Module({
-  imports:[
-    PrismaModule,
-    AuthModule
-  ],
+  imports: [PrismaModule, AuthModule],
   controllers: [
     TemplateController,
     SessionController,
@@ -30,8 +26,9 @@ import { FileController } from './Controllers/FileController';
     FileController,
     UserController,
     AlarmController,
+    RegisterController,
   ],
-  providers:[
+  providers: [
     TemplateService,
     UserService,
     SettingValueService,
@@ -39,7 +36,5 @@ import { FileController } from './Controllers/FileController';
     SessionService,
     AlarmService,
   ],
-
-
 })
 export class PomodoroModule {}

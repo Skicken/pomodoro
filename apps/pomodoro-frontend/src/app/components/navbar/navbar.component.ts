@@ -1,4 +1,5 @@
-import { InfoService } from './../../services/info.service';
+import { PomodoroService } from './../../services/Pomodoro/pomodoro.service';
+import { SnackBarService } from '../../services/Snackbar/snack-bar.service';
 
 import {
   Component,
@@ -20,7 +21,8 @@ export class NavbarComponent {
     public authService: AuthService,
     private router: Router,
     private renderer: Renderer2,
-    private info:InfoService
+    private pomodoro:PomodoroService,
+    private info:SnackBarService
   ) {
     this.renderer.listen('window', 'click', () => {
       if (!this.onDropdownClick) {
@@ -30,6 +32,8 @@ export class NavbarComponent {
     });
   }
   logout() {
+    this.router.navigate(['']);
+
     this.authService.logout().subscribe(()=>{
     });
   }

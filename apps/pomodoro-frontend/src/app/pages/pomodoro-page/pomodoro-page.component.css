@@ -11,15 +11,10 @@
   font-weight: bold;
 }
 
-.tomato
-{
-  width: 200px;
-  height: 200px;
-  margin: auto;
-}
 .timer-text
 {
-  font-size: 40px;
+  font-size: 96px;
+  font-weight: bold;
 }
 .pause-text
 {

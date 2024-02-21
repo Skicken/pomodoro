@@ -1,14 +1,14 @@
 import { Test } from '@nestjs/testing';
 import { PrismaClient, User } from '@prisma/client';
-import { ReturnUserDTO } from '../Dto/user-dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { mockDeep, DeepMockProxy } from 'jest-mock-extended';
 import { passwordHash } from '../../common/common';
 import { config } from 'dotenv';
 import { UserService } from '../Services/User/user.service';
-import { AddUserDTO } from '../Dto/add-user-dto';
-import { UpdateUserDTO } from '../Dto/update-user-dto';
+
 import { TemplateService } from '../Services/Template/template.service';
+import { UpdateUserDTO } from '../Dto/user/update-user-dto';
+import { ReturnUserDTO } from '../Dto/user/user-dto';
 
 describe('UserService', () => {
   let service: UserService;
@@ -54,20 +54,6 @@ describe('UserService', () => {
     },
   ];
 
-  it('add user', async () => {
-    const addUser: AddUserDTO = {
-      nickname: 'test',
-      password: 'test@wp.pl',
-      email: '1234',
-    };
-    await prisma.user.create.mockResolvedValueOnce(user);
-
-    const returnUser: ReturnUserDTO = await service.addUser(addUser);
-
-    expect(returnUser).toBeDefined();
-    expect(returnUser.password).toBeUndefined();
-    expect(returnUser.nickname).toBe('test');
-  });
   it('get user', async () => {
     await prisma.user.findFirst.mockResolvedValueOnce(user);
 

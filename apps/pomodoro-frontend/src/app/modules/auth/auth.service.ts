@@ -44,6 +44,11 @@ export class AuthService {
       })
     );
   }
+  registerUser(data: { email: string; nickname: string; password: string }) {
+    return this.http.post<User>('api/register', data).pipe((user) => {
+      return user;
+    });
+  }
   logout() {
     return this.http.post<User>('api/auth/logout', {}).pipe(tap(()=>{
       this.user = null

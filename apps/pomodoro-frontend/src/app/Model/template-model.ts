@@ -4,11 +4,8 @@ export interface Setting {
   key: string;
   value: number;
   ownerTemplateID:number;
-
+  usedByTemplates:Template[]
 }
-
-
-
 export class Template {
   SetKey(key: string, value: number) {
     const setting = this.settings.find((element) => {
@@ -25,7 +22,7 @@ export class Template {
   isDefault: boolean = false;
   templateName: string = '';
 
-  GetKeySetting(key: string) {
+  GetKeySetting(key: string): Setting | undefined {
 
     const setting:Setting | undefined =  this.settings.find((element) => {
       return element.key=== key;

@@ -11,6 +11,10 @@ import { JwtService } from '@nestjs/jwt';
 import { TokenPayload } from '../Modules/auth/Services/authenticate.service';
 import { UserType } from '@prisma/client';
 import { env } from 'process';
+
+/**
+ * @group int
+ */
 describe('Auth Controller', () => {
   let app: INestApplication;
   let jwtService: JwtService;

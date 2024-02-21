@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { SettingValueFilter } from '../../Filters/SettingValueFilter';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { AddSettingDTO } from '../../Dto/add-setting-dto';
-import { UpdateSettingDTO } from '../../Dto/update-setting-dto';
+import { AddSettingDTO } from '../../Dto/setting-value/add-setting-dto';
+import { UpdateSettingDTO } from '../../Dto/setting-value/update-setting-dto';
 import { SettingNameService } from '../SettingName/settingname.service';
-import { Prisma, SettingName } from '@prisma/client';
-import { SettingValueDTO } from '../../Dto/setting-value-dto';
+import { Prisma, SettingName, SettingValue, TableIDConstraint } from '@prisma/client';
+import { SettingValueDTO } from '../../Dto/setting-value/setting-value-dto';
 type SettingValueInclude = Prisma.SettingValueGetPayload<{
   include: { settingName: true, settingValue_Template:true  };
 }>;
@@ -21,7 +21,6 @@ export class SettingValueService {
       key: setting.settingName.name,
       value: setting.value,
       usedByTemplates:setting.settingValue_Template
-
     };
   }
   async GetSetting(id: number) {
@@ -80,7 +79,31 @@ export class SettingValueService {
     return values;
   }
 
+  async IsValidValueUpdate(newValue:number,settingValue:SettingValue):Promise<boolean>
+  {
+    const settingName:SettingName = await this.settingNameService.GetSettingName(settingValue.settingNameID);
 
+    if(settingName.constraint===TableIDConstraint.NO_CONSTRAINT && (settingName.minValue>newValue || settingName.maxValue<newValue))
+    {
+      return false;
+    }
+
+    switch(settingName.constraint)
+    {
+      case 'NO_CONSTRAINT':
+        return true;
+      case 'TEMPLATE_ID':
+      {
+          return (await this.prisma.template.count({where:{id:newValue}}))>0;
+      }
+      case 'ALARM_ID':
+      {
+        return (await this.prisma.alarm.count({where:{id:newValue}}))>0
+      }
+      default:
+        return true;
+    }
+  }
   async UpdateSetting(id: number, dto: UpdateSettingDTO) {
 
     return await this.prisma.settingValue.update({

@@ -1,12 +1,23 @@
-.template
+.creating
 {
-  display: grid;
-  grid-template-columns:200px auto 30px 30px;
-  align-items: baseline;
+  display: flex;
+  justify-content:center;
+  align-items:baseline;
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-
+  margin-top: 5px;
+}
+.mt-1
+{
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.inline
+{
+  position: absolute;
+  margin-left: 270px;
+  margin-top: 20px;
 }
 .icon
 {

@@ -6,12 +6,13 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { Prisma, User, UserType } from '@prisma/client';
-import { ReturnUserDTO } from '../../Dto/user-dto';
-import { AddUserDTO } from '../../Dto/add-user-dto';
+
 import { plainToInstance } from 'class-transformer';
 import { Logger } from '@nestjs/common';
-import { UpdateUserDTO } from '../../Dto/update-user-dto';
 import { passwordHash } from '../../../common/common';
+import { ReturnUserDTO } from '../../Dto/user/user-dto';
+import { AddUserDTO } from '../../Dto/user/add-user-dto';
+import { UpdateUserDTO } from '../../Dto/user/update-user-dto';
 @Injectable()
 export class UserService {
   UserNotFound = new NotFoundException('User not found');

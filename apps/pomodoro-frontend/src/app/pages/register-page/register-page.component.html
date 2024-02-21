@@ -8,10 +8,15 @@
       <form action="" [formGroup]="registerControl" (ngSubmit)="onSubmit()">
         <mat-form-field class="input">
           <mat-label>Email</mat-label>
-          <input type="email" matInput formControlName="email" name="email" />
+          <input
+            type="email"
+            matInput
+            formControlName="email"
+            autocomplete="email"
+          />
           @if (registerControl.value.email) {
-            <mat-error class="font-xsmall">Enter valid email</mat-error>
-            }
+          <mat-error class="error">Enter valid email</mat-error>
+          }
         </mat-form-field>
 
         <mat-form-field class="input">
@@ -20,10 +25,12 @@
             type="text"
             matInput
             formControlName="username"
-            name="username"
+            autocomplete="nickname"
           />
           @if (registerControl.value.username) {
-          <mat-error class="font-xsmall">Username should be at least length of 5</mat-error>
+          <mat-error class="error"
+            >Username should be at least length of 5</mat-error
+          >
           }
         </mat-form-field>
 
@@ -33,11 +40,10 @@
             type="password"
             matInput
             formControlName="password"
-            name="new-password"
-            autocomplete="on"
+            autocomplete="new-password"
           />
           @if (registerControl.value.password) {
-          <mat-error class="font-xsmall"
+          <mat-error class="error"
             >Password should be at least length of 5.</mat-error
           >
           }
@@ -49,17 +55,16 @@
             type="password"
             matInput
             formControlName="confirmPassword"
-            name="password"
-            autocomplete="on"
+            autocomplete="new-password"
             [errorStateMatcher]="this.matcher"
           />
 
           @if (registerControl.hasError('notSamePassword')) {
-          <mat-error class="font-xsmall">Passwords do not match</mat-error>
+          <mat-error class="error">Passwords do not match</mat-error>
           }
         </mat-form-field>
 
-        <mat-error *ngIf="!correctForm" class="font-xsmall m1">{{
+        <mat-error *ngIf="!correctForm" class="error m1">{{
           errorMessage
         }}</mat-error>
         <div class="text-center">

@@ -42,3 +42,5 @@ apps/pomodoro-backend/.env
 
 .angular
 .env
+assets/alarms/*
+

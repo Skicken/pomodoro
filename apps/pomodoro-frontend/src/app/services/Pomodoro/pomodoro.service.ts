@@ -1,13 +1,11 @@
 
 import { Injectable } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
-import { exampleTemplate } from '../Model/mock-template';
-import { Template } from '../Model/template-model';
-import { PomodoroState, Session } from '../Model/session-model';
-import { SessionService } from './session.service';
-import { AlarmService } from './alarm.service';
-import { defaultAlarm } from '../Model/alarm-model';
-
+import { defaultTemplate } from '../../Model/mock-template';
+import { Template } from '../../Model/template-model';
+import { PomodoroState, Session } from '../../Model/session-model';
+import { SessionService } from '../Session/session.service';
+import { AlarmService } from '../Alarm/alarm.service';
 
 
 @Injectable({
@@ -15,7 +13,7 @@ import { defaultAlarm } from '../Model/alarm-model';
 })
 export class PomodoroService {
 
-  selectedTemplate: Template = exampleTemplate;
+  selectedTemplate: Template = defaultTemplate;
   countDown: Subscription | null;
   isPlaying = false;
   pomodoroTimer = 600;
@@ -50,8 +48,14 @@ export class PomodoroService {
 
       this.currentSession.startTime= new Date(Date.now());
       this.currentSession.templateID = this.selectedTemplate.id;
+      let previousTimestamp = Date.now();
+      let pomodoroTimerMili = this.pomodoroTimer*1000;
       this.countDown = timer(0, 1000).subscribe(() => {
-        --this.pomodoroTimer;
+
+        const currentTimestamp = Date.now();
+        pomodoroTimerMili-= (currentTimestamp - previousTimestamp);
+        this.pomodoroTimer = pomodoroTimerMili/1000;
+        previousTimestamp = currentTimestamp;
         if(this.pomodoroTimer<=0) this.TimerEnd();
       });
     }
@@ -100,16 +104,40 @@ export class PomodoroService {
   {
     return (this.state===PomodoroState.SHORT_BREAK ||this.state===PomodoroState.LONG_BREAK);
   }
+  PlayTemplateAlarm()
+  {
+    let alarmID = 0;
+    let volume = 0.; //volume is stored between 0 - 100
+    if(this.state != PomodoroState.SESSION)
+    {
+      alarmID= this.selectedTemplate.GetKey("pomodoroAlert");
+      volume = this.selectedTemplate.GetKey("pomodoroAlertVolume");
 
+    }
+    else
+    {
+      alarmID = this.selectedTemplate.GetKey("breakAlert");
+      volume = this.selectedTemplate.GetKey("breakAlertVolume");
+    }
+    this.alarmService.PlayAlarmID(alarmID,volume);
+  }
+  SaveSession()
+  {
+    this.currentSession.state = this.state;
+    this.currentSession.endTime = new Date(Date.now());
+    //this.sessionService.AddSession(this.currentSession).subscribe();
+
+  }
   TimerEnd() {
+
+    this.PlayTemplateAlarm()
+    this.SaveSession()
+
+
+    //Changing State of Pomodoro
     const pomodoroAutostart = this.selectedTemplate.GetKey("pomodoroAutostart")
     const breakAutostart = this.selectedTemplate.GetKey("breakAutostart");
     const sessionBeforeLongBreak = this.selectedTemplate.GetKey("sessionBeforeLongBreak");
-    this.currentSession.state = this.state;
-    this.currentSession.endTime = new Date(Date.now());
-    this.alarmService.PlayAlarm(defaultAlarm);
-
-    this.sessionService.AddSession(this.currentSession).subscribe();
 
     if(this.InSession() && this.sessionsMade%sessionBeforeLongBreak==0)
     {
@@ -120,14 +148,12 @@ export class PomodoroService {
     {
       this.SetLongBreakState();
       if(!breakAutostart) this.SetPlaying(false)
-
     }
     else
     {
       this.SetSessionState();
       if(!pomodoroAutostart) this.SetPlaying(false);
     }
-
     this.sessionsMade++;
   }
 }

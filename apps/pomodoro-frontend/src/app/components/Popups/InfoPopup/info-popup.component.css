@@ -1,8 +1,5 @@
-.snackbar-info
-{
 
-}
-.snackbar-error
+.snackbar-text
 {
   font-weight:500;
 }
@@ -10,9 +7,10 @@
 {
   display: flex;
   width: 100%;
-  align-items: baseline;
+  align-items:baseline;
 }
 .ok-button
 {
   margin-left: auto;
+  margin-top: auto;
 }

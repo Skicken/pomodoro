@@ -1,10 +1,10 @@
-import { Observable, of } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import { AuthService } from './../../modules/auth/auth.service';
-import { Setting, Template } from './../../Model/template-model';
+import { Setting } from './../../Model/template-model';
 
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { TemplateService } from '../../services/template.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { TemplateService } from '../../services/Template/template.service';
 import { MatDialog } from '@angular/material/dialog';
 
 export interface Item {
@@ -24,7 +24,7 @@ export class InputMinutesComponent{
   @Input() label: string = 'Minutes';
   @Input() type: 'number' | 'list-id' | 'toggle' | 'slider' =
     'number';
-  @Input() listItems: Item[] = [];
+  @Input() listItems: BehaviorSubject<Item[] | null> = new BehaviorSubject<Item[] | null>([]);
   @Input() minValue:number = 1;
   @Input() maxValue:number = 1440;
   @Output() valueChange = new EventEmitter<Setting>();
@@ -39,11 +39,9 @@ export class InputMinutesComponent{
     public dialog: MatDialog,
 
   ) {}
-
   formatLabel(value: number): string {
     return value.toString() + '%';
   }
-
   setValue() {
     if (
       (this.type == 'number' && this.setting.value < this.minValue) ||
@@ -54,6 +52,7 @@ export class InputMinutesComponent{
     }
     this.valueChange.emit(this.setting);
   }
+
   EmitBinding() {
     this.boundChange.emit(this.setting);
   }

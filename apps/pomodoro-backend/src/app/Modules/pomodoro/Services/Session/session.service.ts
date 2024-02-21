@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SessionFilter } from '../../Filters/SessionFilter';
-import { AddSessionDTO } from '../../Dto/add-session-dto';
+import { AddSessionDTO } from '../../Dto/session/add-session-dto';
 import { PrismaService } from '../../../prisma/prisma.service';
 
 @Injectable()

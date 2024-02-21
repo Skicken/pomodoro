@@ -1,7 +1,7 @@
 import { TemplateService } from './../apps/pomodoro-backend/src/app/Modules/pomodoro/Services/Template/template.service';
 import { passwordHash } from './../apps/pomodoro-backend/src/app/Modules/common/common';
 
-import { PrismaClient, Template, User, UserType } from '@prisma/client';
+import { PrismaClient, TableIDConstraint, Template, User, UserType } from '@prisma/client';
 
 const prisma = new PrismaClient();
 export const seedDev = async () => {
@@ -10,7 +10,6 @@ export const seedDev = async () => {
 
   console.log('populating setting names...');
   populateSettingNames();
-
 
 };
 
@@ -78,6 +77,8 @@ const populateSettingNames = async () => {
       {
         name: 'pomodoroAlert',
         defaultValue: 0,
+        constraint:TableIDConstraint.ALARM_ID
+
       },
       {
         name: 'pomodoroAlertVolume',
@@ -86,10 +87,12 @@ const populateSettingNames = async () => {
       {
         name: 'breakAlert',
         defaultValue: 0,
+        constraint:TableIDConstraint.ALARM_ID
+
       },
       {
         name: 'breakAlertVolume',
-        defaultValue: 100,
+        defaultValue: 1000,
       },
       {
         name: 'backgroundColor',

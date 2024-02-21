@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Setting, Template } from '../Model/template-model';
-import { Observable, forkJoin, map, of, switchMap, tap, Subject, BehaviorSubject } from 'rxjs';
-import { exampleTemplate } from '../Model/mock-template';
-import { User } from '../Model/user-model';
-import { GetStorageTemplate } from './helper';
+import { Setting, Template } from '../../Model/template-model';
+import { Observable, forkJoin, map, of, switchMap, tap, BehaviorSubject } from 'rxjs';
+import { defaultTemplate } from '../../Model/mock-template';
+import { User } from '../../Model/user-model';
+import { GetStorageTemplate } from '../LocalStorage';
 @Injectable({
   providedIn: 'root',
 })
@@ -27,8 +27,8 @@ export class TemplateService {
         this.templates$.next([template]);
         return of([template]);
       }
-      this.templates$.next([exampleTemplate]);
-      return of([exampleTemplate]);
+      this.templates$.next([defaultTemplate]);
+      return of([defaultTemplate]);
     }
     const user:User = JSON.parse(userStorage);
 
@@ -43,12 +43,8 @@ export class TemplateService {
         map((data:Template[]) => {
           const templates:Template[] = [];
           data.forEach((element) => {
-            const template:Template = new Template();
-            template.id = element.id;
-            template.isDefault = element.isDefault;
-            template.templateName = element.templateName;
+            const template:Template = new Template(element);
             templates.push(template)
-
           });
           return templates;
         }),switchMap((templates:Template[])=>{
@@ -62,35 +58,13 @@ export class TemplateService {
           });
           return forkJoin(observables);
         }),tap((templates:Template[])=>{
+          console.log(templates);
           this.templates$.next(templates);
         })
       );
   }
   AddTemplate(template: { templateName: string; }) {
-    console.log(template)
     return this.http.post<Template>("api/template",template);
-  }
-
-  GetTemplate(templateID: number) {
-    return this.http
-      .get<Template>(
-        `api/template/${templateID}`,
-        {}
-      )
-      .pipe(
-        switchMap((data) => {
-          const template:Template = new Template();
-          template.id = data.id;
-          template.isDefault = data.isDefault;
-          template.templateName = data.templateName;
-          const observable = this.GetSettings(template.id).pipe(switchMap((settings:Setting[])=>
-          {
-            template.settings = settings;
-            return of(template);
-          }))
-          return observable;
-        })
-      );
   }
   GetSettings(templateID: number) {
     return this.http.get<Setting[]>(`api/setting-value/`, {

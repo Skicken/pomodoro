@@ -27,11 +27,15 @@
         discrete
         *ngSwitchCase="'slider'"
         [displayWith]="formatLabel"
+        [disabled]="(this.binding|async)!==null"
+
       >
         <input
           matSliderThumb
           [(ngModel)]="setting.value"
           (change)="setValue()"
+          [disabled]="(this.binding|async)!==null"
+
         />
       </mat-slider>
 
@@ -39,17 +43,20 @@
         *ngSwitchCase="'toggle'"
         [(ngModel)]="setting.value"
         (change)="setValue()"
+        [disabled]="(this.binding|async)!==null"
+
       ></mat-slide-toggle>
 
-      <mat-form-field *ngSwitchCase="'list-id'">
+      <mat-form-field *ngSwitchCase="'list-id'" >
         <mat-label>{{ label }}</mat-label>
         <mat-select
           name="template"
           [(ngModel)]="setting.value"
-          (change)="setValue()"
+          [disabled]="(this.binding|async)!==null"
+          (ngModelChange)="setValue()"
         >
-          @for (item of listItems; track item) {
-          <mat-option [value]="item.id">{{ item.displayName }}</mat-option>
+          @for (item of listItems | async; track item) {
+            <mat-option [value]="item.id">{{ item.displayName }}</mat-option>
           }
         </mat-select>
       </mat-form-field>

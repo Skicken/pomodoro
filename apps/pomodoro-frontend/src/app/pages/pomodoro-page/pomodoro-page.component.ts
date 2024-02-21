@@ -1,14 +1,14 @@
 
 
 import { Component, OnInit } from '@angular/core';
-import { PomodoroService } from '../../services/pomodoro.service';
+import { PomodoroService } from '../../services/Pomodoro/pomodoro.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectTemplateDialogComponent } from '../../components/SelectTemplateDialog/select-template-dialog.component';
-import { InfoService } from '../../services/info.service';
-import { GetStorageTemplate, GetStorageUser } from '../../services/helper';
-import { TemplateService } from '../../services/template.service';
+import { SnackBarService } from '../../services/Snackbar/snack-bar.service';
+import { GetStorageTemplate, GetStorageUser } from '../../services/LocalStorage';
+import { TemplateService } from '../../services/Template/template.service';
 import { Template } from '../../Model/template-model';
-import { AlarmService } from '../../services/alarm.service';
+import { AlarmService } from '../../services/Alarm/alarm.service';
 
 @Component({
   selector: 'pomodoro-pomodoro-page',
@@ -18,7 +18,7 @@ import { AlarmService } from '../../services/alarm.service';
 export class PomodoroPageComponent implements OnInit{
 
   constructor(readonly pomodoroService:PomodoroService,private templateService:TemplateService,
-    readonly infoService:InfoService,public dialog: MatDialog,private alarmService:AlarmService){
+    readonly infoService:SnackBarService,public dialog: MatDialog,private alarmService:AlarmService){
 
   }
   ngOnInit(): void {

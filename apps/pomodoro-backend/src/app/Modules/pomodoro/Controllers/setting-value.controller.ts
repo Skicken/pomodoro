@@ -1,6 +1,7 @@
 import { TemplateService } from '../Services/Template/template.service';
 import { SettingValueService } from '../Services/SettingValue/settingvalue.service';
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -12,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
 import { SettingValueFilter } from '../Filters/SettingValueFilter';
-import { UpdateSettingDTO } from '../Dto/update-setting-dto';
+import { UpdateSettingDTO } from '../Dto/setting-value/update-setting-dto';
 import {
   ExtractPayload,
   checkOwnerThrow,
@@ -61,7 +62,10 @@ export class SettingValueController {
       setting.ownerTemplateID
     );
     checkOwnerThrow(template.userID, payload);
-
+    if(!this.settingService.IsValidValueUpdate(dto.value,setting))
+    {
+      throw new BadRequestException("Invalid new value");
+    }
     return this.settingService.UpdateSetting(id, dto);
   }
 }

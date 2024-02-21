@@ -1,3 +1,4 @@
+import { AuthService } from './../../modules/auth/auth.service';
 import { Component } from '@angular/core';
 import {
   FormGroup,
@@ -7,7 +8,6 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { UserService } from '../../services/user-service.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -20,7 +20,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
   styleUrl: './register-page.component.css',
 })
 export class RegisterPageComponent {
-  constructor(private userService: UserService,private router:Router) {}
+  constructor(private authService: AuthService,private router:Router) {}
   errorMessage = '';
   correctForm = true;
   matcher = new PasswordConfirmMatcher();
@@ -52,7 +52,7 @@ export class RegisterPageComponent {
     const passwordValue = this.registerControl.get('password')!.value!;
     console.log('registering user');
     console.log(emailValue, usernameValue, passwordValue);
-    this.userService
+    this.authService
       .registerUser({
         email: emailValue,
         nickname: usernameValue,
@@ -65,6 +65,7 @@ export class RegisterPageComponent {
         },
         next:()=>
         {
+          console.log("valid registration")
           this.router.navigate(['valid-registration'])
             //if succesfully logged
         }

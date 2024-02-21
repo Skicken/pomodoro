@@ -1,11 +1,8 @@
-import { PomodoroService } from './../../services/pomodoro.service';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
-import { TemplateService } from '../../services/template.service';
 import { AuthService } from '../../modules/auth/auth.service';
-import { DeleteStorageTemplate } from '../../services/helper';
 
 @Component({
   selector: 'pomodoro-login-page',

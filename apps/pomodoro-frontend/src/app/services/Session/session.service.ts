@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, tap } from 'rxjs';
-import { User } from '../Model/user-model';
-import { GetStorageSessions } from './helper';
-import { PomodoroState, Session } from '../Model/session-model';
+import { User } from '../../Model/user-model';
+import { GetStorageSessions } from '../LocalStorage';
+import { PomodoroState, Session } from '../../Model/session-model';
 
 @Injectable({
   providedIn: 'root',
@@ -30,8 +30,8 @@ export class SessionService {
     if (!userStorage) {
       const sessions: undefined | Session[] = GetStorageSessions();
       if (sessions) {
-        this.sessions$.next(sessions);
-        return of(sessions);
+        this.sessions$.next(null);
+        return of(null);
       }
       this.sessions$.next(null);
       return of(null);

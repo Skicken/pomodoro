@@ -1,11 +1,11 @@
 import { ExtractPayload, checkOwnerThrow, checkOwnerThrowIgnoreAdmin } from '../../auth/Guards/extract-payload.decorator';
-import { AddTemplateDTO } from '../Dto/add-template-dto';
+import { AddTemplateDTO } from '../Dto/template/add-template-dto';
 import { BadRequestException, Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
 import { TemplateService } from '../Services/Template/template.service';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
 import { TemplateFilter } from '../Filters/TemplateFilter';
-import { MapSettingDTO } from '../Dto/map-setting-dto';
+import { MapSettingDTO } from '../Dto/setting-value/map-setting-dto';
 
 @Controller('template')
 @UseGuards(JwtAuthGuard)
@@ -24,12 +24,11 @@ export class TemplateController {
   {
     const template = await this.templateService.GetTemplate(id);
     checkOwnerThrowIgnoreAdmin(template.userID,payload)
-    if(template.isDefault) throw new BadRequestException("cannot map default template");
+    if(template.isDefault) throw new BadRequestException("Cannot map default template");
     if(dto.to)
       return this.templateService.MapSettingTemplate(id,dto.from,dto.to,payload);
     return this.templateService.MapSettingSelf(id,dto.from);
   }
-
   @Post()
   @HttpCode(HttpStatus.CREATED)
   AddTemplate(@Body() dto:AddTemplateDTO,@ExtractPayload() payload:TokenPayload)

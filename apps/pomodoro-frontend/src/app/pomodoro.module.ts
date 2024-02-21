@@ -1,40 +1,37 @@
 import { NgModule } from '@angular/core';
-import { NavbarComponent } from './components/navbar/navbar.component';
+import { NavbarComponent } from './components/Navbar/navbar.component';
 import { HomePageComponent } from './pages/home-page/home-page.component';
 import { LoginPageComponent } from './pages/login-page/login-page.component';
-import { RegisterPageComponent } from './pages/register-page/register-page.component';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { BrowserModule } from '@angular/platform-browser';
-import { MatInputModule } from '@angular/material/input';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UserService } from './services/user-service.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptor } from './Interceptors/auth.interceptor';
-import { ValidRegistrationComponent } from './pages/valid-registration/valid-registration.component';
+
 import { PomodoroPageComponent } from './pages/pomodoro-page/pomodoro-page.component';
 import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';
 import { TemplatePageComponent } from './pages/template-page/template-page.component';
-import { MatDividerModule } from '@angular/material/divider';
 import { InputMinutesComponent } from './components/SettingInput/SettingInput.component';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { AddTemplateDialogComponent } from './components/AddTemplateDialog/add-template-dialog.component';
-import { ConfirmDialogComponent } from './components/ConfirmDialog/confirm-dialog.component';
+
+import { AddTemplateDialogComponent } from './components/Dialogs/AddTemplateDialog/add-template-dialog.component';
+import { ConfirmDialogComponent } from './components/Dialogs/ConfirmDialog/confirm-dialog.component';
 import { SelectTemplateDialogComponent } from './components/SelectTemplateDialog/select-template-dialog.component';
-import { InfoPopupComponent } from './components/InfoPopup/info-popup.component';
-import { InfoService } from './services/info.service';
-import { TemplateService } from './services/template.service';
+import { InfoPopupComponent } from './components/Popups/InfoPopup/info-popup.component';
+
 import { AuthModule } from './modules/auth/auth.module';
 import { ReportPageComponent } from './pages/report-page/report-page.component';
+import { MaterialModule } from './modules/material/material/material.module';
+import { RegisterModule } from './modules/register/register-module/register-module.module';
+import { RegisterPageComponent } from './pages/register-page/register-page.component';
+import { ValidRegistrationComponent } from './pages/valid-registration/valid-registration.component';
+import { TomatoComponent } from './components/TomatoComponent/Tomato.component';
+import { AddAlarmDialogComponent } from './components/Dialogs/AddAlarmDialog/add-alarm-dialog.component';
+import { DropZoneDirective } from './Directives/DropZone.directive';
+import { ErrorPopupComponent } from './components/Popups/ErrorPopup/error-popup.component';
 
 @NgModule({
   declarations: [
@@ -42,41 +39,34 @@ import { ReportPageComponent } from './pages/report-page/report-page.component';
     NavbarComponent,
     HomePageComponent,
     LoginPageComponent,
-    RegisterPageComponent,
-    ValidRegistrationComponent,
     PomodoroPageComponent,
     UserSettingsPageComponent,
     TemplatePageComponent,
     InputMinutesComponent,
+    RegisterPageComponent,
+    ValidRegistrationComponent,
     AddTemplateDialogComponent,
     ConfirmDialogComponent,
     SelectTemplateDialogComponent,
     InfoPopupComponent,
     ReportPageComponent,
+    TomatoComponent,
+    AddAlarmDialogComponent,
+    DropZoneDirective,
+    ErrorPopupComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    UserService,
-    InfoService,
-    TemplateService,
   ],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes),
-    MatIconModule,
-    MatInputModule,
-    MatTooltipModule,
     FormsModule,
+    MaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatDividerModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatDialogModule,
-    MatSnackBarModule,
-    MatButtonModule,
+    RegisterModule,
     AuthModule,
   ],
   bootstrap: [AppComponent],

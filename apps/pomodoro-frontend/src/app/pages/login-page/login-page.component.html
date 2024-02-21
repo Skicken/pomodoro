@@ -8,12 +8,12 @@
       <form action="" [formGroup]="loginControl" (ngSubmit)="onSubmit()">
         <mat-form-field class="input">
           <mat-label>Email</mat-label>
-          <input type="email" matInput formControlName="email" />
+          <input type="email" matInput formControlName="email" autocomplete="email"/>
         </mat-form-field>
 
         <mat-form-field class="input">
           <mat-label>Password</mat-label>
-          <input type="password" matInput formControlName="password" />
+          <input type="password" matInput formControlName="password" autocomplete="current-password" />
         </mat-form-field>
         <mat-error *ngIf="!correctForm" class="error-login">{{
           errorMessage

@@ -1,7 +1,7 @@
 import { ReturnAuthUserDTO } from './../DTO/return-auth-user-dto';
 import { plainToInstance } from 'class-transformer';
 import { AuthenticateService } from '../Services/authenticate.service';
-import { Controller, Post, Res,Req, UseGuards, Logger } from '@nestjs/common';
+import { Controller, Post, Res,Req, UseGuards, Logger, UnauthorizedException } from '@nestjs/common';
 import { Response,Request} from 'express';
 import { LocalAuthGuard } from '../Services/local-strategy.service';
 @Controller('auth')
@@ -36,8 +36,21 @@ export class AuthenticationController {
     @Post("refresh")
     async refreshToken(@Req() request: Request,@Res({ passthrough: true }) resp: Response)
     {
-        const userData:ReturnAuthUserDTO = await this.authService.refreshToken(request.cookies["refresh_token"]);
+        let userData:ReturnAuthUserDTO ;
+        try{
+        userData = await this.authService.refreshToken(request.cookies["refresh_token"]);
+        }
+        catch(error)
+        {
 
+          resp.clearCookie("isLogged");
+          resp.clearCookie("refresh_token",{
+            domain:"localhost",
+            path:"api/auth"
+          });
+          resp.clearCookie("access_token");
+          throw new UnauthorizedException("invalid refresh token");
+        }
         resp.cookie('access_token',userData.access_token,{
           httpOnly:true,
           expires:new Date(Date.now()+60*60*1000),

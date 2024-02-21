@@ -7,7 +7,7 @@ import { PomodoroPageComponent } from './pages/pomodoro-page/pomodoro-page.compo
 import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';
 import { TemplatePageComponent } from './pages/template-page/template-page.component';
 import { ReportPageComponent } from './pages/report-page/report-page.component';
-import { loginGuard } from './guards/login.guard';
+import { loginGuard } from './Guards/login.guard';
 
 export const appRoutes: Route[] = [
   { path: 'login', component: LoginPageComponent },

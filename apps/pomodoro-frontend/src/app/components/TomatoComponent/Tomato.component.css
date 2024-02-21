@@ -1,0 +1,40 @@
+.tomato-img
+{
+  width: 200px;
+  height: 200px;
+  margin: auto;
+  background-image: url("https://cdn-icons-png.flaticon.com/512/7313/7313003.png");
+  background-size:contain;
+  overflow: hidden;
+  display: none;
+  /* filter: grayscale(100%); */
+}
+
+.tomato-img-fill
+{
+  transform: translate(-50%,-100%);
+  clip-path: inset(100% 0% 0% 0%);
+
+  left: 50%;
+  position: absolute;
+  width: 200px;
+  height: 200px;
+
+  background-image: url("https://cdn-icons-png.flaticon.com/512/7313/7313003.png");
+  background-size:contain;
+  animation: fill 10s ease-in-out 0.0s forwards;
+}
+/* @keyframes fill {
+
+  0%
+  {
+    clip-path: inset(100% 0% 0% 0%);
+
+  }
+  100%
+  {
+    clip-path: inset(0% 0% 0% 0%);
+  }
+} */
+
+

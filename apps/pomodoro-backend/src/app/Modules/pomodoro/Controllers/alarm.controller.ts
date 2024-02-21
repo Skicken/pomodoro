@@ -1,17 +1,16 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AlarmService } from '../Services/Alarm/alarm.service';
-import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, InternalServerErrorException, Logger, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, Req, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
-import { multerOptions } from '../Services/Alarm/multer-options';
+import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Logger, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import {  multerOptions } from '../Services/Alarm/multer-options';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
-import { Request,Response } from 'express';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
 import { FilterByUserID } from '../Filters/FilterByUserID';
 import { ExtractPayload, checkOwnerThrow } from '../../auth/Guards/extract-payload.decorator';
 import { Role, RoleGuard } from '../../auth/Guards/role.guard';
 import { UserType } from '@prisma/client';
-import { createReadStream } from 'fs';
-import { join } from 'path';
-import { Res } from '@nestjs/common';
+import fs from 'fs';
+import { env } from 'process';
+import path from 'path';
 @Controller('alarm')
 @UseGuards(JwtAuthGuard)
 export class AlarmController {
@@ -22,29 +21,18 @@ export class AlarmController {
   @UseInterceptors(FileInterceptor('alarm',multerOptions))
   UploadFile(
     @UploadedFile(new ParseFilePipeBuilder()
-      .addFileTypeValidator({
-        fileType: 'wav',
-      })
       .addMaxSizeValidator({
-        maxSize: 1048576,
+        maxSize: 5*1024*1024,
       })
-      .build({
-        exceptionFactory(error) {
-          throw new HttpException(error, HttpStatus.BAD_REQUEST);
-        },
-      })) alarmFile: Express.Multer.File, @Req() request:Request  ) {
-
-        if(!request.user) throw new InternalServerErrorException("user data should be added to the request");
-        const userPayload:TokenPayload = <TokenPayload> request.user;
-        return this.alarmService.addAlarm(alarmFile,userPayload);
+      .build()) alarmFile: Express.Multer.File, @ExtractPayload() payload:TokenPayload  ) {
+        return this.alarmService.AddAlarm(alarmFile,payload);
   }
-
-  @Get()
-  @Role(UserType.ADMIN)
-  @UseGuards(RoleGuard)
-  async GetAlarms()
+  @Get(":id")
+  async GetAlarm(@Param("id",ParseIntPipe) id:number, @ExtractPayload() payload:TokenPayload)
   {
-    return this.alarmService.getAlarms();
+    const alarm = await this.alarmService.GetAlarm(id);
+    checkOwnerThrow(alarm.ownerID,payload);
+    return alarm;
   }
   @Get()
   GetAlarmFilter( @Query() query:FilterByUserID,@ExtractPayload() payload:TokenPayload )
@@ -53,21 +41,26 @@ export class AlarmController {
     return this.alarmService.GetAlarmFilter(query);
   }
 
-  @Get(":id")
-  async GetAlarm(@Param("id",ParseIntPipe) id:number, @ExtractPayload() payload:TokenPayload)
+
+  @Get()
+  @Role(UserType.ADMIN)
+  @UseGuards(RoleGuard)
+  async GetAlarms()
   {
-    const alarm = await this.alarmService.GetAlarm(id);
-    checkOwnerThrow(alarm.ownerID,payload);
-    return alarm;
+    return this.alarmService.getAlarms();
   }
-
-
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
   async DeleteAlarm(@Param("id",ParseIntPipe) id:number, @ExtractPayload() payload:TokenPayload)
   {
     const alarm = await this.alarmService.GetAlarm(id);
     checkOwnerThrow(alarm.ownerID,payload);
+    const deleteAlarmPath = path.join(env.ALARM_PATH,alarm.urlPath);
+    if(fs.existsSync(deleteAlarmPath))
+    {
+      Logger.log("Successfully deleted alarm")
+      fs.unlinkSync(deleteAlarmPath);
+    }
     return this.alarmService.DeleteAlarm(id);
   }
 

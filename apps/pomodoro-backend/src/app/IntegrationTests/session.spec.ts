@@ -8,8 +8,8 @@ import { config } from 'dotenv';
 import { JwtService } from '@nestjs/jwt';
 import { UserType } from '@prisma/client';
 import { TokenPayload } from '../Modules/auth/Services/authenticate.service';
-import { AddSessionDTO } from '../Modules/pomodoro/Dto/add-session-dto';
 import { SessionFilter } from '../Modules/pomodoro/Filters/SessionFilter';
+import { AddSessionDTO } from '../Modules/pomodoro/Dto/session/add-session-dto';
 
 /**
  * @group int
