@@ -1,7 +1,7 @@
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../DTO/login-dto';
 import { PrismaService } from '../../prisma/prisma.service';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { ReturnUserDTO } from '../../pomodoro/Dto/user/user-dto';
 import { User, UserType } from '@prisma/client';

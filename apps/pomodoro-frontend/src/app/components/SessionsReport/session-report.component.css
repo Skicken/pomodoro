@@ -1,0 +1,29 @@
+.session
+{
+  padding: 5px;
+  margin: 5px;
+  border: 1px dashed black;
+  display:flex;
+  align-items: center;
+}
+.session-icon
+{
+  width: 50px;
+  height: 50px;
+  float: right;
+}
+.date-time
+{
+  margin-left: 10px;
+}
+
+.date
+{
+  font-size: larger;
+  font-weight: 500;
+  display: block;
+}
+.sessionDate
+{
+  margin: 6px;
+}

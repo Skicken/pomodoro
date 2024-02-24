@@ -32,6 +32,8 @@ import { TomatoComponent } from './components/TomatoComponent/Tomato.component';
 import { AddAlarmDialogComponent } from './components/Dialogs/AddAlarmDialog/add-alarm-dialog.component';
 import { DropZoneDirective } from './Directives/DropZone.directive';
 import { ErrorPopupComponent } from './components/Popups/ErrorPopup/error-popup.component';
+import { ChartReportComponent } from './components/GraphReport/chart-report.component';
+import { SessionReportComponent } from './components/SessionsReport/session-report.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +56,8 @@ import { ErrorPopupComponent } from './components/Popups/ErrorPopup/error-popup.
     AddAlarmDialogComponent,
     DropZoneDirective,
     ErrorPopupComponent,
+    ChartReportComponent,
+    SessionReportComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

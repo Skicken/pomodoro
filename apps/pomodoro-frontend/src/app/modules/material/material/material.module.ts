@@ -10,8 +10,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
-
-
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatExpansionModule} from '@angular/material/expansion';
 @NgModule({
   declarations: [],
   imports: [
@@ -25,7 +25,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatIconModule,
     MatInputModule,
     MatTooltipModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatTabsModule,
+    MatExpansionModule
   ],
   exports:[
     MatDividerModule,
@@ -38,7 +40,9 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
     MatIconModule,
     MatInputModule,
     MatTooltipModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatTabsModule,
+    MatExpansionModule
   ]
 })
 export class MaterialModule { }

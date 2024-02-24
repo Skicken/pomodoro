@@ -4,15 +4,18 @@ import { PrismaService } from '../../../prisma/prisma.service';
 import { AddSettingDTO } from '../../Dto/setting-value/add-setting-dto';
 import { UpdateSettingDTO } from '../../Dto/setting-value/update-setting-dto';
 import { SettingNameService } from '../SettingName/settingname.service';
-import { Prisma, SettingName, SettingValue, TableIDConstraint } from '@prisma/client';
+import {
+  Prisma,
+  SettingName,
+  SettingValue,
+  TableIDConstraint,
+} from '@prisma/client';
 import { SettingValueDTO } from '../../Dto/setting-value/setting-value-dto';
 type SettingValueInclude = Prisma.SettingValueGetPayload<{
-  include: { settingName: true, settingValue_Template:true  };
+  include: { settingName: true; settingValue_Template: true };
 }>;
 @Injectable()
 export class SettingValueService {
-
-
   MapSettingDTO(setting: SettingValueInclude): SettingValueDTO {
     return <SettingValueDTO>{
       settingNameID: setting.settingNameID,
@@ -20,7 +23,7 @@ export class SettingValueService {
       ownerTemplateID: setting.ownerTemplateID,
       key: setting.settingName.name,
       value: setting.value,
-      usedByTemplates:setting.settingValue_Template
+      usedByTemplates: setting.settingValue_Template,
     };
   }
   async GetSetting(id: number) {
@@ -28,7 +31,7 @@ export class SettingValueService {
       where: { id: id },
       include: {
         settingName: true,
-        settingValue_Template:true
+        settingValue_Template: true,
       },
     });
 
@@ -48,13 +51,13 @@ export class SettingValueService {
               id: filter.templateID,
             },
           },
-          settingName:{
-            name:filter.key
-          }
+          settingName: {
+            name: filter.key,
+          },
         },
         include: {
           settingName: true,
-          settingValue_Template:true,
+          settingValue_Template: true,
         },
       })
     ).map((setting) => {
@@ -79,33 +82,52 @@ export class SettingValueService {
     return values;
   }
 
-  async IsValidValueUpdate(newValue:number,settingValue:SettingValue):Promise<boolean>
-  {
-    const settingName:SettingName = await this.settingNameService.GetSettingName(settingValue.settingNameID);
+  async IsValidValueUpdate(
+    newValue: number,
+    settingValue: SettingValue
+  ): Promise<boolean> {
+    const settingName: SettingName =
+      await this.settingNameService.GetSettingName(settingValue.settingNameID);
 
-    if(settingName.constraint===TableIDConstraint.NO_CONSTRAINT && (settingName.minValue>newValue || settingName.maxValue<newValue))
-    {
+    if (
+      settingName.constraint === TableIDConstraint.NO_CONSTRAINT &&
+      (settingName.minValue > newValue || settingName.maxValue < newValue)
+    ) {
       return false;
     }
 
-    switch(settingName.constraint)
-    {
+    switch (settingName.constraint) {
       case 'NO_CONSTRAINT':
         return true;
-      case 'TEMPLATE_ID':
-      {
-          return (await this.prisma.template.count({where:{id:newValue}}))>0;
+      case 'TEMPLATE_ID': {
+        return (
+          (await this.prisma.template.count({ where: { id: newValue } })) > 0
+        );
       }
-      case 'ALARM_ID':
-      {
-        return (await this.prisma.alarm.count({where:{id:newValue}}))>0
+      case 'ALARM_ID': {
+        return (await this.prisma.alarm.count({ where: { id: newValue } })) > 0;
       }
       default:
         return true;
     }
   }
-  async UpdateSetting(id: number, dto: UpdateSettingDTO) {
+  async ResetSettingToDefault(
+    SettingName: string,
+    WhereValue:number | undefined
+  ) {
+    const settingName: SettingName =
+      await this.prisma.settingName.findUniqueOrThrow({
+        where: { name: SettingName },
+      });
+    return await this.prisma.settingValue.updateMany({
+      data: { value: settingName.defaultValue },
+      where: {
+        value:WhereValue
+      },
+    });
+  }
 
+  async UpdateSetting(id: number, dto: UpdateSettingDTO) {
     return await this.prisma.settingValue.update({
       where: {
         id: id,

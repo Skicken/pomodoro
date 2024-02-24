@@ -17,10 +17,5 @@ export class ReportPageComponent implements OnInit {
       console.log(data);
     })
   }
-  formatTime(date:Date)
-  {
-      const value = new Date(date);
 
-      return value.toLocaleDateString()+" "+value.toLocaleTimeString();
-  }
 }

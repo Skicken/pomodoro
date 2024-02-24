@@ -6,18 +6,18 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './Services/local-strategy.service';
 import { JwtStrategy } from './Services/jwt-strategy.service';
-import { env } from 'process';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-
+import { HttpModule } from '@nestjs/axios'
 @Module({
   imports: [
     PrismaModule,
     PassportModule,
+    HttpModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         return {
-          secret: configService.get("ACCESS_SECRET"),
+          secret: configService.get('ACCESS_SECRET'),
           signOptions: { expiresIn: '3600s' },
         };
       },

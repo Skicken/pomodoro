@@ -16,13 +16,6 @@ import { TemplateService } from '../Services/Template/template.service';
 export class UserController {
 
     constructor(private userService:UserService,private templateService:TemplateService){}
-    @Post()
-    async addUser(@Body() dto:AddUserDTO)
-    {
-      const user = await this.userService.addUser(dto);
-      if(user) this.templateService.CreateUserDefault(user.id)
-      return user;
-    }
     @Get(":id")
     @Role(UserType.USER)
     @UseGuards(RoleGuard)

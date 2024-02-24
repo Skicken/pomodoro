@@ -39,7 +39,7 @@ export class SessionService {
 
     const user: User = JSON.parse(userStorage);
     return this.http
-      .get<Session[]>('api/session', { params: { userID: user.id } })
+      .get<Session[]>('api/session', { params: { userID: user.id, SortDate:'desc' } })
       .pipe(
         tap((sessions: Session[]) => {
           this.sessions$.next(sessions);

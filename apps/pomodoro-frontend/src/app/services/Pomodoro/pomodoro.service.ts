@@ -26,6 +26,7 @@ export class PomodoroService {
     templateID: 0
   };
   sessionsMade = 0;
+
   constructor(private sessionService:SessionService,private alarmService:AlarmService) {
     this.countDown = null;
   }
@@ -125,7 +126,7 @@ export class PomodoroService {
   {
     this.currentSession.state = this.state;
     this.currentSession.endTime = new Date(Date.now());
-    //this.sessionService.AddSession(this.currentSession).subscribe();
+    this.sessionService.AddSession(this.currentSession).subscribe();
 
   }
   TimerEnd() {

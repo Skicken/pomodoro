@@ -1,7 +1,7 @@
 import { ReturnAuthUserDTO } from './../DTO/return-auth-user-dto';
 import { plainToInstance } from 'class-transformer';
 import { AuthenticateService } from '../Services/authenticate.service';
-import { Controller, Post, Res,Req, UseGuards, Logger, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Res,Req, UseGuards, UnauthorizedException } from '@nestjs/common';
 import { Response,Request} from 'express';
 import { LocalAuthGuard } from '../Services/local-strategy.service';
 @Controller('auth')
@@ -11,23 +11,23 @@ export class AuthenticationController {
 
   @UseGuards(LocalAuthGuard)
   @Post("login")
-  async login(@Req() req, @Res({ passthrough: true }) resp: Response)
+  async login(@Req() req, @Res({ passthrough: true }) res: Response)
   {
 
         const data_login = this.authService.login(req.user);
-        resp.cookie('refresh_token', data_login.refresh_token,{
+        res.cookie('refresh_token', data_login.refresh_token,{
           httpOnly:true,
           expires:new Date(Date.now()+60*60*1000*24*7),
           path:"api/auth",
           domain:"localhost",
           sameSite:'strict'
         })
-        resp.cookie('access_token', data_login.access_token,{
+        res.cookie('access_token', data_login.access_token,{
           httpOnly:true,
           expires:new Date(Date.now()+60*60*1000),
           sameSite:'strict'
         })
-        resp.cookie('isLogged', true,
+        res.cookie('isLogged', true,
         {
           expires:new Date(Date.now()+60*60*1000*24*7),
         })

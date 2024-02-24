@@ -11,15 +11,18 @@ import { UserType } from '@prisma/client';
 import fs from 'fs';
 import { env } from 'process';
 import path from 'path';
+import { SettingValueService } from '../Services/SettingValue/settingvalue.service';
 @Controller('alarm')
 @UseGuards(JwtAuthGuard)
 export class AlarmController {
 
-  constructor(private alarmService: AlarmService) {
+  constructor(private alarmService: AlarmService,
+    private settingValueService:SettingValueService
+    ) {
   }
   @Post()
   @UseInterceptors(FileInterceptor('alarm',multerOptions))
-  UploadFile(
+  UploadAlarm(
     @UploadedFile(new ParseFilePipeBuilder()
       .addMaxSizeValidator({
         maxSize: 5*1024*1024,
@@ -61,6 +64,10 @@ export class AlarmController {
       Logger.log("Successfully deleted alarm")
       fs.unlinkSync(deleteAlarmPath);
     }
+    this.settingValueService.ResetSettingToDefault("pomodoroAlert",alarm.id)
+    this.settingValueService.ResetSettingToDefault("breakAlert",alarm.id)
+
+
     return this.alarmService.DeleteAlarm(id);
   }
 

@@ -81,4 +81,5 @@ model Alarm{
     userOwner User @relation(fields: [ownerID],references: [id], onDelete: Cascade)
     name String
     urlPath String
+    isDefault Boolean @default(false)
 }

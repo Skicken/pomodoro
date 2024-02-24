@@ -1,0 +1,29 @@
+<div *ngFor="let sessionDate of sessionGroups | keyvalue" class="sessionDate">
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <h3>{{ sessionDate.key }}</h3>
+      </mat-panel-title>
+      <mat-panel-description> </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div *ngFor="let session of sessionDate.value" class="session">
+      <div [ngSwitch]="session.state">
+        <div *ngSwitchCase="'SESSION'">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/7313/7313003.png"
+            alt=""
+            class="session-icon"
+          />
+        </div>
+        <div *ngSwitchDefault>output2</div>
+      </div>
+      <h3>{{ session.template?.templateName }}</h3>
+      <div class="date-time">
+        <div class="date">
+          {{ this.formatTime(session.startTime) }}
+        </div>
+        <div class="date">{{ this.formatTime(session.endTime) }}</div>
+      </div>
+    </div>
+  </mat-expansion-panel>
+</div>
