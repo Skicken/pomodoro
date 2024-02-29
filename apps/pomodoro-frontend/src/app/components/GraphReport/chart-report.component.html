@@ -1,0 +1,16 @@
+<h3 class="text-center m1">Template Spent Time</h3>
+
+<div class="charts">
+  <ngx-charts-bar-vertical-stacked
+    [results]="this.timeChart"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="'Day'"
+    [yAxisLabel]="'Time Spent in minutes'"
+    [yScaleMax]='45'
+    >
+  </ngx-charts-bar-vertical-stacked>
+</div>

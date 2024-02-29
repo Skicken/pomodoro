@@ -1,0 +1,68 @@
+
+<div class="content-wrapper">
+  <h1 class="text-center">
+      {{this.pomodoroService.selectedTemplate.templateName}}
+    <mat-icon fontIcon="bookmark" class="template-icon" (click)="openTemplateSelection()"></mat-icon>
+  </h1>
+  <div class="buttons center">
+    <button
+      class="my-button-white size"
+      [class]="
+      this.pomodoroService.currentSession.state ===
+        this.pomodoroService.PomodoroStateType.SESSION
+          ? 'my-button-white-selected'
+          : ''
+      "
+      (click)="this.pomodoroService.PomodoroButton()"
+    >
+      Pomodoro
+    </button>
+    <button
+      class="my-button-white size"
+      (click)="this.pomodoroService.ShortBreakButton()"
+      [class]="
+      this.pomodoroService.currentSession.state ===
+        this.pomodoroService.PomodoroStateType.SHORT_BREAK
+          ? 'my-button-white-selected'
+          : ''
+      "
+    >
+      Short Break
+    </button>
+    <button
+      class="my-button-white size"
+      (click)="this.pomodoroService.LongBreakButton()"
+      [class]="
+        this.pomodoroService.currentSession.state ===
+        this.pomodoroService.PomodoroStateType.LONG_BREAK
+          ? 'my-button-white-selected'
+          : ''
+      "
+    >
+      Long Break
+    </button>
+  </div>
+  <div class="center">
+    <pomodoro-tomato></pomodoro-tomato>
+  </div>
+  <div class="center timer-text">
+    {{ formatTimer(this.pomodoroService.pomodoroTimer) }}
+  </div>
+  <div class="buttons center">
+    <button
+      class="my-button-white size"
+      (click)="this.pomodoroService.StopResumeButton()"
+    >
+      <ng-container *ngIf="this.pomodoroService.isPlaying">
+        <div class="pause-text">Pause</div>
+        <mat-icon fontIcon="pause" class="icon"></mat-icon>
+      </ng-container>
+      <ng-container *ngIf="!this.pomodoroService.isPlaying">
+        <div class="pause-text">Play</div>
+        <mat-icon fontIcon="play_arrow" class="icon"></mat-icon>
+      </ng-container>
+    </button>
+  </div>
+
+</div>
+

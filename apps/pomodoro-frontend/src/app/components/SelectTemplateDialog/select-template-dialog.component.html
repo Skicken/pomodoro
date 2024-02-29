@@ -1,0 +1,10 @@
+<div class="dialog-wrapper text-center">
+
+  <h3>Select Template</h3>
+
+  <div class="list">
+    <div (click)=SelectTemplate(template) class="templateSelection" *ngFor="let template of this.templateService.templates$ | async">
+        {{template.templateName}}
+    </div>
+  </div>
+</div>

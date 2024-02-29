@@ -1,0 +1,45 @@
+.center
+{
+  text-align: center;
+  margin: 10px;
+}
+.size
+{
+  margin: 5px;
+  padding: 10px;
+  font-size: larger;
+  font-weight: bold;
+}
+
+.timer-text
+{
+  font-size: 96px;
+  font-weight: bold;
+}
+.pause-text
+{
+  display: inline-flex;
+}
+.icon
+{
+  display: inline-flex;
+  float: right;
+}
+.template-icon
+{
+  transform: scale(1.5);
+  cursor: pointer;
+}
+.template-icon:hover
+{
+  color: black;
+}
+.template-icon:hover svg {
+  fill: black;
+}
+
+.selected
+{
+  color: black;
+  background-color: var(--white-font-color);
+}

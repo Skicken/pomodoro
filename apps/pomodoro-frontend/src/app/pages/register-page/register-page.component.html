@@ -1,0 +1,95 @@
+<div class="content-wrapper">
+  <div class="text-center">
+    <h1><a href="">Pomodoro</a></h1>
+    <h2>Register</h2>
+  </div>
+  <div class="content-container">
+    <div class="register-container">
+      <form action="" [formGroup]="registerControl" (ngSubmit)="onSubmit()" autocomplete="on">
+        <mat-form-field class="input">
+          <mat-label>Email</mat-label>
+          <input
+            type="email"
+            id="username"
+            name="username"
+            autocomplete="username"
+            matInput
+            formControlName="username"
+            required
+          />
+          @if (registerControl.value.username) {
+          <mat-error class="error">Enter valid email</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field class="input">
+          <mat-label>Nickname</mat-label>
+          <input
+            type="text"
+            name="nickname"
+            id="nickname"
+            matInput
+            formControlName="nickname"
+            autocomplete="family-name"
+          />
+          @if (registerControl.value.nickname) {
+          <mat-error class="error"
+            >Username should be at least length of 5</mat-error
+          >
+          }
+        </mat-form-field>
+
+        <mat-form-field class="input">
+          <mat-label>Password</mat-label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            matInput
+            formControlName="password"
+            autocomplete="new-password"
+          />
+          @if (registerControl.value.password) {
+          <mat-error class="error"
+            >Password should be at least length of 5.</mat-error
+          >
+          }
+        </mat-form-field>
+
+        <mat-form-field class="input">
+          <mat-label>Confirm password</mat-label>
+          <input
+            matInput
+            type="password"
+            name="password"
+            id="password"
+            formControlName="confirmPassword"
+            autocomplete="new-password"
+            [errorStateMatcher]="this.matcher"
+          />
+
+          @if (registerControl.hasError('notSamePassword')) {
+          <mat-error class="error">Passwords do not match</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-error *ngIf="!correctForm" class="error">{{
+          errorMessage
+        }}</mat-error>
+        <div class="text-center">
+          <button class="my-button" type="submit">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="text-center" style="margin-top: 20px">
+    <h4>Have account?</h4>
+    <button
+      class="my-button-white"
+      style="margin-top: 10px"
+      routerLink="/login"
+    >
+      Login
+    </button>
+  </div>
+</div>

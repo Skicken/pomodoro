@@ -1,0 +1,38 @@
+@import "variables.less";
+.my-button
+{
+  min-width: 150px;
+  font-size:large;
+  font-family: 'Inter';
+  background-color: black;
+  color: @white-color;
+  border-radius: 30px;
+  font-weight: 500;
+}
+.my-button:hover
+{
+  background-color: @white-color;
+  color: black;
+  cursor:pointer;
+}
+.my-button-white
+{
+  background-color: transparent;
+  color: @white-color;
+  font-size:large;
+  padding: 10px;
+  min-width: 200px;
+  border-radius: 40px;
+  border: 1px solid @white-color;
+}
+.my-button-white:hover
+{
+  cursor:pointer;
+  background-color: white;
+  color: black;
+}
+.my-button-white-selected
+{
+  background-color: white;
+  color: black;
+}

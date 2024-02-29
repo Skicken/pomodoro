@@ -1,0 +1,16 @@
+
+.snackbar-text
+{
+  font-weight:500;
+}
+.snackbar
+{
+  display: flex;
+  width: 100%;
+  align-items:baseline;
+}
+.ok-button
+{
+  margin-left: auto;
+  margin-top: auto;
+}

@@ -1,0 +1,22 @@
+<div class="dialog-wrapper">
+
+  <div class="accepted-formats">
+    Accepted audio formats <b>Wav</b>,<b>Mp3</b>
+  </div>
+  <div
+    class="file-input"
+    pomodoroDropZone
+    (fileDropped)="OnFileDropped($event)"
+  >
+    <div class="center">
+      <mat-icon *ngIf="!file" fontIcon="upload_file" class="upload_icon"></mat-icon>
+      <span for="alarmFile">{{file?file?.name:"Drag Audio File"}}</span>
+    </div>
+  </div>
+  <div [ngStyle]="{visibility: hasError?'visible':'hidden'}" class="error">{{this.errorMessage}}</div>
+  <div class="flex-center m1">
+    <button mat-raised-button color="primary" (click)="AddAlarm()">Upload</button>
+  </div>
+  <mat-progress-bar mode="indeterminate" [ngStyle]="{visibility: uploadingFile?'visible':'hidden'}"></mat-progress-bar>
+
+</div>

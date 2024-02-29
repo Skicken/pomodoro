@@ -1,0 +1,61 @@
+input[type="file"] {
+  display: none;
+}
+.center
+{
+  margin: auto;
+  display: flexbox;
+  justify-content: center;
+}
+.accepted-formats
+{
+  color:var(--black-color) ;
+  display: flexbox;
+  justify-self: center;
+  text-align: center;
+  margin: 5px;
+}
+b
+{
+  color: chocolate;
+}
+button
+{
+  margin: auto;
+}
+.upload_icon
+{
+  margin: auto;
+  display: block;
+  transform: scale(1.2);
+}
+label
+{
+  display: block;
+  font-weight:500;
+}
+.file-input
+{
+  border: 1px dashed black;
+  border-radius: 50%;
+  min-width: 200px;
+  min-height: 200px;
+
+  max-width: 200px;
+  max-height: 200px;
+
+  margin: auto;
+  color: var(--black-color) ;
+  display: flex;
+
+}
+.error
+{
+  color: red;
+  font-size:small;
+}
+.dialog-wrapper
+{
+  width: 300px;
+
+}

@@ -1,0 +1,107 @@
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
+.my-button {
+  min-width: 150px;
+  font-size: large;
+  font-family: 'Inter';
+  background-color: black;
+  color: #FBF5F3;
+  border-radius: 30px;
+  font-weight: 500;
+}
+.my-button:hover {
+  background-color: #FBF5F3;
+  color: black;
+  cursor: pointer;
+}
+.my-button-white {
+  background-color: transparent;
+  color: #FBF5F3;
+  font-size: large;
+  padding: 10px;
+  min-width: 200px;
+  border-radius: 40px;
+  border: 1px solid #FBF5F3;
+}
+.my-button-white:hover {
+  cursor: pointer;
+  background-color: white;
+  color: black;
+}
+.my-button-white-selected {
+  background-color: white;
+  color: black;
+}
+.content-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@media screen and (max-height: 900px) {
+  .content-wrapper {
+    top: 100px;
+    transform: translate(-50%, 0%);
+  }
+}
+.content-wrapper-top {
+  min-width: 60%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  -webkit-transform: translate(-50%);
+  -moz-transform: translate(-50%);
+  -o-transform: translate(-50%);
+  -ms-transform: translate(-50%);
+}
+.content-container {
+  background-color: #FBF5F3;
+  border-radius: 2em;
+  padding: 30px;
+  color: black;
+  min-width: 300px;
+  margin: 20px;
+}
+.dialog-wrapper {
+  min-width: 200px;
+  padding: 20px;
+}
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+.text-center {
+  text-align: center;
+}
+.m1 {
+  margin: 1em;
+}
+.font-xsmall {
+  font-size: x-small;
+}
+body,
+head {
+  background-color: #6F2DBD;
+  font-family: Inter;
+  color: #FBF5F3;
+  height: 100%;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --white-color: #FBF5F3;
+  --black-color: black;
+}
+a {
+  text-decoration: none;
+  color: #FBF5F3;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}

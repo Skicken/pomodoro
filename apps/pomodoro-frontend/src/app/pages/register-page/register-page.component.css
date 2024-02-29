@@ -1,0 +1,15 @@
+.input
+{
+  display: block;
+  max-width: 250px;
+  margin: auto;
+}
+.error-login
+{
+  font-size: small;
+  text-align: center;
+}
+.error
+{
+  font-size: smaller;
+}

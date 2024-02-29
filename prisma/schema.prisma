@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+enum UserType {
+  ADMIN
+  USER
+}
+enum TableIDConstraint {
+  NO_CONSTRAINT
+  TEMPLATE_ID
+  ALARM_ID
+}
+enum PomodoroState {
+  SESSION
+  SHORT_BREAK
+  LONG_BREAK
+}
+model SettingName{
+  id Int @id @default(autoincrement())
+  setting_SettingValue SettingValue[]
+  name String @unique
+  defaultValue Int
+  minValue Int @default(0)
+  maxValue Int @default(1440)
+  constraint TableIDConstraint @default(NO_CONSTRAINT)
+}
+
+model SettingValue{
+  id Int @id @default(autoincrement())
+  settingNameID Int
+
+  settingName   SettingName @relation(fields: [settingNameID], references: [id],onDelete: Cascade)
+
+  ownerTemplateID Int
+  ownerTemplate Template @relation(fields: [ownerTemplateID],references: [id],onDelete: Cascade)
+
+  settingValue_Template Template[] @relation(name:"Template_Settings")
+  value Int
+}
+
+model User{
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  userType UserType @default(USER)
+  nickname String
+  email String @unique
+  password String
+  spotifyToken String @default("")
+  templates Template[]
+  alarms Alarm[]
+  sessions Session[]
+
+}
+model Template{
+    id Int @id @default(autoincrement())
+    isDefault Boolean
+    templateName String
+    userID Int
+    userOwner User @relation(fields: [userID],references: [id],onDelete: Cascade)
+    ownedSettings SettingValue[]
+    template_SettingValue SettingValue[] @relation(name:"Template_Settings")
+    sessions Session[]
+}
+model Session{
+  id         Int        @id @default(autoincrement())
+  templateID Int
+  template Template @relation(fields: [templateID],references: [id])
+  startTime  DateTime
+  endTime DateTime
+  state PomodoroState
+  ownerID Int
+  userOwner User @relation(fields: [ownerID],references: [id], onDelete: Cascade)
+}
+model Alarm{
+    id Int @id @default(autoincrement())
+    ownerID Int
+    userOwner User @relation(fields: [ownerID],references: [id], onDelete: Cascade)
+    name String
+    urlPath String
+    isDefault Boolean @default(false)
+}
+model BackgroundColor{
+    id Int @id @default(autoincrement())
+    color String
+}

@@ -1,0 +1,21 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default",
+                "enableSsl": "Disabled"
+            },
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 3306,
+            "driver": "MySQL",
+            "username": "root",
+            "password": "root",
+            "name": "Pomodoro",
+            "database": "pomodoro"
+        }
+    ],
+    "cSpell.words": [
+        "Pomodoro"
+    ]
+}

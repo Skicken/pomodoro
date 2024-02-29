@@ -1,0 +1,45 @@
+.setting
+{
+  display: grid;
+  max-width: 600px;
+  grid-column:  auto;
+  grid-template-columns: 300px auto 30px;
+  align-items: baseline;
+  margin-left: auto;
+  margin-right: auto;
+}
+.input
+{
+  min-height: 40px;
+}
+.binding
+{
+  border-radius: 50%;
+  margin-left: auto;
+
+}
+.template-icon
+{
+  transform: scale(1);
+  cursor: pointer;
+}
+.setting-name
+{
+  display: inline-block;
+}
+.slider
+{
+  width: 200px;
+}
+.minutes
+{
+  width: 120px;
+}
+.bound
+{
+  color: red;
+}
+.binding:hover
+{
+  background-color: gray;
+}

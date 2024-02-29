@@ -1,0 +1,80 @@
+<div class="setting">
+  <div class="setting-name">
+    <h4>
+      {{ settingName }}
+    </h4>
+  </div>
+  <div class="input" >
+    <ng-container [ngSwitch]="type">
+      <mat-form-field *ngSwitchCase="'number'" class="minutes">
+        <mat-label>{{label}}</mat-label>
+        <input
+          [min]=this.minValue
+          [max]=this.maxValue
+          type="number"
+          matInput
+          [(ngModel)]="setting.value"
+          (change)="setValue()"
+          [disabled]="(this.binding|async)!==null"
+        />
+      </mat-form-field>
+
+      <mat-slider
+        class="slider"
+        min="0"
+        max="100"
+        step="1"
+        discrete
+        *ngSwitchCase="'slider'"
+        [displayWith]="formatLabel"
+        [disabled]="(this.binding|async)!==null"
+
+      >
+        <input
+          matSliderThumb
+          [(ngModel)]="setting.value"
+          (change)="setValue()"
+          [disabled]="(this.binding|async)!==null"
+
+        />
+      </mat-slider>
+
+      <mat-slide-toggle
+        *ngSwitchCase="'toggle'"
+        [(ngModel)]="setting.value"
+        (change)="setValue()"
+        [disabled]="(this.binding|async)!==null"
+        color="primary"
+
+      ></mat-slide-toggle>
+
+      <mat-form-field *ngSwitchCase="'list-id'" >
+        <mat-label>{{ label }}</mat-label>
+        <mat-select
+          name="template"
+          [(ngModel)]="setting.value"
+          [disabled]="(this.binding|async)!==null"
+          (ngModelChange)="setValue()"
+        >
+          @for (item of listItems | async; track item) {
+            <mat-option [value]="item.id">{{ item.displayName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </ng-container>
+  </div>
+  <ng-container *ngIf="this.authService.user">
+    <div class="binding">
+
+      <!-- {{this.boundTo?.displayName}} -->
+      <mat-icon
+        *ngIf="!this.isDefault"
+        fontIcon="bookmark"
+        class="template-icon"
+        [matTooltip]="(this.binding|async)?'Currently bound to '+(this.binding | async)!.displayName:'Bind template'"
+        [class]="(this.binding|async)?'bound':''"
+        (click)="this.EmitBinding()"
+      ></mat-icon>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,44 @@
+<nav *ngIf="true">
+  <div class="nav-container">
+    <a href="" class="logo">
+      <h1>Pomodoro</h1>
+    </a>
+    <div class="link-container">
+      <a routerLink="/login" class="nav-item" *ngIf="!this.authService.user">
+        <mat-icon fontIcon="login" class="icon"></mat-icon>
+        <span class="nav-text">Login</span>
+      </a>
+      <a class="nav-item dropdown" *ngIf="this.authService.user" (click)="openUserOptions()">
+
+        <mat-icon fontIcon="person" class="icon"></mat-icon>
+        <span class="nav-text">{{ this.authService.user?.nickname }}</span>
+
+        <mat-icon fontIcon="arrow_drop_down"  *ngIf="!this.showUserOptions" class="icon"></mat-icon>
+        <mat-icon fontIcon="arrow_drop_up"  *ngIf="this.showUserOptions" class="icon"></mat-icon>
+
+        <div class="dropdown-content" *ngIf="this.showUserOptions">
+          <!-- <a routerLink="/settings">
+            <mat-icon fontIcon="settings" class="icon"></mat-icon>
+            <span >Settings</span>
+          </a> -->
+          <a (click)="logout()">
+            <mat-icon fontIcon="logout" class="icon"></mat-icon>
+            <span >Logout</span>
+          </a>
+        </div>
+      </a>
+      <a routerLink="/" class="nav-item">
+        <mat-icon fontIcon="home" class="icon"></mat-icon>
+        <span class="nav-text">Home</span>
+      </a>
+      <a routerLink="/report" class="nav-item">
+        <mat-icon fontIcon="analytics" class="icon"></mat-icon>
+        <span class="nav-text">Report</span>
+      </a>
+      <a routerLink="/templates" class="nav-item">
+        <mat-icon fontIcon="bookmark" class="icon"></mat-icon>
+        <span class="nav-text">Templates</span>
+      </a>
+    </div>
+  </div>
+</nav>
