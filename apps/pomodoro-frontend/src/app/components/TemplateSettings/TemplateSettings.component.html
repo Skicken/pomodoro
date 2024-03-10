@@ -180,7 +180,7 @@
     settingName="Break Alert"
     type="list-id"
     label="Select Alert"
-    [listItems]="alarmItemList$"
+    [listItems]="this.alarmItemList$"
     [setting]="setting"
     (valueChange)="
       this.UpdateSetting($event);
@@ -211,59 +211,63 @@
   />
 </div>
 
-<mat-divider></mat-divider>
+<ng-container *ngIf="this.authService.user">
+  <mat-divider></mat-divider>
+  <h3 class="text-center mt-1">Spotify Integration</h3>
+  <div
+    class="text-center spotify-integration"
+    *ngIf="!this.authService.user?.spotifyIntegrated"
+  >
+    You have not integrated your spotify account click
+    <a (click)="IntegrateSpotify()">here</a> to integrate
+  </div>
 
-<h3 class="text-center mt-1">Spotify Integration</h3>
-<div
-  class="text-center spotify-integration"
-  *ngIf="!this.authService.user?.spotifyIntegrated"
->
-  You have not integrated your spotify account click
-  <a (click)="IntegrateSpotify()">here</a> to integrate
-</div>
+  <div
+    class="settings-container"
+    *ngIf="this.selectedTemplate; let template"
+    [ngClass]="{
+      notAvailableSection: !this.authService.user?.spotifyIntegrated
+    }"
+  >
+    <div class="flex-center mt-1">
+      <button
+        mat-raised-button
+        color="primary"
+        (click)="this.OpenSpotifyPlaylistDialog()"
+        [disabled]="!this.authService.user?.spotifyIntegrated"
+      >
+        Select Spotify Playlist
+      </button>
+    </div>
+    <div class="flex-center mt-1 playing-playlist">
+      <h4>Playing &nbsp;</h4>
+      <ng-container
+        *ngIf="this.selectedPlaylist; let playlist; else: noplaylist"
+      >
+        <img
+          [src]="this.selectedPlaylist.images[0].url"
+          alt=""
+          class="playlist-img"
+        />
+        <div class="playlist-name">
+          {{ playlist.name }}
+        </div>
+      </ng-container>
+      <ng-template #noplaylist>
+        <h4>None</h4>
+      </ng-template>
+    </div>
 
-<div
-  class="settings-container"
-  *ngIf="this.selectedTemplate; let template"
-  [ngClass]="{ notAvailableSection: !this.authService.user?.spotifyIntegrated }"
-
->
-  <div class="flex-center mt-1">
-    <button
-      mat-raised-button
-      color="primary"
-      (click)="this.OpenSpotifyPlaylistDialog()"
+    <setting-input
+      *ngIf="template.GetKeySetting('playOnBreak'); let setting"
+      settingName="Play playlist on break"
+      type="toggle"
+      [setting]="setting"
+      (valueChange)="this.UpdateSetting($event)"
+      (boundChange)="this.SetBinding($event)"
+      [isDefault]="template.isDefault"
+      [binding]="this.GetBound(setting)"
       [disabled]="!this.authService.user?.spotifyIntegrated"
-    >
-      Select Spotify Playlist
-    </button>
+    />
   </div>
-  <div class="flex-center mt-1 playing-playlist">
-    <h4>Playing &nbsp;</h4>
-    <ng-container *ngIf="this.selectedPlaylist; let playlist; else: noplaylist">
-      <img
-        [src]="this.selectedPlaylist.images[0].url"
-        alt=""
-        class="playlist-img"
-      />
-      <div class="playlist-name">
-        {{ playlist.name }}
-      </div>
-    </ng-container>
-    <ng-template #noplaylist>
-      <h4>None</h4>
-    </ng-template>
-  </div>
-
-  <setting-input
-    *ngIf="template.GetKeySetting('playOnBreak'); let setting"
-    settingName="Play playlist on break"
-    type="toggle"
-    [setting]="setting"
-    (valueChange)="this.UpdateSetting($event)"
-    (boundChange)="this.SetBinding($event)"
-    [isDefault]="template.isDefault"
-    [binding]="this.GetBound(setting)"
-    [disabled]="!this.authService.user?.spotifyIntegrated"
-  />
-</div>
+</ng-container>

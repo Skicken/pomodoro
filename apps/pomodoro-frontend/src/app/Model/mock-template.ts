@@ -43,25 +43,25 @@ export const defaultTemplate= new Template({
       id: 0,
       settingNameID: 0,
       key: "pomodoroAlert",
-      value: 1
+      value: 0
     },
     <Setting>{
       id: 0,
       settingNameID: 0,
       key: "pomodoroAlertVolume",
-      value: 1
+      value: 100
     },
     <Setting>{
       id: 0,
       settingNameID: 0,
       key: "breakAlert",
-      value: 1
+      value: 0
     },
     <Setting>{
       id: 0,
       settingNameID: 0,
       key: "breakAlertVolume",
-      value: 1
+      value: 100
     },
     <Setting>{
       id: 0,
