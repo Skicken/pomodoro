@@ -1,0 +1,11 @@
+<div class="content-wrapper">
+  <div class="content-container">
+    <div class="center" [ngClass]="{success: this.status===200, error:this.status!==200}">
+      <h2>{{statusMessage}}</h2>
+    </div>
+    <div class="center redirect">
+      You will automatically be redirected to the main page
+    </div>
+  </div>
+
+</div>

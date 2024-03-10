@@ -9,9 +9,9 @@ export class RegisterController {
 
   constructor(private userService:UserService,private templateService:TemplateService){}
   @Post()
-  async addUser(@Body() dto:AddUserDTO)
+  async AddUser(@Body() dto:AddUserDTO)
   {
-    const user = await this.userService.addUser(dto);
+    const user = await this.userService.AddUser(dto);
     if(user) this.templateService.CreateUserDefault(user.id)
     return user;
   }

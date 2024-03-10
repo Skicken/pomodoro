@@ -8,6 +8,7 @@ export class  ReturnUserDTO
   userType: $Enums.UserType;
   nickname: string;
   email: string;
+  spotifyIntegrated:boolean;
   @Exclude()
   password:string
 

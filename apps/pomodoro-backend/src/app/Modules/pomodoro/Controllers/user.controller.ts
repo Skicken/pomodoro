@@ -2,7 +2,6 @@ import { ExtractPayload, checkOwnerThrow } from '../../auth/Guards/extract-paylo
 
 import { UserService } from '../Services/User/user.service';
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
-import { AddUserDTO } from '../Dto/user/add-user-dto';
 import { Role, RoleGuard } from '../../auth/Guards/role.guard';
 import { UserType } from '@prisma/client';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
@@ -22,15 +21,19 @@ export class UserController {
     getUser(@Param("id",ParseIntPipe) id:number,@ExtractPayload() payload:TokenPayload )
     {
       checkOwnerThrow(id,payload);
-      return this.userService.getUser(id);
+      return this.userService.GetUser(id);
     }
+
+
     @Get()
     @Role(UserType.ADMIN)
     @UseGuards(RoleGuard)
     getUsers()
     {
-      return this.userService.getUsers();
+      return this.userService.GetUsers();
     }
+
+
     @Put(":id")
     @Role(UserType.USER)
     @UseGuards(RoleGuard)
@@ -38,8 +41,10 @@ export class UserController {
     updateUser(@Param("id",ParseIntPipe) id:number,@Body() dto:UpdateUserDTO,@ExtractPayload() payload:TokenPayload )
     {
       checkOwnerThrow(id,payload)
-      return this.userService.updateUser(id,dto);
+      return this.userService.UpdateUser(id,dto);
     }
+
+
     @Delete(":id")
     @Role(UserType.USER)
     @UseGuards(RoleGuard)
@@ -47,7 +52,7 @@ export class UserController {
     deleteUser(@Param("id",ParseIntPipe) id:number,@Body() dto:UpdateUserDTO,@ExtractPayload() payload:TokenPayload )
     {
       checkOwnerThrow(id,payload)
-      return this.userService.deleteUser(id);
+      return this.userService.DeleteUser(id);
     }
 
 }

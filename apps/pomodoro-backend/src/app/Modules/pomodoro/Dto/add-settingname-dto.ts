@@ -1,5 +1,5 @@
 
-import { IsNotEmpty, IsNumber } from "class-validator";
+import { IsNotEmpty } from "class-validator";
 
 export class AddSettingName {
     @IsNotEmpty()
@@ -7,7 +7,6 @@ export class AddSettingName {
     @IsNotEmpty()
 
 
-    @IsNumber()
-    defaultValue:number
+    defaultValue:string
 }
 

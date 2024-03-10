@@ -6,6 +6,7 @@ import { AddSettingName } from '../../Dto/add-settingname-dto';
 export class SettingNameService {
 
   constructor(private prisma:PrismaService){}
+
   async GetSettingName(id: number) {
     const result  =  await this.prisma.settingName.findFirst({where:{id:id}});
     if(!result) throw new NotFoundException("SettingName could not be found");

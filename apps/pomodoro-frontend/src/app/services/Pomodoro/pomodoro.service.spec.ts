@@ -7,6 +7,9 @@ import { MockProvider } from 'ng-mocks';
 import { PomodoroState, Session } from '../../Model/session-model';
 import { of } from 'rxjs';
 import { TestTemplate } from './test-template';
+import { SpotifyService } from '../Spotify/spotify.service';
+import { SettingKey } from '../../Model/template-model';
+import { debug } from 'console';
 /**
  * @group unit/frontend
  */
@@ -25,6 +28,8 @@ describe('PomodoroService', () => {
           AddAlarm:(file:File)=>{
             return of()
           }
+        }),
+        MockProvider(SpotifyService,{
         }),
       ]
     });
@@ -64,7 +69,9 @@ describe('PomodoroService', () => {
 
   });
   it('simulate autostart', () => {
-    TestTemplate.SetKey("breakAutostart",1)
+
+    TestTemplate.SetKey(SettingKey.breakAutostartKey,1)
+    TestTemplate.SetKey(SettingKey.pomodoroAutostartKey,1)
 
     service.SetTemplate(TestTemplate)
     service.StartPlaying();
@@ -72,29 +79,47 @@ describe('PomodoroService', () => {
     const pomodoro = TestTemplate.GetKey("pomodoro");
     const shortBreak = TestTemplate.GetKey("shortBreak");
 
-    jest.advanceTimersByTime(pomodoro*60*1000+shortBreak*60*1000-5000)
+    jest.advanceTimersByTime(pomodoro*60*1000)
+    jest.advanceTimersByTime(shortBreak*60*1000-5000)
+
+
+    expect(service.currentSession.state).not.toBe(PomodoroState.SESSION)
 
     expect(service.isPlaying).toBe(true)
     expect(service.countDown).not.toBe(null)
-    expect(service.currentSession.state).not.toBe(PomodoroState.SESSION)
-    expect(service.pomodoroTimer).toBeLessThanOrEqual(shortBreak*60*1000-5000)
+    expect(service.pomodoroTimer).toBeLessThanOrEqual(6)
+    expect(service.pomodoroTimer).toBeGreaterThanOrEqual(5)
   });
 
   it('long break after sessions', () => {
-    TestTemplate.SetKey("breakAutostart",1)
-    TestTemplate.SetKey("pomodoroAutostart",1)
+    TestTemplate.SetKey(SettingKey.breakAutostartKey,1)
+    TestTemplate.SetKey(SettingKey.pomodoroAutostartKey,1)
 
     service.SetTemplate(TestTemplate)
     service.StartPlaying();
 
-    const pomodoro = TestTemplate.GetKey("pomodoro");
-    const shortBreak = TestTemplate.GetKey("shortBreak");
-    const sessionsBeforeLongBreak = TestTemplate.GetKey("sessionBeforeLongBreak");
+    const pomodoro = TestTemplate.GetKey(SettingKey.pomodoroKey);
+    const shortBreak = TestTemplate.GetKey(SettingKey.shortBreakKey);
+    const sessionsBeforeLongBreak = TestTemplate.GetKey(SettingKey.sessionsBeforeLongBreakKey);
     jest.advanceTimersByTime((pomodoro+shortBreak)*sessionsBeforeLongBreak*60*1000+1000)
 
     expect(service.isPlaying).toBe(true)
     expect(service.countDown).not.toBe(null)
     expect(service.currentSession.state).not.toBe(PomodoroState.LONG_BREAK)
+  });
+  it('Time precision (1 second error allowed)', () => {
+    TestTemplate.SetKey(SettingKey.breakAutostartKey,1)
+    TestTemplate.SetKey(SettingKey.pomodoroAutostartKey,1)
+
+    service.SetTemplate(TestTemplate)
+    service.StartPlaying();
+
+    const pomodoro = TestTemplate.GetKey(SettingKey.pomodoroKey);
+    for(let i = 0;i<pomodoro*60;i++)
+    {
+      expect(service.pomodoroTimer).toBe(pomodoro*60-i)
+      jest.advanceTimersByTime(1000)
+    }
 
   });
 

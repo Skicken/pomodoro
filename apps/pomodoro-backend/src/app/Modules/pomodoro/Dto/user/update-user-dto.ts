@@ -12,7 +12,7 @@ export class UpdateUserDTO {
     password?:string;
 
     @IsOptional()
-    spotifyToken?:string
+    spotifyIntegrated?:boolean
 }
 
 

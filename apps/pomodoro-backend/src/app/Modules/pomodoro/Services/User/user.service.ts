@@ -16,7 +16,7 @@ import { UpdateUserDTO } from '../../Dto/user/update-user-dto';
 @Injectable()
 export class UserService {
   UserNotFound = new NotFoundException('User not found');
-  async updateUser(userID: number, dto: UpdateUserDTO) {
+  async UpdateUser(userID: number, dto: UpdateUserDTO) {
     let password;
     const nickname = dto.nickname;
     if (dto.password) {
@@ -42,24 +42,24 @@ export class UserService {
     return plainToInstance(ReturnUserDTO,updatedUser);
 
   }
-  async deleteUser(id: number) {
+  async DeleteUser(id: number) {
     await this.prisma.user.deleteMany({ where: { id: id } });
   }
-  async getUsers() {
+  async GetUsers() {
     const users: User[] = await this.prisma.user.findMany();
     return users.map((user) => {
       return plainToInstance(ReturnUserDTO, user);
     });
   }
 
-  async getUser(id: number) {
+  async GetUser(id: number) {
     const user = await this.prisma.user.findFirst({ where: { id: id } });
     if (!user) throw this.UserNotFound;
     return plainToInstance(ReturnUserDTO, user);
   }
   constructor(private prisma: PrismaService) {}
 
-  async addUser(dto: AddUserDTO) {
+  async AddUser(dto: AddUserDTO) {
     Logger.debug('Adding new user');
     const user = await this.prisma.user
       .create({

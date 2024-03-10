@@ -1,6 +1,6 @@
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AlarmService } from '../Services/Alarm/alarm.service';
-import { Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Logger, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, HttpCode, HttpStatus, Logger, Param, ParseFilePipeBuilder, ParseIntPipe, Post, Query, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import {  multerOptions } from '../Services/Alarm/multer-options';
 import { JwtAuthGuard } from '../../auth/Services/jwt-strategy.service';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
@@ -30,6 +30,8 @@ export class AlarmController {
       .build()) alarmFile: Express.Multer.File, @ExtractPayload() payload:TokenPayload  ) {
         return this.alarmService.AddAlarm(alarmFile,payload);
   }
+
+
   @Get(":id")
   async GetAlarm(@Param("id",ParseIntPipe) id:number, @ExtractPayload() payload:TokenPayload)
   {
@@ -37,6 +39,8 @@ export class AlarmController {
     checkOwnerThrow(alarm.ownerID,payload);
     return alarm;
   }
+
+
   @Get()
   GetAlarmFilter( @Query() query:FilterByUserID,@ExtractPayload() payload:TokenPayload )
   {
@@ -52,6 +56,8 @@ export class AlarmController {
   {
     return this.alarmService.getAlarms();
   }
+
+
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)
   async DeleteAlarm(@Param("id",ParseIntPipe) id:number, @ExtractPayload() payload:TokenPayload)
@@ -64,8 +70,8 @@ export class AlarmController {
       Logger.log("Successfully deleted alarm")
       fs.unlinkSync(deleteAlarmPath);
     }
-    this.settingValueService.ResetSettingToDefault("pomodoroAlert",alarm.id)
-    this.settingValueService.ResetSettingToDefault("breakAlert",alarm.id)
+    this.settingValueService.ResetSettingToDefault("pomodoroAlert",alarm.id.toString())
+    this.settingValueService.ResetSettingToDefault("breakAlert",alarm.id.toString())
 
 
     return this.alarmService.DeleteAlarm(id);

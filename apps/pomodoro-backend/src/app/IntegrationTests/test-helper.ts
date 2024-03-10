@@ -30,7 +30,8 @@ export const CreateNormalUser=(jwt:JwtService):AuthUserDTO=>{
     userType: 'USER',
     nickname: 'Johnny',
     email: 'johnny@email.com',
-    password: '123'
+    password: '123',
+    spotifyIntegrated:false,
   }
   return user;
 }
@@ -43,7 +44,8 @@ export const CreateAdminUser=(jwt:JwtService):AuthUserDTO=>{
     userType: 'USER',
     nickname: 'Johnny',
     email: 'johnny@email.com',
-    password: '123'
+    password: '123',
+    spotifyIntegrated:false
   }
   return user;
 }

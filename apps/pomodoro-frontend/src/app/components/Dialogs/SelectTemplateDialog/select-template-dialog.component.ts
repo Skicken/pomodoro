@@ -1,7 +1,7 @@
-import { TemplateService } from '../../services/Template/template.service';
+import { TemplateService } from '../../../services/Template/template.service';
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Template } from '../../Model/template-model';
+import { Template } from '../../../Model/template-model';
 
 @Component({
   selector: 'pomodoro-select-template-dialog',

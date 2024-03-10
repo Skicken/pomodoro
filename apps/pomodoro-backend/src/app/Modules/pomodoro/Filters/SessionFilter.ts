@@ -1,5 +1,5 @@
 import { PomodoroState } from "@prisma/client";
-import { IsBoolean, IsEnum, IsNumber, IsOptional } from "class-validator";
+import { IsEnum, IsNumber, IsOptional } from "class-validator";
 
 export class SessionFilter
 {
@@ -11,10 +11,7 @@ export class SessionFilter
   templateID?:number
 
   @IsOptional()
-  id?:number;
-
-  @IsOptional()
-  SortDate? : "asc" | "desc";
+  sortDate? : "asc" | "desc";
 
   @IsOptional()
   @IsEnum(PomodoroState)

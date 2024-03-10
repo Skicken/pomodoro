@@ -15,7 +15,7 @@
           matInput
           [(ngModel)]="setting.value"
           (change)="setValue()"
-          [disabled]="(this.binding|async)!==null"
+          [disabled]="(this.binding|async)!==null || disabled"
         />
       </mat-form-field>
 
@@ -27,14 +27,14 @@
         discrete
         *ngSwitchCase="'slider'"
         [displayWith]="formatLabel"
-        [disabled]="(this.binding|async)!==null"
+        [disabled]="(this.binding|async)!==null || disabled"
 
       >
         <input
           matSliderThumb
           [(ngModel)]="setting.value"
           (change)="setValue()"
-          [disabled]="(this.binding|async)!==null"
+          [disabled]="(this.binding|async)!==null || disabled"
 
         />
       </mat-slider>
@@ -43,9 +43,8 @@
         *ngSwitchCase="'toggle'"
         [(ngModel)]="setting.value"
         (change)="setValue()"
-        [disabled]="(this.binding|async)!==null"
+        [disabled]="(this.binding|async)!==null || disabled"
         color="primary"
-
       ></mat-slide-toggle>
 
       <mat-form-field *ngSwitchCase="'list-id'" >
@@ -53,7 +52,7 @@
         <mat-select
           name="template"
           [(ngModel)]="setting.value"
-          [disabled]="(this.binding|async)!==null"
+          [disabled]="(this.binding|async)!==null || disabled"
           (ngModelChange)="setValue()"
         >
           @for (item of listItems | async; track item) {
@@ -66,7 +65,6 @@
   <ng-container *ngIf="this.authService.user">
     <div class="binding">
 
-      <!-- {{this.boundTo?.displayName}} -->
       <mat-icon
         *ngIf="!this.isDefault"
         fontIcon="bookmark"

@@ -1,3 +1,4 @@
+import { resetDatabase } from './../../../../../prisma/helpers/populate';
 import { createApp } from './test-helper';
 import request from 'supertest';
 
@@ -41,6 +42,9 @@ describe('User Controller', () => {
     });
 
   });
+  beforeEach(()=>{
+    resetDatabase();
+  })
   describe('/GET user', () => {
     it(`all without token`, () => {
       return request(app.getHttpServer()).get('/user').expect(401);

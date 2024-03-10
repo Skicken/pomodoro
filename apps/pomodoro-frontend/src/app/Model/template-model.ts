@@ -1,13 +1,16 @@
+import { SettingType } from "@prisma/client";
+
 export interface Setting {
   id: number;
   settingNameID: number;
   key: string;
-  value: number;
+  value: number | string;
   ownerTemplateID:number;
   usedByTemplates:Template[]
+  type:SettingType
 }
 export class Template {
-  SetKey(key: string, value: number) {
+  SetKey(key: string, value: number | string) {
     const setting = this.settings.find((element) => {
       return element.key == key;
     });
@@ -31,27 +34,35 @@ export class Template {
     {
       return setting;
     }
+    console.log(this.settings)
     console.error('Could not find setting with: ', key);
-    console.log(this.settings);
     return undefined;
   }
   GetKey(key: string): number {
-    return this.GetKeySetting(key)!.value;
+    return <number>this.GetKeySetting(key)!.value;
+  }
+  GetKeyString(key: string): string {
+    return <string>this.GetKeySetting(key)!.value;
   }
   public constructor(init?: Partial<Template>) {
     Object.assign(this, init);
   }
 }
 
+export enum SettingKey
+{
+  shortBreakKey = 'shortBreak',
+  pomodoroKey = 'pomodoro',
+  longBreakKey = 'longBreak',
+  sessionsBeforeLongBreakKey = "sessionBeforeLongBreak",
+  pomodoroAutostartKey = 'pomodoroAutostart',
+  breakAutostartKey = 'breakAutostart',
+  pomodoroAlert = 'pomodoroAlert',
+  pomodoroAlertVolumeKey = 'pomodoroAlertVolume',
+  breakAlertKey = 'breakAlert',
+  breakAlertVolumeKey = 'breakAlertVolume',
+  backgroundColorKey = 'backgroundColor' ,
+  spotifyPlaylist = 'spotifyPlaylist',
+  playOnBreak = 'playOnBreak'
+}
 
-export const pomodoroKey = 'pomodoro';
-export const shortBreakKey = 'shortBreak';
-export const longBreakKey = 'longBreak';
-export const sessionsBeforeLongBreakKey = "sessionBeforeLongBreak"
-export const pomodoroAutostartKey = 'pomodoroAutostart'
-export const breakAutostartKey = 'breakAutostart'
-export const pomodoroAlert = 'pomodoroAlert'
-export const pomodoroAlertVolumeKey = 'pomodoroAlertVolume'
-export const breakAlertKey = 'breakAlert'
-export const breakAlertVolumeKey = 'breakAlertVolume'
-export const backgroundColorKey = 'backgroundColor'

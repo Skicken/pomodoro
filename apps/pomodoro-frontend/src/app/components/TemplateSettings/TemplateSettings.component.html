@@ -1,0 +1,269 @@
+<div class="text-center">
+  <h3>Template</h3>
+</div>
+<div class="text-center creating">
+  <mat-form-field>
+    <mat-label>Template</mat-label>
+    <mat-select
+      name="template"
+      [(ngModel)]="selectedTemplate"
+      (ngModelChange)="UpdateSelected()"
+    >
+      @for (template of this.templateService.templates$ | async ; track
+      template) {
+      <mat-option [value]="template">{{ template.templateName }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="this.authService.user" class="inline">
+    <mat-icon
+      fontIcon="add"
+      class="icon add-icon"
+      matTooltip="Add new template"
+      (click)="OpenAddTemplateDialog()"
+    ></mat-icon>
+    <mat-icon
+      fontIcon="remove"
+      class="icon remove-icon"
+      matTooltip="Remove current template"
+      (click)="OpenDeleteTemplateDialog()"
+      *ngIf="!this.selectedTemplate.isDefault"
+    ></mat-icon>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+<h3 class="text-center mt-1">General Settings</h3>
+<div class="settings-container" *ngIf="this.selectedTemplate; let template">
+  <setting-input
+    *ngIf="template.GetKeySetting('pomodoro'); let setting"
+    settingName="Pomodoro time"
+    [setting]="setting"
+    (valueChange)="this.UpdateSetting($event)"
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+  <setting-input
+    *ngIf="template.GetKeySetting('shortBreak'); let setting"
+    settingName="Short break time"
+    [setting]="setting"
+    (valueChange)="this.UpdateSetting($event)"
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+
+  <setting-input
+    *ngIf="template.GetKeySetting('longBreak'); let setting"
+    settingName="Long break time"
+    [setting]="setting"
+    (valueChange)="this.UpdateSetting($event)"
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+
+  <setting-input
+    *ngIf="template.GetKeySetting('sessionBeforeLongBreak'); let setting"
+    settingName="Sessions Before Long Break"
+    [minValue]="1"
+    [maxValue]="10"
+    [setting]="setting"
+    label="Sessions"
+    (valueChange)="this.UpdateSetting($event)"
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+
+  <setting-input
+    *ngIf="template.GetKeySetting('breakAutostart'); let setting"
+    settingName="Break autostart"
+    type="toggle"
+    [setting]="setting"
+    (valueChange)="this.UpdateSetting($event)"
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+
+  <setting-input
+    *ngIf="template.GetKeySetting('pomodoroAutostart'); let setting"
+    settingName="Pomodoro autostart"
+    type="toggle"
+    [setting]="setting"
+    (valueChange)="this.UpdateSetting($event)"
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+</div>
+
+<mat-divider></mat-divider>
+<h3 class="text-center mt-1">Alarm</h3>
+<div class="text-center creating">
+  <mat-form-field>
+    <mat-label>Alarm</mat-label>
+    <mat-select name="alarm" [(ngModel)]="selectedAlarm">
+      @for (alarm of this.alarmService.alarms$ | async ; track alarm) {
+      <mat-option [value]="alarm">{{ alarm.name }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <div *ngIf="this.authService.user" class="inline">
+    <mat-icon
+      fontIcon="add"
+      class="icon add-icon"
+      matTooltip="add new alarm"
+      (click)="OpenAddAlarmDialog()"
+    ></mat-icon>
+    <mat-icon
+      fontIcon="remove"
+      class="icon remove-icon"
+      matTooltip="remove alarm"
+      (click)="OpenRemoveAlarmDialog()"
+      *ngIf="!this.selectedAlarm.isDefault"
+    ></mat-icon>
+  </div>
+</div>
+<mat-divider></mat-divider>
+<h3 class="text-center mt-1">Template Alarm Settings</h3>
+<div class="flex-center mt-1">
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="this.alarmService.StopPlaying()"
+  >
+    Stop Playing Alarm
+  </button>
+</div>
+
+<div class="settings-container" *ngIf="this.selectedTemplate; let template">
+  <setting-input
+    *ngIf="template.GetKeySetting('pomodoroAlert'); let setting"
+    settingName="Pomodoro Alert"
+    type="list-id"
+    label="Select Alert"
+    [listItems]="alarmItemList$"
+    [setting]="setting"
+    (valueChange)="
+      this.UpdateSetting($event);
+      this.alarmService.PlayAlarmID(
+        template.GetKey('pomodoroAlert'),
+        template.GetKey('pomodoroAlertVolume')
+      )
+    "
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+  <setting-input
+    *ngIf="template.GetKeySetting('pomodoroAlertVolume'); let setting"
+    settingName="Pomodoro Alert Volume"
+    type="slider"
+    [setting]="setting"
+    (valueChange)="
+      this.UpdateSetting($event);
+      this.alarmService.PlayAlarmID(
+        template.GetKey('pomodoroAlert'),
+        template.GetKey('pomodoroAlertVolume')
+      )
+    "
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+
+  <setting-input
+    *ngIf="template.GetKeySetting('breakAlert'); let setting"
+    settingName="Break Alert"
+    type="list-id"
+    label="Select Alert"
+    [listItems]="alarmItemList$"
+    [setting]="setting"
+    (valueChange)="
+      this.UpdateSetting($event);
+      this.alarmService.PlayAlarmID(
+        template.GetKey('breakAlert'),
+        template.GetKey('breakAlertVolume')
+      )
+    "
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+  <setting-input
+    *ngIf="template.GetKeySetting('breakAlertVolume'); let setting"
+    settingName="Break Alert Volume"
+    type="slider"
+    [setting]="setting"
+    (valueChange)="
+      this.UpdateSetting($event);
+      this.alarmService.PlayAlarmID(
+        template.GetKey('breakAlert'),
+        template.GetKey('breakAlertVolume')
+      )
+    "
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+  />
+</div>
+
+<mat-divider></mat-divider>
+
+<h3 class="text-center mt-1">Spotify Integration</h3>
+<div
+  class="text-center spotify-integration"
+  *ngIf="!this.authService.user?.spotifyIntegrated"
+>
+  You have not integrated your spotify account click
+  <a (click)="IntegrateSpotify()">here</a> to integrate
+</div>
+
+<div
+  class="settings-container"
+  *ngIf="this.selectedTemplate; let template"
+  [ngClass]="{ notAvailableSection: !this.authService.user?.spotifyIntegrated }"
+
+>
+  <div class="flex-center mt-1">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="this.OpenSpotifyPlaylistDialog()"
+      [disabled]="!this.authService.user?.spotifyIntegrated"
+    >
+      Select Spotify Playlist
+    </button>
+  </div>
+  <div class="flex-center mt-1 playing-playlist">
+    <h4>Playing &nbsp;</h4>
+    <ng-container *ngIf="this.selectedPlaylist; let playlist; else: noplaylist">
+      <img
+        [src]="this.selectedPlaylist.images[0].url"
+        alt=""
+        class="playlist-img"
+      />
+      <div class="playlist-name">
+        {{ playlist.name }}
+      </div>
+    </ng-container>
+    <ng-template #noplaylist>
+      <h4>None</h4>
+    </ng-template>
+  </div>
+
+  <setting-input
+    *ngIf="template.GetKeySetting('playOnBreak'); let setting"
+    settingName="Play playlist on break"
+    type="toggle"
+    [setting]="setting"
+    (valueChange)="this.UpdateSetting($event)"
+    (boundChange)="this.SetBinding($event)"
+    [isDefault]="template.isDefault"
+    [binding]="this.GetBound(setting)"
+    [disabled]="!this.authService.user?.spotifyIntegrated"
+  />
+</div>

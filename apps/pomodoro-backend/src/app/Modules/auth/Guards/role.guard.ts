@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable, Logger, SetMetadata } from '@nestjs/common';
+import { CanActivate, ExecutionContext, Injectable, SetMetadata } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserType } from '@prisma/client';
 import { Observable } from 'rxjs';
@@ -24,7 +24,6 @@ export class RoleGuard implements CanActivate {
     if(!role) true;
 
     const user = context.switchToHttp().getRequest().user
-    Logger.debug(role)
     if(!user) return false;
     if(role==UserType.ADMIN)
       return user.role == role;

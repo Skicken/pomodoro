@@ -29,7 +29,7 @@ export class LoginPageComponent {
     const emailValue = this.loginControl.get('email')!.value!;
     const passwordValue = this.loginControl.get('password')!.value!;
 
-    this.authService.loginUser(emailValue, passwordValue).subscribe({
+    this.authService.LoginUser(emailValue, passwordValue).subscribe({
       next: () => {
         this.router.navigate(['']);
       },

@@ -3,7 +3,7 @@ export class AddSettingDTO
 {
 
   @IsNotEmpty()
-  value:number
+  value:string
 
   @IsNumber()
   settingNameID:number;

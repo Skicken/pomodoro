@@ -1,3 +1,4 @@
+
 import { Observable, BehaviorSubject } from 'rxjs';
 
 import { AuthService } from './../../modules/auth/auth.service';
@@ -32,6 +33,7 @@ export class InputMinutesComponent{
   @Input({ required: true }) setting!: Setting;
   @Input() isDefault: boolean = false;
   @Input() binding: Observable<Item | null> = new Observable<Item | null>;
+  @Input() disabled:boolean = false;
   boundTo: Item | null = null;
   constructor(
     public authService: AuthService,
@@ -43,12 +45,17 @@ export class InputMinutesComponent{
     return value.toString() + '%';
   }
   setValue() {
-    if (
-      (this.type == 'number' && this.setting.value < this.minValue) ||
-      this.setting.value > this.maxValue
+
+    if ( Number.isInteger(this.setting.value) &&
+      ( this.type == 'number' && <number>this.setting.value < this.minValue) ||
+      <number>this.setting.value > this.maxValue
     ) {
       this.setting.value = 1;
       return;
+    }
+    if(this.type=='toggle')
+    {
+      this.setting.value = +!!this.setting.value;
     }
     this.valueChange.emit(this.setting);
   }

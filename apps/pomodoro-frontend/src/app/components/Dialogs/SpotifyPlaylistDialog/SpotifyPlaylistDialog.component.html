@@ -1,0 +1,7 @@
+<div class="dialog-wrapper text-center">
+  <pomodoro-spotify-playlist
+    *ngFor="let playlist of this.spotifyService.playlists$ | async"
+    (click)="SelectPlaylist(playlist)"
+    [playlist]="playlist"
+  ></pomodoro-spotify-playlist>
+</div>

@@ -7,22 +7,34 @@ import { SettingNameService } from '../SettingName/settingname.service';
 import {
   Prisma,
   SettingName,
-  SettingValue,
+  SettingType,
   TableIDConstraint,
 } from '@prisma/client';
 import { SettingValueDTO } from '../../Dto/setting-value/setting-value-dto';
+import { IsValidType, ParseType } from './Utilities/types';
 type SettingValueInclude = Prisma.SettingValueGetPayload<{
   include: { settingName: true; settingValue_Template: true };
 }>;
 @Injectable()
 export class SettingValueService {
+
+  constructor(
+    private prisma: PrismaService,
+    private settingNameService: SettingNameService
+  ) {}
+
+  /**
+   *
+   * @param setting
+   * @returns Flattened Setting Value Data
+   */
   MapSettingDTO(setting: SettingValueInclude): SettingValueDTO {
     return <SettingValueDTO>{
       settingNameID: setting.settingNameID,
       id: setting.id,
       ownerTemplateID: setting.ownerTemplateID,
       key: setting.settingName.name,
-      value: setting.value,
+      value: ParseType(setting.value,setting.settingName.type) ,
       usedByTemplates: setting.settingValue_Template,
     };
   }
@@ -34,14 +46,10 @@ export class SettingValueService {
         settingValue_Template: true,
       },
     });
-
     if (!setting) throw new NotFoundException('Setting could not be found');
     return this.MapSettingDTO(setting);
   }
-  constructor(
-    private prisma: PrismaService,
-    private settingNameService: SettingNameService
-  ) {}
+
   async GetSettingsFiltered(filter: SettingValueFilter) {
     return (
       await this.prisma.settingValue.findMany({
@@ -83,37 +91,44 @@ export class SettingValueService {
   }
 
   async IsValidValueUpdate(
-    newValue: number,
-    settingValue: SettingValue
+    newValue: string,
+    settingValue: SettingValueDTO
   ): Promise<boolean> {
+
     const settingName: SettingName =
       await this.settingNameService.GetSettingName(settingValue.settingNameID);
+    if(!IsValidType(newValue,settingName.type)) return false;
 
+    if(settingName.type!=SettingType.NUMBER)
+    {
+      return true;
+    }
+    const value = parseInt(newValue);
     if (
       settingName.constraint === TableIDConstraint.NO_CONSTRAINT &&
-      (settingName.minValue > newValue || settingName.maxValue < newValue)
+      (settingName.minValue > value || settingName.maxValue < value)
     ) {
       return false;
     }
-
     switch (settingName.constraint) {
       case 'NO_CONSTRAINT':
         return true;
       case 'TEMPLATE_ID': {
         return (
-          (await this.prisma.template.count({ where: { id: newValue } })) > 0
+          (await this.prisma.template.count({ where: { id: value } })) > 0
         );
       }
       case 'ALARM_ID': {
-        return (await this.prisma.alarm.count({ where: { id: newValue } })) > 0;
+        return (await this.prisma.alarm.count({ where: { id: value } })) > 0;
       }
       default:
         return true;
     }
+
   }
   async ResetSettingToDefault(
     SettingName: string,
-    WhereValue:number | undefined
+    WhereValue:string | undefined
   ) {
     const settingName: SettingName =
       await this.prisma.settingName.findUniqueOrThrow({

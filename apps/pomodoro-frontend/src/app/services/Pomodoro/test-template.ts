@@ -69,6 +69,19 @@ export const TestTemplate= new Template({
       key: "backgroundColor",
       value: 1
     },
+    <Setting>{
+      id: 0,
+      settingNameID: 0,
+      key: "spotifyPlaylist",
+      value: ""
+    },
+    <Setting>{
+      id: 0,
+      settingNameID: 0,
+      key: "playOnBreak",
+      value: 1
+    },
+
   ],
   isDefault: true,
   templateName: "Simple pomodoro"

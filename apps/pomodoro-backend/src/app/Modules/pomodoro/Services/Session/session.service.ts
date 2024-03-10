@@ -9,13 +9,15 @@ export class SessionService {
   GetFiltered(filter: SessionFilter) {
 
     return this.prisma.session.findMany({where:{
-      templateID:filter.id,
+      templateID:filter.templateID,
       ownerID:filter.userID,
       state:filter.state,
-    },orderBy:{startTime:filter.SortDate},include:{
+    },orderBy:{startTime:filter.sortDate},include:{
       template:true
     }})
   }
+
+
   AddSession(userID:number,dto: AddSessionDTO) {
     return this.prisma.session.create({data:{
       userOwner:{connect:{id:userID}},

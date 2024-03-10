@@ -19,7 +19,7 @@ import { InputMinutesComponent } from './components/SettingInput/SettingInput.co
 
 import { AddTemplateDialogComponent } from './components/Dialogs/AddTemplateDialog/add-template-dialog.component';
 import { ConfirmDialogComponent } from './components/Dialogs/ConfirmDialog/confirm-dialog.component';
-import { SelectTemplateDialogComponent } from './components/SelectTemplateDialog/select-template-dialog.component';
+import { SelectTemplateDialogComponent } from './components/Dialogs/SelectTemplateDialog/select-template-dialog.component';
 import { InfoPopupComponent } from './components/Popups/InfoPopup/info-popup.component';
 
 import { AuthModule } from './modules/auth/auth.module';
@@ -35,6 +35,10 @@ import { ErrorPopupComponent } from './components/Popups/ErrorPopup/error-popup.
 import { ChartReportComponent } from './components/GraphReport/chart-report.component';
 import { SessionReportComponent } from './components/SessionsReport/session-report.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { TemplateSettingsComponent } from './components/TemplateSettings/TemplateSettings.component';
+import { SpotifyPlaylistDialogComponent } from './components/Dialogs/SpotifyPlaylistDialog/SpotifyPlaylistDialog.component';
+import { SpotifyPlaylistComponent } from './components/Spotify-Playlist/spotify-playlist.component';
+import { SpotifyStatusPageComponent } from './pages/spotify-status-page/spotify-status-page.component';
 
 @NgModule({
   declarations: [
@@ -59,6 +63,10 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     ErrorPopupComponent,
     ChartReportComponent,
     SessionReportComponent,
+    TemplateSettingsComponent,
+    SpotifyPlaylistDialogComponent,
+    SpotifyPlaylistComponent,
+    SpotifyStatusPageComponent,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

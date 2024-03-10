@@ -8,5 +8,5 @@ export const mockUser:User = {
   nickname: 'test',
   email: 'test@wp.pl',
   password: passwordHash('1234'),
-  spotifyToken: ''
+  spotifyIntegrated: false
 }

@@ -1,4 +1,4 @@
-import { PomodoroService } from './../../services/Pomodoro/pomodoro.service';
+import { PomodoroService } from '../../services/Pomodoro/pomodoro.service';
 import { SnackBarService } from '../../services/Snackbar/snack-bar.service';
 
 import {
@@ -34,7 +34,7 @@ export class NavbarComponent {
   logout() {
     this.router.navigate(['']);
 
-    this.authService.logout().subscribe(()=>{
+    this.authService.Logout().subscribe(()=>{
     });
   }
   openUserOptions() {

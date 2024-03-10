@@ -1,0 +1,5 @@
+<div class="playlist" *ngIf="this.playlist;let playlist">
+  <img [src]="playlist.images[0].url" alt="" srcset="" class="playlist-img">
+  <h4>{{playlist.name}}</h4>
+  <div class="playlist-author">{{playlist.owner.display_name}}</div>
+</div>

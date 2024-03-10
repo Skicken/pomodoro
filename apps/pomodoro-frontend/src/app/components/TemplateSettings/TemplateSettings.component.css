@@ -1,0 +1,84 @@
+.creating
+{
+  display: flex;
+  justify-content:center;
+  align-items:baseline;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 5px;
+}
+.mt-1
+{
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+.settings-container
+{
+  padding: 10px;
+}
+.inline
+{
+  position: absolute;
+  margin-left: 270px;
+  margin-top: 20px;
+}
+.icon
+{
+  display: inline-block;
+  margin-right: auto;
+  transform: scale(1.5);
+  border-radius: 50%;
+}
+.add-icon
+{
+  color: green;
+}
+.remove-icon
+{
+  color: red;
+}
+.icon:hover
+{
+  background-color: gray;
+  cursor: pointer;
+}
+.playlist-playing
+{
+  color:darkcyan
+}
+.spotify-integration
+{
+  color: orange;
+  font-size: small;
+}
+.spotify-integration a
+{
+  color:darkcyan;
+}
+.spotify-integration a:hover
+{
+  cursor: pointer;
+}
+.playing-playlist
+{
+  display: flexbox;
+  align-items: center;
+  justify-content: center;
+}
+.playlist-img
+{
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+
+}
+.playlist-name
+{
+  color:darkcyan;
+  margin-left: 5px;
+}
+.notAvailableSection
+{
+  background-color:aliceblue
+}

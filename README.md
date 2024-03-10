@@ -35,3 +35,4 @@ Spotify integration requires user to have spotify premium. It seems that api doe
 |      Spotify playlist      | int    | spotify        | playlist which will be played on session. <br>Needs spotify integration.         |         |
 |  Play spotify on pomodoro  | bool   | spotify        |                                                                                  |         |
 |    Play spotify on break   | bool   | spotify        |                                                                                  |         |
+

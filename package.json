@@ -13,7 +13,12 @@
     "int-test": "npx prisma db push --force-reset && npm run mysql:restore && npx nx test --silent=true pomodoro-backend",
     "unit-test:backend": "npx jest --group=unit/backend",
     "unit-test:frontend": "npx jest --group=unit/frontend",
-    "compile-less": "npx lessc ./apps/pomodoro-frontend/src/styles.less ./apps/pomodoro-frontend/src/styles.css"
+    "compile-less": "npx lessc ./apps/pomodoro-frontend/src/styles.less ./apps/pomodoro-frontend/src/styles.css",
+
+    "build:page":"npx nx run pomodoro-backend:build --configuration=production && npx nx run pomodoro-frontend:build --configuration=production && cpy apps/pomodoro-backend/.env dist/",
+    "serve:backend":"cd dist/apps/pomodoro-backend/ && node main.js ",
+    "serve:frontend":"npx http-server dist/apps/pomodoro-frontend"
+
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
@@ -32,7 +37,7 @@
     "@angular/router": "~17.0.0",
     "@fastify/cookie": "^9.2.0",
     "@nestjs/axios": "^3.0.2",
-    "@nestjs/common": "^10.0.2",
+    "@nestjs/common": "^10.3.3",
     "@nestjs/config": "^3.1.1",
     "@nestjs/core": "^10.0.2",
     "@nestjs/jwt": "^10.2.0",
@@ -50,8 +55,10 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "datejs": "^1.0.0-rc3",
     "dotenv": "^16.3.1",
+    "http-server": "^14.1.1",
     "nest": "^0.1.6",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
@@ -130,7 +137,7 @@
     "ng-mocks": "^14.12.1",
     "nx": "17.2.1",
     "prettier": "^2.6.2",
-    "prisma": "^5.7.1",
+    "prisma": "^5.10.2",
     "react-refresh": "^0.10.0",
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",

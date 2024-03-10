@@ -11,6 +11,7 @@
       "outputs": [
         "{options.outputPath}"
       ],
+      "browserTarget": "bjjcastle:build",
       "options": {
         "outputPath": "dist/apps/pomodoro-frontend",
         "index": "apps/pomodoro-frontend/src/index.html",
@@ -61,10 +62,13 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-
       "executor": "@angular-devkit/build-angular:dev-server",
+
       "configurations": {
-        "production": {},
+        "production": {
+          "browserTarget": "pomodoro-frontend:build:production"
+
+        },
         "development": {
           "browserTarget": "pomodoro-frontend:build:development"
         }
@@ -100,6 +104,7 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
+
         "browserTarget": "pomodoro-frontend:build",
         "staticFilePath": "dist/apps/pomodoro-frontend/browser"
       }

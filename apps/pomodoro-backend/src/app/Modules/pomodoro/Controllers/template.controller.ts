@@ -19,6 +19,7 @@ export class TemplateController {
     return this.templateService.GetUserDefault(filter.userID);
   }
 
+
   @Put(":id")
   async MapSetting(@Param("id",ParseIntPipe) id:number,@Body() dto:MapSettingDTO,@ExtractPayload() payload:TokenPayload)
   {
@@ -29,6 +30,8 @@ export class TemplateController {
       return this.templateService.MapSettingTemplate(id,dto.from,dto.to,payload);
     return this.templateService.MapSettingSelf(id,dto.from);
   }
+
+
   @Post()
   @HttpCode(HttpStatus.CREATED)
   AddTemplate(@Body() dto:AddTemplateDTO,@ExtractPayload() payload:TokenPayload)
@@ -42,6 +45,8 @@ export class TemplateController {
     checkOwnerThrow(filter.userID,payload)
     return this.templateService.GetTemplateFilter(filter);
   }
+
+
   @Get(":id")
   async GetTemplate(@Param("id",ParseIntPipe) id:number,@ExtractPayload() payload:TokenPayload)
   {
@@ -49,6 +54,7 @@ export class TemplateController {
      checkOwnerThrow(template.userID,payload)
      return template;
   }
+
 
   @Delete(":id")
   @HttpCode(HttpStatus.NO_CONTENT)

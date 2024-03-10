@@ -1,0 +1,28 @@
+.center
+{
+  text-align: center;
+  margin: 10px;
+}
+.login-button
+{
+  text-align: center;
+}
+.input
+{
+  display: block;
+  max-width: 250px;
+  margin: auto;
+}
+.success
+{
+  color: green;
+}
+.error
+{
+  color:red;
+}
+
+.redirect
+{
+  font-size: large;
+}

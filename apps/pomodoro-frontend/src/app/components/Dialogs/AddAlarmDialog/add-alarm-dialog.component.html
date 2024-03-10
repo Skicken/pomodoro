@@ -10,7 +10,7 @@
   >
     <div class="center">
       <mat-icon *ngIf="!file" fontIcon="upload_file" class="upload_icon"></mat-icon>
-      <span for="alarmFile">{{file?file?.name:"Drag Audio File"}}</span>
+      <span for="alarmFile">{{file?file.name:"Drag Audio File"}}</span>
     </div>
   </div>
   <div [ngStyle]="{visibility: hasError?'visible':'hidden'}" class="error">{{this.errorMessage}}</div>

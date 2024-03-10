@@ -1,182 +1,235 @@
-
+import { SnackBarService } from './../Snackbar/snack-bar.service';
 import { Injectable } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
 import { defaultTemplate } from '../../Model/mock-template';
-import { Template } from '../../Model/template-model';
+import { SettingKey, Template } from '../../Model/template-model';
 import { PomodoroState, Session } from '../../Model/session-model';
 import { SessionService } from '../Session/session.service';
 import { AlarmService } from '../Alarm/alarm.service';
 import { NavigationStart, Router } from '@angular/router';
-
+import { SpotifyService } from '../Spotify/spotify.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PomodoroService {
-
   selectedTemplate: Template = defaultTemplate;
   countDown: Subscription | null;
   isPlaying = false;
+  inPause = true;
   pomodoroTimer = 600;
   PomodoroStateType = PomodoroState;
-  currentSession:Session = {
+  currentSession: Session = {
     state: PomodoroState.SESSION,
     startTime: new Date(Date.now()),
     endTime: new Date(Date.now()),
-    templateID: 0
+    templateID: 0,
   };
   sessionsMade = 0;
+  spotifyPlaylistPlaying = false;
+  constructor(
+    private sessionService: SessionService,
+    private alarmService: AlarmService,
+    private router: Router,
+    private spotifyService: SpotifyService,
 
-  constructor(private sessionService:SessionService,private alarmService:AlarmService,private router:Router) {
+  ) {
     this.countDown = null;
 
-    this.router.events.subscribe((event)=>{
-      if(event instanceof NavigationStart) {
-        this.PomodoroButton()
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.PomodoroButton();
+        this.spotifyService.PausePlaying().subscribe();
       }
-    })
+    });
   }
-  SetTemplate(template:Template)
-  {
+  SetTemplate(template: Template) {
     this.selectedTemplate = template;
-    this.StopPlaying()
+    this.StopPlaying();
     this.SetSessionState();
-    localStorage.setItem("selectedTemplate",JSON.stringify(this.selectedTemplate))
+    localStorage.setItem(
+      'selectedTemplate',
+      JSON.stringify(this.selectedTemplate)
+    );
   }
-  SetTimer(minutes:number)
-  {
-    this.pomodoroTimer = minutes*60;
+  SetTimer(minutes: number) {
+    this.pomodoroTimer = minutes * 60;
   }
-  StopPlaying()
-  {
-    this.isPlaying =false;
+  StopPlaying() {
+    this.isPlaying = false;
     this.countDown?.unsubscribe();
     this.countDown = null;
   }
-
-  StartPlaying()
-  {
+  PausePlaying() {
+    this.spotifyService.PausePlaying().subscribe({ error: (error) => {} });
+    this.countDown?.unsubscribe();
+    this.countDown = null;
+    this.inPause = true;
+  }
+  ContinuePlaying() {
+    this.inPause = false;
+    this.spotifyService.ContinuePlaying().subscribe({ error: (error) => {} });
+    this.StartTicking();
+  }
+  StartPlaying() {
     this.isPlaying = true;
-    this.currentSession.startTime= new Date(Date.now());
+    this.inPause = false;
+    this.currentSession.startTime = new Date(Date.now());
     this.currentSession.templateID = this.selectedTemplate.id;
+    this.StartPlayingPlaylist();
+    this.StartTicking();
+  }
+  StartTicking() {
     let previousTimestamp = Date.now();
-    let pomodoroTimerMili = this.pomodoroTimer*1000;
-    this.countDown = timer(0, 1000).subscribe(() => {
+    let pomodoroTimerMili = this.pomodoroTimer * 1000;
 
+    this.countDown = timer(0, 1000).subscribe(() => {
       const currentTimestamp = Date.now();
-      pomodoroTimerMili-= (currentTimestamp - previousTimestamp);
-      this.pomodoroTimer = pomodoroTimerMili/1000;
+      pomodoroTimerMili -= currentTimestamp - previousTimestamp;
+      this.pomodoroTimer = pomodoroTimerMili / 1000;
       previousTimestamp = currentTimestamp;
-      if(this.pomodoroTimer<=0)
-      {
+      if (this.pomodoroTimer <= 0) {
+        this.countDown?.unsubscribe();
+        this.countDown = null;
         this.TimerEnd();
       }
     });
-
   }
   StopResumeButton() {
-    if(this.isPlaying)
-    {
-      this.StopPlaying()
-    }
-    else
-    {
+    if (!this.isPlaying) {
       this.StartPlaying();
+      return;
+    }
+    if (this.inPause) {
+      this.ContinuePlaying();
+    } else {
+      this.PausePlaying();
     }
   }
   PomodoroButton() {
+    this.sessionsMade = 0;
     this.StopPlaying();
     this.SetSessionState();
   }
   ShortBreakButton() {
+    this.sessionsMade = 0;
     this.StopPlaying();
     this.SetShortBreakState();
   }
   LongBreakButton() {
+    this.sessionsMade = 0;
     this.StopPlaying();
-    this.SetLongBreakState()
+    this.SetLongBreakState();
   }
-  SetSessionState()
-  {
-    const time = this.selectedTemplate.GetKey("pomodoro")
+  SetSessionState() {
+    const time = this.selectedTemplate.GetKey(SettingKey.pomodoroKey);
     this.SetTimer(time);
     this.currentSession.state = PomodoroState.SESSION;
   }
-  SetShortBreakState()
-  {
-    const time = this.selectedTemplate.GetKey("shortBreak");
+  SetShortBreakState() {
+    const time = this.selectedTemplate.GetKey(SettingKey.shortBreakKey);
     this.SetTimer(time);
     this.currentSession.state = PomodoroState.SHORT_BREAK;
   }
-  SetLongBreakState()
-  {
-    const time = this.selectedTemplate.GetKey("longBreak")
+  SetLongBreakState() {
+    const time = this.selectedTemplate.GetKey(SettingKey.longBreakKey);
     this.SetTimer(time);
     this.currentSession.state = PomodoroState.LONG_BREAK;
   }
-  InSession()
-  {
+  InSession() {
     return this.currentSession.state === PomodoroState.SESSION;
   }
-  InBreak()
-  {
-    return (this.currentSession.state===PomodoroState.SHORT_BREAK || this.currentSession.state===PomodoroState.LONG_BREAK);
+  InBreak() {
+    return (
+      this.currentSession.state === PomodoroState.SHORT_BREAK ||
+      this.currentSession.state === PomodoroState.LONG_BREAK
+    );
   }
-  PlayTemplateAlarm()
-  {
+  PlayTemplateAlarm() {
     let alarmID = 0;
-    let volume = 0.; //volume is stored between 0 - 100
-    if(this.currentSession.state != PomodoroState.SESSION)
-    {
-      alarmID= this.selectedTemplate.GetKey("pomodoroAlert");
-      volume = this.selectedTemplate.GetKey("pomodoroAlertVolume");
-
+    let volume = 0; //volume is stored between 0 - 100
+    if (this.currentSession.state != PomodoroState.SESSION) {
+      alarmID = this.selectedTemplate.GetKey(SettingKey.pomodoroAlert);
+      volume = this.selectedTemplate.GetKey(SettingKey.pomodoroAlertVolumeKey);
+    } else {
+      alarmID = this.selectedTemplate.GetKey(SettingKey.breakAlertKey);
+      volume = this.selectedTemplate.GetKey(SettingKey.breakAlertVolumeKey);
     }
-    else
-    {
-      alarmID = this.selectedTemplate.GetKey("breakAlert");
-      volume = this.selectedTemplate.GetKey("breakAlertVolume");
-    }
-    this.alarmService.PlayAlarmID(alarmID,volume);
+    this.alarmService.PlayAlarmID(alarmID, volume);
   }
-  SaveSession()
-  {
+  SaveSession() {
     const currentDate = new Date(Date.now());
     this.currentSession.endTime = currentDate;
     this.sessionService.AddSession(this.currentSession).subscribe();
-    this.currentSession.startTime = currentDate
-
+    this.currentSession.startTime = currentDate;
   }
-  TimerEnd() {
-
-
-    this.StopPlaying()
-    this.PlayTemplateAlarm()
-    this.SaveSession()
-
-
-    //Changing State of Pomodoro
-    const pomodoroAutostart = this.selectedTemplate.GetKey("pomodoroAutostart")
-    const breakAutostart = this.selectedTemplate.GetKey("breakAutostart");
-    const sessionBeforeLongBreak = this.selectedTemplate.GetKey("sessionBeforeLongBreak");
-
-    if(this.InSession() && this.sessionsMade%sessionBeforeLongBreak==0)
-    {
-      this.SetShortBreakState();
-      if(breakAutostart) this.StartPlaying()
+  StartPlayingPlaylist() {
+    if (this.currentSession.state == PomodoroState.SESSION) {
+      const spotifyPlaylistURI = this.selectedTemplate.GetKeyString(
+        SettingKey.spotifyPlaylist
+      );
+      console.log(spotifyPlaylistURI);
+      if (spotifyPlaylistURI.length > 0) {
+        this.spotifyService.PlayPlaylist(spotifyPlaylistURI).subscribe({
+          error: () => {
+            this.spotifyService.ContinuePlaying().subscribe({error:()=>{
+            }});
+          },
+        });
+      }
     }
-    else if(this.InSession())
-    {
-      this.SetLongBreakState();
-      if(breakAutostart) this.StartPlaying()
+  }
+  HandlePlaylistOnTimerEnd() {
+    if (this.currentSession.state != PomodoroState.SESSION) {
+      const PlayOnBreak = this.selectedTemplate.GetKey(SettingKey.playOnBreak);
+      if (PlayOnBreak == 0) {
+        this.spotifyService.PausePlaying().subscribe();
+      }
     }
     else
     {
-      this.SetSessionState();
-      if(pomodoroAutostart) this.StartPlaying();
+      this.spotifyService.ContinuePlaying().subscribe();
     }
-    console.log(this.pomodoroTimer)
+  }
+  SetPomodoroState() {
+
+    const sessionBeforeLongBreak = this.selectedTemplate.GetKey(
+      SettingKey.sessionsBeforeLongBreakKey
+    );
+    if (this.InSession() && this.sessionsMade % sessionBeforeLongBreak == 0) {
+      this.SetShortBreakState();
+    } else if (this.InSession()) {
+      this.SetLongBreakState();
+    } else {
+      this.SetSessionState();
+    }
+  }
+
+  TimerEnd() {
+
+    const pomodoroAutostart = this.selectedTemplate.GetKey(
+      SettingKey.pomodoroAutostartKey
+    );
+    const breakAutostart = this.selectedTemplate.GetKey(
+      SettingKey.breakAutostartKey
+    );
+
+    this.PlayTemplateAlarm();
+    this.SaveSession();
+    this.SetPomodoroState();
+    if (
+      (this.currentSession.state == PomodoroState.SESSION &&
+        !pomodoroAutostart) ||
+      (this.currentSession.state != PomodoroState.SESSION && !breakAutostart)
+    ) {
+      this.StopPlaying();
+    }
+    else
+    {
+      this.StartTicking();
+    }
+    this.HandlePlaylistOnTimerEnd();
     this.sessionsMade++;
   }
 }
-

@@ -1,7 +1,7 @@
-import { IsNumber } from 'class-validator';
+import { IsString } from 'class-validator';
 export class UpdateSettingDTO
 {
-  @IsNumber()
-  value:number
+  @IsString()
+  value:string
 
 }

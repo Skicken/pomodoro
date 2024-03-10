@@ -44,3 +44,5 @@ apps/pomodoro-backend/.env
 .env
 assets/alarms/*
 
+apps/pomodoro-backend/src/assets/alarms/297a202c8c5bac710212ab18ec6aa3922.wav
+apps/pomodoro-backend/src/assets/alarms/DefaultAlarm.mp3

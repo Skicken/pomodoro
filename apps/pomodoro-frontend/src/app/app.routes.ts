@@ -7,7 +7,8 @@ import { PomodoroPageComponent } from './pages/pomodoro-page/pomodoro-page.compo
 import { UserSettingsPageComponent } from './pages/user-settings-page/user-settings-page.component';
 import { TemplatePageComponent } from './pages/template-page/template-page.component';
 import { ReportPageComponent } from './pages/report-page/report-page.component';
-import { loginGuard } from './Guards/login.guard';
+import { loginGuard } from './guards/login.guard';
+import { SpotifyStatusPageComponent } from './pages/spotify-status-page/spotify-status-page.component';
 
 export const appRoutes: Route[] = [
   { path: 'login', component: LoginPageComponent },
@@ -21,8 +22,8 @@ export const appRoutes: Route[] = [
       {path:'',component:PomodoroPageComponent},
       {path:'user-settings',component:UserSettingsPageComponent},
       {path:'templates',component:TemplatePageComponent},
-      {path:'report',component:ReportPageComponent,canActivate:[loginGuard]}
-
+      {path:'report',component:ReportPageComponent,canActivate:[loginGuard]},
+      {path:'spotify-status',component:SpotifyStatusPageComponent}
     ],
   },
 ];

@@ -57,7 +57,7 @@ describe('UserService', () => {
   it('get user', async () => {
     await prisma.user.findFirst.mockResolvedValueOnce(user);
 
-    const returnUser: ReturnUserDTO = await service.getUser(1);
+    const returnUser: ReturnUserDTO = await service.GetUser(1);
 
     expect(returnUser).toBeDefined();
     expect(returnUser.password).toBeUndefined();
@@ -66,7 +66,7 @@ describe('UserService', () => {
 
   it('get users', async () => {
     await prisma.user.findMany.mockResolvedValueOnce(users);
-    const returnUser: ReturnUserDTO[] = await service.getUsers();
+    const returnUser: ReturnUserDTO[] = await service.GetUsers();
 
     expect(returnUser).toBeDefined();
     returnUser.forEach((user) => {
@@ -84,7 +84,7 @@ describe('UserService', () => {
     copyUser.password = passwordHash(update.password);
 
     await prisma.user.update.mockResolvedValueOnce(copyUser);
-    const returnUser: ReturnUserDTO = await service.updateUser(1,update);
+    const returnUser: ReturnUserDTO = await service.UpdateUser(1,update);
 
     expect(returnUser).toBeDefined();
     expect(returnUser.password).toBeUndefined();

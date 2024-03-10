@@ -5,6 +5,11 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+enum SettingType {
+  NUMBER
+  STRING
+}
 enum UserType {
   ADMIN
   USER
@@ -23,23 +28,21 @@ model SettingName{
   id Int @id @default(autoincrement())
   setting_SettingValue SettingValue[]
   name String @unique
-  defaultValue Int
+  defaultValue String
   minValue Int @default(0)
   maxValue Int @default(1440)
   constraint TableIDConstraint @default(NO_CONSTRAINT)
+  type SettingType @default(NUMBER)
 }
 
 model SettingValue{
   id Int @id @default(autoincrement())
   settingNameID Int
-
   settingName   SettingName @relation(fields: [settingNameID], references: [id],onDelete: Cascade)
-
   ownerTemplateID Int
   ownerTemplate Template @relation(fields: [ownerTemplateID],references: [id],onDelete: Cascade)
-
   settingValue_Template Template[] @relation(name:"Template_Settings")
-  value Int
+  value String
 }
 
 model User{
@@ -49,10 +52,10 @@ model User{
   nickname String
   email String @unique
   password String
-  spotifyToken String @default("")
   templates Template[]
   alarms Alarm[]
   sessions Session[]
+  spotifyIntegrated Boolean @default(false)
 
 }
 model Template{

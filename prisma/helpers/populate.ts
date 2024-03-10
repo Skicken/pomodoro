@@ -1,5 +1,5 @@
 
-import { PrismaClient, TableIDConstraint, UserType } from '@prisma/client';
+import { PrismaClient, SettingType, TableIDConstraint, UserType } from '@prisma/client';
 import { passwordHash } from '../../apps/pomodoro-backend/src/app/Modules/common/common';
 import { spawn } from 'child_process';
 
@@ -44,61 +44,72 @@ export const populateSettingNames = async () => {
       {
         id:1,
         name: 'pomodoro',
-        defaultValue: 25,
+        defaultValue: "25",
       },
       {
         id:2,
         name: 'shortBreak',
-        defaultValue: 5,
+        defaultValue: "5",
       },
       {
         id:3,
         name: 'longBreak',
-        defaultValue: 10,
+        defaultValue: "10",
       },
       {
         id:4,
         name: 'sessionBeforeLongBreak',
-        defaultValue: 3,
+        defaultValue: "3",
       },
       {
         id:5,
         name: 'pomodoroAutostart',
-        defaultValue: 0,
+        defaultValue: "0",
       },
       {
         id:6,
         name: 'breakAutostart',
-        defaultValue: 0,
+        defaultValue: "0",
       },
       {
         id:7,
         name: 'pomodoroAlert',
-        defaultValue: 0,
+        defaultValue: "0",
         constraint:TableIDConstraint.ALARM_ID
 
       },
       {
         id:8,
         name: 'pomodoroAlertVolume',
-        defaultValue: 100,
+        defaultValue: "100",
       },
       {
         id:9,
         name: 'breakAlert',
-        defaultValue: 0,
+        defaultValue: "0",
         constraint:TableIDConstraint.ALARM_ID
 
       },
       {
         id:10,
         name: 'breakAlertVolume',
-        defaultValue: 1000,
+        defaultValue: "1000",
       },
       {
         id:11,
         name: 'backgroundColor',
-        defaultValue: 0,
+        defaultValue: "0",
+      },
+      {
+        id:12,
+        name: 'spotifyPlaylist',
+        defaultValue: "",
+        type:SettingType.STRING
+      },
+      {
+        id:13,
+        name: 'playOnBreak',
+        defaultValue: "0",
       },
     ],
   });

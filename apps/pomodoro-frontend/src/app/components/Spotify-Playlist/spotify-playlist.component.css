@@ -1,0 +1,26 @@
+.playlist
+{
+  color: black;
+  display: flexbox;
+  align-items:center;
+  justify-items: center;
+  padding: 10px;
+  transition: transform 0.2s;
+  background-color: cornsilk;
+}
+.playlist-img
+{
+  max-width: 100px;
+  min-width: 100px;
+  margin: 10px;
+  border-radius: 10px;
+}
+.playlist-author
+{
+  display: block;
+}
+.playlist:hover
+{
+  transform: scale(1.1);
+  cursor: pointer;
+}

@@ -17,6 +17,8 @@ export class SettingNameController {
   GetSettingName(@Param('id', ParseIntPipe) id: number) {
     return this.settingNameService.GetSettingName(id);
   }
+
+
   @Get()
   GetSettingNames() {
     return this.settingNameService.GetSettingNames();

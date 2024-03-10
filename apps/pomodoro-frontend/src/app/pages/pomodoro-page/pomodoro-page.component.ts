@@ -3,7 +3,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PomodoroService } from '../../services/Pomodoro/pomodoro.service';
 import { MatDialog } from '@angular/material/dialog';
-import { SelectTemplateDialogComponent } from '../../components/SelectTemplateDialog/select-template-dialog.component';
+import { SelectTemplateDialogComponent } from '../../components/Dialogs/SelectTemplateDialog/select-template-dialog.component';
 import { SnackBarService } from '../../services/Snackbar/snack-bar.service';
 import { GetStorageTemplate, GetStorageUser } from '../../services/LocalStorage';
 import { TemplateService } from '../../services/Template/template.service';

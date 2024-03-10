@@ -19,6 +19,7 @@ import {
   checkOwnerThrow,
 } from '../../auth/Guards/extract-payload.decorator';
 import { TokenPayload } from '../../auth/Services/authenticate.service';
+import { SettingValueDTO } from '../Dto/setting-value/setting-value-dto';
 
 @Controller('setting-value')
 @UseGuards(JwtAuthGuard)
@@ -57,7 +58,7 @@ export class SettingValueController {
     @Body() dto: UpdateSettingDTO,
     @ExtractPayload() payload: TokenPayload
   ) {
-    const setting = await this.settingService.GetSetting(id);
+    const setting:SettingValueDTO = await this.settingService.GetSetting(id);
     const template = await this.templateService.GetTemplate(
       setting.ownerTemplateID
     );

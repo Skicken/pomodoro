@@ -53,11 +53,11 @@
       class="my-button-white size"
       (click)="this.pomodoroService.StopResumeButton()"
     >
-      <ng-container *ngIf="this.pomodoroService.isPlaying">
+      <ng-container *ngIf="!this.pomodoroService.inPause">
         <div class="pause-text">Pause</div>
         <mat-icon fontIcon="pause" class="icon"></mat-icon>
       </ng-container>
-      <ng-container *ngIf="!this.pomodoroService.isPlaying">
+      <ng-container *ngIf="this.pomodoroService.inPause">
         <div class="pause-text">Play</div>
         <mat-icon fontIcon="play_arrow" class="icon"></mat-icon>
       </ng-container>

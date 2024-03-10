@@ -5,6 +5,7 @@ import { Observable, forkJoin, map, of, switchMap, tap, BehaviorSubject } from '
 import { defaultTemplate } from '../../Model/mock-template';
 import { User } from '../../Model/user-model';
 import { GetStorageTemplate } from '../LocalStorage';
+import { SettingType } from '@prisma/client';
 @Injectable({
   providedIn: 'root',
 })
@@ -14,9 +15,10 @@ export class TemplateService {
   constructor(private http: HttpClient) {
     this.GetUserTemplates().subscribe();
   }
-  UpdateSetting(setting: Setting, value: number) {
+  UpdateSetting(setting: Setting, value: number | string) {
       return this.http.put<Template>(`api/setting-value/${setting.id}`,{value:value})
   }
+
   GetUserTemplates() : Observable<Template[]> {
 
     const userStorage = localStorage.getItem('user');

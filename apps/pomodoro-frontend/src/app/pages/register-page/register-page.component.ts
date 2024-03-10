@@ -53,7 +53,7 @@ export class RegisterPageComponent {
     console.log('registering user');
     console.log(usernameValue, nicknameValue, passwordValue);
     this.authService
-      .registerUser({
+      .RegisterUser({
         email: usernameValue,
         nickname: nicknameValue,
         password: passwordValue,
