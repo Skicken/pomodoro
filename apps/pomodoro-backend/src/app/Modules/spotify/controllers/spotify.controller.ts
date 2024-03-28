@@ -6,6 +6,7 @@ import {
   Get,
   HttpStatus,
   Logger,
+  Param,
   Post,
   Put,
   Req,
@@ -81,7 +82,7 @@ export class SpotifyController {
       .catch((error: HttpErrorResponse) => {
         throw new BadRequestException(error.message);
       });
-
+    Logger.log(req.query);
     this.spotifyService.SetAuthorizationCookies(res, tokenResponse.data);
     this.spotifyService.SetSpotifyIntegration(token.sub,true)
     stringifiedParameters.set("statusMessage","Successful spotify authorization")
@@ -92,6 +93,7 @@ export class SpotifyController {
   }
   @Get()
   IntegrateSpotify(
+    @Param("return_url") return_url:string = "",
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response
   ) {
@@ -104,6 +106,7 @@ export class SpotifyController {
       state: state,
       scope: this.scope,
     }).toString();
+
     return res.redirect(
       'https://accounts.spotify.com/authorize?' + stringifiedParameters
     );

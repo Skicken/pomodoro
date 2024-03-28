@@ -69,6 +69,9 @@ export class AuthenticationController {
           path:"api/auth"
         });
         resp.clearCookie("access_token");
+        resp.clearCookie("spotify_access_token");
+        resp.clearCookie("spotify_refresh_token");
+
 
     }
 

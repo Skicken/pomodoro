@@ -60,7 +60,6 @@ export class TemplateService {
           });
           return forkJoin(observables);
         }),tap((templates:Template[])=>{
-          console.log(templates);
           this.templates$.next(templates);
         })
       );

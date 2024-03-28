@@ -155,7 +155,7 @@ export class TemplateSettingsComponent implements OnInit {
 
   IntegrateSpotify()
   {
-    window.location.href = "http://localhost:3000/api/spotify/";
+    this.spotifyService.AuthorizeSpotify()
     // this.spotifyService.IntegrateSpotify().subscribe({next:()=>{
     //   this.snackBarService.openInfoBar("Successfully integrated spotify account")
     // }});

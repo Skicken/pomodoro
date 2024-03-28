@@ -25,16 +25,10 @@ export class SpotifyService {
       res.cookie('spotify_refresh_token', tokenData.refresh_token, {
         httpOnly: true,
         expires: new Date(Date.now() + 60 * 60 * 1000 * 24 * 7),
-        path: 'api/',
-        domain: 'localhost',
-        sameSite: 'strict',
       });
     if (tokenData.access_token)
       res.cookie('spotify_access_token', tokenData.access_token, {
         httpOnly: true,
-        path: 'api/',
-        domain: 'localhost',
-        sameSite: 'strict',
         expires: new Date(tokenData.expires_in.toString()),
       });
   }
@@ -71,7 +65,6 @@ export class SpotifyService {
         throw new UnauthorizedException(error.message);
       })
       .catch((error: ForbiddenException) => {
-        throw new ForbiddenException(error.message);
       })
       .then(() => {});
   }

@@ -1,3 +1,4 @@
+import { SpotifyService } from './../../services/Spotify/spotify.service';
 import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { User } from '../../Model/user-model';
@@ -9,7 +10,7 @@ import { HttpBackend, HttpClient, HttpErrorResponse, HttpStatusCode } from '@ang
 })
 export class AuthService {
   user: User | null = null;
-  constructor(private http: HttpClient, backend: HttpBackend, private router:Router) {
+  constructor(private http: HttpClient, backend: HttpBackend, private router:Router,private spotifyService:SpotifyService) {
     this.http = new HttpClient(backend);
     const userStorage = localStorage.getItem('user');
     if (userStorage) {
@@ -34,7 +35,7 @@ export class AuthService {
         {
           this.user = user;
           localStorage.setItem('user', JSON.stringify(user));
-          window.location.reload();
+          // window.location.reload();
         }
       }),
       catchError((error:HttpErrorResponse,caught)=>{
