@@ -22,9 +22,6 @@ A pomodoro timer with highly customizable template (a project you want to work o
 |     Break alert volume     | int    | alert          |                                                                                  | 100     |
 
 
-
-
-
 ## Spotify integration
 
 Spotify integration requires user to have spotify premium. Before using spotify player should be opened and interact with player (pause, play playlist in order to detect the device).
@@ -53,6 +50,17 @@ Spotify integration requires user to have spotify premium. Before using spotify 
 ![](img/template-settings1.png)
 ![](img/template-settings2.png)
 
+
+
+## Environment variables
+**ALARM_PATH** - path where audio files are stored in backend application
+**PORT** - backend application port
+**HOST** - backend application host
+**ACCESS_SECRET** - for jwt authorization
+**REFRESH_SECRET** - for jwt authorization
+**CLIENT_ID** - client id from spotify application
+**CLIENT_SECRET** - client secret from spotify application
+**DATABASE_URL** - mysql database for prisma to use
 
 ## Technologies
 

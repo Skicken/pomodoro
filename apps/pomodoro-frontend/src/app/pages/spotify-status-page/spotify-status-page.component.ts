@@ -14,13 +14,19 @@ export class SpotifyStatusPageComponent implements OnInit{
   status:number = 0
   constructor(
     private route: ActivatedRoute,
-    private authService: AuthService) {}
+    private authService: AuthService,
+    private router:Router) {}
   ngOnInit(): void {
     this.authService.UpdateUser().subscribe();
     this.route.queryParams.subscribe((params)=>{
       console.log(params)
       this.status = Number.parseInt(params['status']!);
       this.statusMessage = params['statusMessage']!;
+      setTimeout(()=>
+      {
+        this.router.navigateByUrl("")
+      },5000)
+
     })
 
   }

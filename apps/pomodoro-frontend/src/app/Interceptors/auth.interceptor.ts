@@ -45,8 +45,6 @@ export class AuthInterceptor implements HttpInterceptor {
       }),
       tap({
         error: (error) => {
-          this.info.openErrorBar(error.message);
-          console.error('login out');
           this.authService.Logout();
         },
       })

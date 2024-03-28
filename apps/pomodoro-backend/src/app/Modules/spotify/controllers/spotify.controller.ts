@@ -82,7 +82,9 @@ export class SpotifyController {
       .catch((error: HttpErrorResponse) => {
         throw new BadRequestException(error.message);
       });
-    Logger.log(req.query);
+
+
+
     this.spotifyService.SetAuthorizationCookies(res, tokenResponse.data);
     this.spotifyService.SetSpotifyIntegration(token.sub,true)
     stringifiedParameters.set("statusMessage","Successful spotify authorization")
@@ -106,7 +108,6 @@ export class SpotifyController {
       state: state,
       scope: this.scope,
     }).toString();
-
     return res.redirect(
       'https://accounts.spotify.com/authorize?' + stringifiedParameters
     );
