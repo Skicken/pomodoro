@@ -1,0 +1,11 @@
+version: '3.1'
+services:
+  # backend:
+  #   image: test
+  #   restart: always
+  #   env_file:
+  #     - C:\Dev\pomodoro\apps\pomodoro-backend\.env
+  #   ports:
+  #     - 3000:3000
+
+

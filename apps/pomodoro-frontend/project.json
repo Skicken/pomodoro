@@ -11,7 +11,7 @@
       "outputs": [
         "{options.outputPath}"
       ],
-      "browserTarget": "bjjcastle:build",
+      "buildTarget": "bjjcastle:build",
       "options": {
         "outputPath": "dist/apps/pomodoro-frontend",
         "index": "apps/pomodoro-frontend/src/index.html",
@@ -66,11 +66,11 @@
 
       "configurations": {
         "production": {
-          "browserTarget": "pomodoro-frontend:build:production"
+          "buildTarget": "pomodoro-frontend:build:production"
 
         },
         "development": {
-          "browserTarget": "pomodoro-frontend:build:development"
+          "buildTarget": "pomodoro-frontend:build:development"
         }
 
       },
@@ -83,7 +83,7 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "pomodoro-frontend:build"
+        "buildTarget": "pomodoro-frontend:build"
       }
     },
     "lint": {
@@ -105,7 +105,7 @@
       "executor": "@nx/web:file-server",
       "options": {
 
-        "browserTarget": "pomodoro-frontend:build",
+        "buildTarget": "pomodoro-frontend:build",
         "staticFilePath": "dist/apps/pomodoro-frontend/browser"
       }
     }

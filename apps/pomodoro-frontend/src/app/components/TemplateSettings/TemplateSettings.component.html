@@ -226,7 +226,7 @@
     class="settings-container"
     *ngIf="this.selectedTemplate; let template"
     [ngClass]="{
-      notAvailableSection: !this.authService.user?.spotifyIntegrated
+      notAvailableSection: !this.authService.user.spotifyIntegrated
     }"
   >
     <div class="flex-center mt-1">
@@ -234,7 +234,7 @@
         mat-raised-button
         color="primary"
         (click)="this.OpenSpotifyPlaylistDialog()"
-        [disabled]="!this.authService.user?.spotifyIntegrated"
+        [disabled]="!this.authService.user.spotifyIntegrated"
       >
         Select Spotify Playlist
       </button>
@@ -267,7 +267,7 @@
       (boundChange)="this.SetBinding($event)"
       [isDefault]="template.isDefault"
       [binding]="this.GetBound(setting)"
-      [disabled]="!this.authService.user?.spotifyIntegrated"
+      [disabled]="!this.authService.user.spotifyIntegrated"
     />
   </div>
 </ng-container>
