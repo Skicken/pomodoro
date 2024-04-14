@@ -39,6 +39,7 @@ import { TemplateSettingsComponent } from './components/TemplateSettings/Templat
 import { SpotifyPlaylistDialogComponent } from './components/Dialogs/SpotifyPlaylistDialog/SpotifyPlaylistDialog.component';
 import { SpotifyPlaylistComponent } from './components/Spotify-Playlist/spotify-playlist.component';
 import { SpotifyStatusPageComponent } from './pages/spotify-status-page/spotify-status-page.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,7 @@ import { SpotifyStatusPageComponent } from './pages/spotify-status-page/spotify-
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
   ],
   imports: [
+    CommonModule,
     BrowserModule,
     RouterModule.forRoot(appRoutes),
     FormsModule,
